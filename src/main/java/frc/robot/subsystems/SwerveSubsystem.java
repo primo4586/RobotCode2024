@@ -27,6 +27,7 @@ public class SwerveSubsystem extends SubsystemBase {
     public SwerveModule[] mSwerveMods;
     public Pigeon2 gyro;
     public SwerveDriveKinematics kinematics;
+    public Vision vision;
 
     private static SwerveSubsystem instance;
 
@@ -42,6 +43,8 @@ public class SwerveSubsystem extends SubsystemBase {
         gyro = new Pigeon2(pigeonID);
         gyro.getConfigurator().apply(new Pigeon2Configuration());
         zeroGyro();
+
+        vision = Vision.getInstance();
 
         mSwerveMods = new SwerveModule[] {
                 new SwerveModule(0, Mod0.constants),
@@ -156,12 +159,26 @@ public class SwerveSubsystem extends SubsystemBase {
     @Override
     public void periodic() {
         swerveOdometry.update(getYaw(), getModulePositions());
-        var rightEstimatedGlobalPose = Vision.getRightEstimatedGlobalPose().get().estimatedPose.toPose2d();
-        var leftEstimatedGlobalPose = Vision.getRightEstimatedGlobalPose().get().estimatedPose.toPose2d();
-        poseEstimation.addVisionMeasurement(rightEstimatedGlobalPose, Vision.rightLastEstTimestamp,
-                Vision.getEstimationStdDevs(rightEstimatedGlobalPose));
-        poseEstimation.addVisionMeasurement(leftEstimatedGlobalPose, Vision.leftLastEstTimestamp,
-                Vision.getEstimationStdDevs(leftEstimatedGlobalPose));
+
+        vision.getRightEstimatedGlobalPose().ifPresent(
+                est -> {
+                    var estPose = est.estimatedPose.toPose2d();
+                    // Change our trust in the measurement based on the tags we can see
+                    var estStdDevs = vision.getEstimationStdDevsRight(estPose);
+
+                    poseEstimation.addVisionMeasurement(
+                            est.estimatedPose.toPose2d(), est.timestampSeconds, estStdDevs);
+                });
+
+        vision.getLeftEstimatedGlobalPose().ifPresent(
+                est -> {
+                    var estPose = est.estimatedPose.toPose2d();
+                    // Change our trust in the measurement based on the tags we can see
+                    var estStdDevs = vision.getEstimationStdDevsLeft(estPose);
+
+                    poseEstimation.addVisionMeasurement(
+                            est.estimatedPose.toPose2d(), est.timestampSeconds, estStdDevs);
+                });
 
         for (SwerveModule mod : mSwerveMods) {
             SmartDashboard.putNumber("Mod " + mod.moduleNumber + " CANcoder", mod.getCANcoder().getDegrees());

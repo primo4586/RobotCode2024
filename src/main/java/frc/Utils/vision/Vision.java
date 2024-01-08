@@ -40,25 +40,38 @@ import org.photonvision.PhotonCamera;
 import org.photonvision.PhotonPoseEstimator;
 import org.photonvision.PhotonPoseEstimator.PoseStrategy;
 import org.photonvision.PhotonUtils;
-import org.photonvision.targeting.PhotonPipelineResult;
 
 public class Vision {
-    private static final PhotonCamera rightCamera = new PhotonCamera(kRightCameraName);
-    private static final PhotonPoseEstimator rightPhotonEstimator =
+    private final PhotonCamera rightCamera;
+    private final PhotonPoseEstimator rightPhotonEstimator;
+    public double rightLastEstTimestamp = 0;
+
+    private  final PhotonCamera leftCamera;
+    private final PhotonPoseEstimator leftPhotonEstimator;
+    public double leftLastEstTimestamp = 0;
+
+    private static Vision instance;
+
+    // singelton
+    public static Vision getInstance() {
+        if (instance == null) {
+            instance = new Vision();
+        }
+        return instance;
+    }
+
+    private Vision(){
+        rightCamera = new PhotonCamera(kRightCameraName);
+        rightPhotonEstimator =
                 new PhotonPoseEstimator(
                         kTagLayout, PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR, rightCamera, kRightRobotToCam);
-    public static double rightLastEstTimestamp = 0;
-
-    private static final PhotonCamera leftCamera = new PhotonCamera(kLeftCameraName);
-    private static final PhotonPoseEstimator leftPhotonEstimator =
+        
+        leftCamera = new PhotonCamera(kLeftCameraName);
+        leftPhotonEstimator =
                 new PhotonPoseEstimator(
                     kTagLayout, PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR, leftCamera, kLeftRobotToCam);
-
-    public static double leftLastEstTimestamp = 0;
-
-    public static PhotonPipelineResult getLatestResult() {
-        return rightCamera.getLatestResult();
     }
+
 
     /**
      * The latest estimated robot pose on the field from vision data. This may be empty. This should
@@ -67,7 +80,7 @@ public class Vision {
      * @return An {@link EstimatedRobotPose} with an estimated pose, estimate timestamp, and targets
      *     used for estimation.
      */
-    public static Optional<EstimatedRobotPose> getRightEstimatedGlobalPose() {
+    public Optional<EstimatedRobotPose> getRightEstimatedGlobalPose() {
         var rightVisionEst = rightPhotonEstimator.update();
 
         double rightLatestTimestamp = rightCamera.getLatestResult().getTimestampSeconds();
@@ -85,7 +98,7 @@ public class Vision {
      * @return An {@link EstimatedRobotPose} with an estimated pose, estimate timestamp, and targets
      *     used for estimation.
      */
-    public static Optional<EstimatedRobotPose> getLeftEstimatedGlobalPose() {
+    public Optional<EstimatedRobotPose> getLeftEstimatedGlobalPose() {
         var leftVisionEst = rightPhotonEstimator.update();
 
         double leftLatestTimestamp = rightCamera.getLatestResult().getTimestampSeconds();
@@ -95,14 +108,10 @@ public class Vision {
         if (leftNewResult) leftLastEstTimestamp = leftLatestTimestamp;
         return  leftVisionEst;
     }
-
-    public static Matrix<N3, N1> getEstimationStdDevs(Pose2d estimatedPose) {
-        return rightLastEstTimestamp < leftLastEstTimestamp ? getEstimationStdDevsRight(estimatedPose) : getEstimationStdDevsLeft(estimatedPose);
-    }
     
-    private static Matrix<N3, N1> getEstimationStdDevsRight(Pose2d estimatedPose) {
+    public Matrix<N3, N1> getEstimationStdDevsRight(Pose2d estimatedPose) {
         var estStdDevs = kRightSingleTagStdDevs;
-        var targets = getLatestResult().getTargets();
+        var targets = rightCamera.getLatestResult().getTargets();
         int numTags = 0;
         double avgDist = 0;
         for (var tgt : targets) {
@@ -127,9 +136,9 @@ public class Vision {
         return estStdDevs;
     }
 
-    private static Matrix<N3, N1> getEstimationStdDevsLeft(Pose2d estimatedPose) {
+    public Matrix<N3, N1> getEstimationStdDevsLeft(Pose2d estimatedPose) {
         var estStdDevs = kLeftSingleTagStdDevs; // Assuming you have constants for left camera as well
-        var targets = getLatestResult().getTargets();
+        var targets = leftCamera.getLatestResult().getTargets();
         int numTags = 0;
         double avgDist = 0;
         for (var tgt : targets) {
@@ -154,13 +163,19 @@ public class Vision {
         return estStdDevs;
     }
 
-    public static double DistanceFromTarget() {
-        return PhotonUtils.getDistanceToPose(SwerveSubsystem.getInstance().getPose(), target);
-
+    public double DistanceFromTarget() {
+        return DistanceFromTarget(target);
     }
 
-    public static Rotation2d GetAngleFromTarget() {
-        return PhotonUtils.getYawToPose(SwerveSubsystem.getInstance().getPose(), target);
+    public double DistanceFromTarget(Pose2d targetPose) {
+        return PhotonUtils.getDistanceToPose(SwerveSubsystem.getInstance().getPose(), targetPose);
+    }
 
+    public Rotation2d GetAngleFromTarget() {
+        return GetAngleFromTarget(target);
+    }
+
+    public Rotation2d GetAngleFromTarget(Pose2d targetPose) {
+        return PhotonUtils.getYawToPose(SwerveSubsystem.getInstance().getPose(), targetPose);
     }
 }

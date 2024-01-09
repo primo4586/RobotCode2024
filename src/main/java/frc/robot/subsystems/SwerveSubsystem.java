@@ -10,8 +10,7 @@ import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 
-import com.ctre.phoenix6.configs.Pigeon2Configuration;
-import com.ctre.phoenix6.hardware.Pigeon2;
+import com.ctre.phoenix.sensors.PigeonIMU;
 
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
@@ -25,7 +24,7 @@ public class SwerveSubsystem extends SubsystemBase {
     public SwerveDriveOdometry swerveOdometry;
     public SwerveDrivePoseEstimator poseEstimation;
     public SwerveModule[] mSwerveMods;
-    public Pigeon2 gyro;
+    public PigeonIMU gyro;
     public SwerveDriveKinematics kinematics;
     public Vision vision;
 
@@ -40,8 +39,8 @@ public class SwerveSubsystem extends SubsystemBase {
     }
 
     private SwerveSubsystem() {
-        gyro = new Pigeon2(pigeonID);
-        gyro.getConfigurator().apply(new Pigeon2Configuration());
+        gyro = new PigeonIMU(pigeonID);
+        gyro.configFactoryDefault();
         zeroGyro();
 
         vision = Vision.getInstance();
@@ -124,8 +123,8 @@ public class SwerveSubsystem extends SubsystemBase {
     }
 
     public Rotation2d getYaw() {
-        return (invertGyro) ? Rotation2d.fromDegrees(360 - gyro.getYaw().getValue())
-                : Rotation2d.fromDegrees(gyro.getYaw().getValue());
+        return (invertGyro) ? Rotation2d.fromDegrees(360 - gyro.getYaw())
+                : Rotation2d.fromDegrees(gyro.getYaw());
     }
 
     public void resetModulesToAbsolute() {

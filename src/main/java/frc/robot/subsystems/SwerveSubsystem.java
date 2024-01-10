@@ -2,6 +2,10 @@ package frc.robot.subsystems;
 
 import frc.Utils.swerve.SwerveModule;
 import frc.Utils.vision.Vision;
+import frc.robot.Constants.Swerve.Mod0;
+import frc.robot.Constants.Swerve.Mod1;
+import frc.robot.Constants.Swerve.Mod2;
+import frc.robot.Constants.Swerve.Mod3;
 
 import static frc.robot.Constants.Swerve.*;
 
@@ -182,6 +186,7 @@ public class SwerveSubsystem extends SubsystemBase {
         for (SwerveModule mod : mSwerveMods) {
             SmartDashboard.putNumber("Mod " + mod.moduleNumber + " CANcoder", mod.getCANcoder().getDegrees());
             SmartDashboard.putNumber("Mod " + mod.moduleNumber + " Integrated", mod.getPosition().angle.getDegrees());
+            SmartDashboard.putNumber("Mod " + mod.moduleNumber + " Desired angle", mod.getDesierdState().angle.getDegrees());
             SmartDashboard.putNumber("Mod " + mod.moduleNumber + " Velocity", mod.getState().speedMetersPerSecond);
         }
         SmartDashboard.putNumberArray("ModuleStates", getAdvantageModuleStates());

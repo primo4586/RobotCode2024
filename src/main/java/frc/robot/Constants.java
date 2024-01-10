@@ -3,6 +3,8 @@ package frc.robot;
 import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 import com.ctre.phoenix6.signals.SensorDirectionValue;
+import com.pathplanner.lib.util.PIDConstants;
+import com.pathplanner.lib.util.ReplanningConfig;
 import com.revrobotics.CANSparkBase.IdleMode;
 
 import edu.wpi.first.apriltag.AprilTagFieldLayout;
@@ -152,6 +154,17 @@ public final class Constants {
         public static final double kPXController = 1;
         public static final double kPYController = 1;
         public static final double kPThetaController = 1;
+
+        public static final PIDConstants rotation_PID = new PIDConstants(0, 0);
+        public static final PIDConstants XY_PID = new PIDConstants(0, 0);
+
+        public static final double driveBaseRadius = 
+                        Math.sqrt(Math.pow((Constants.Swerve.wheelBase / 2), 2)
+                        + Math.pow((Constants.Swerve.trackWidth / 2), 2));
+
+        public static final ReplanningConfig replanningConfig = 
+                new ReplanningConfig(true, true,
+                        0.5,1);
     
         /* Constraint for the motion profilied robot angle controller */
         public static final TrapezoidProfile.Constraints kThetaControllerConstraints =

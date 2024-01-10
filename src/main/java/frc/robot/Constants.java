@@ -48,7 +48,7 @@ public final class Constants {
 
         /* Module Gear Ratios */
         public static final double driveGearRatio = chosenModule.driveGearRatio;
-        public static final double angleGearRatio = chosenModule.angleGearRatio;
+        public static final double angleGearRatio = 360 / chosenModule.angleGearRatio;
 
         /* Motor Inverts */
         public static final boolean angleMotorInvert = false;

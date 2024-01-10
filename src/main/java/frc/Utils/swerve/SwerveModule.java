@@ -26,7 +26,7 @@ public class SwerveModule {
 
     private CANSparkMax mAngleMotor;
     private TalonFX mDriveMotor;
-    private CANcoder angleEncoder;
+    private CANcoder mCancoder;
 
     private SwerveModuleState desiredState = new SwerveModuleState(0, Rotation2d.fromDegrees(0));
 
@@ -44,7 +44,7 @@ public class SwerveModule {
         this.angleOffset = moduleConstants.angleOffset;
         
         /* Angle Encoder Config */
-        angleEncoder = new CANcoder(moduleConstants.cancoderID);
+        mCancoder = new CANcoder(moduleConstants.cancoderID);
         configAngleEncoder();
 
         /* Angle Motor Config */
@@ -106,12 +106,12 @@ public class SwerveModule {
     }
 
     public Rotation2d getCANcoder(){
-        return Rotation2d.fromRotations(angleEncoder.getAbsolutePosition().getValue());
+        return Rotation2d.fromRotations(mCancoder.getAbsolutePosition().getValue());
     }
 
     private Rotation2d waitForCANcoder(){
         /* wait for up to 250ms for a new CANcoder position */
-        return Rotation2d.fromRotations(angleEncoder.getAbsolutePosition().waitForUpdate(250).getValue());
+        return Rotation2d.fromRotations(mCancoder.getAbsolutePosition().waitForUpdate(250).getValue());
     }
 
     public void resetToAbsolute(){
@@ -120,11 +120,11 @@ public class SwerveModule {
     }
 
     private void configAngleEncoder(){    
-        angleEncoder.getConfigurator().apply(Robot.ctreConfigs.swerveCANcoderConfig);
+        mCancoder.getConfigurator().apply(Robot.ctreConfigs.swerveCANcoderConfig);
     }
 
     private void configAngleMotor(){
-        //mAngleMotor.restoreFactoryDefaults();
+        mAngleMotor.restoreFactoryDefaults();
         CANSparkMaxUtil.setCANSparkMaxBusUsage(mAngleMotor, Usage.kPositionOnly);
         mAngleMotor.setSmartCurrentLimit(Constants.Swerve.angleCurrentLimit);
         mAngleMotor.setInverted(Constants.Swerve.angleMotorInvert);

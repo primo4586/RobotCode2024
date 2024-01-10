@@ -5,6 +5,7 @@ import com.ctre.phoenix6.controls.VelocityVoltage;
 import com.ctre.phoenix6.hardware.CANcoder;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.revrobotics.CANSparkMax;
+import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkPIDController;
 import com.revrobotics.CANSparkBase.ControlType;
 import com.revrobotics.CANSparkLowLevel.MotorType;
@@ -23,8 +24,10 @@ public class SwerveModule {
     public int moduleNumber;
     private Rotation2d angleOffset;
     private Rotation2d lastAngle;
+    private SwerveModuleConstants moduleConstants;
 
     private CANSparkMax mAngleMotor;
+    private RelativeEncoder integratedEncoder;
     private TalonFX mDriveMotor;
     private CANcoder mCancoder;
 
@@ -37,7 +40,7 @@ public class SwerveModule {
     private final VelocityVoltage driveVelocity = new VelocityVoltage(0);
 
     /* angle motor control requests */
-    private final SparkPIDController anglePosition;
+    private SparkPIDController anglePosition;
 
     public SwerveModule(int moduleNumber, SwerveModuleConstants moduleConstants){
         this.moduleNumber = moduleNumber;
@@ -50,6 +53,7 @@ public class SwerveModule {
         /* Angle Motor Config */
         mAngleMotor = new CANSparkMax(moduleConstants.angleMotorID, MotorType.kBrushless);
         anglePosition = mAngleMotor.getPIDController();
+        integratedEncoder = mAngleMotor.getEncoder();
         configAngleMotor();
 
         /* Drive Motor Config */
@@ -115,8 +119,8 @@ public class SwerveModule {
     }
 
     public void resetToAbsolute(){
-        double absolutePosition = waitForCANcoder().getDegrees() - angleOffset.getDegrees();
-        mAngleMotor.getEncoder().setPosition(absolutePosition);
+        double absolutePosition = mCancoder.getAbsolutePosition().waitForUpdate(250).getValue() * 360 - angleOffset.getDegrees();
+        System.out.println(integratedEncoder.setPosition(absolutePosition));
     }
 
     private void configAngleEncoder(){    
@@ -124,16 +128,16 @@ public class SwerveModule {
     }
 
     private void configAngleMotor(){
-        mAngleMotor.restoreFactoryDefaults();
         CANSparkMaxUtil.setCANSparkMaxBusUsage(mAngleMotor, Usage.kPositionOnly);
         mAngleMotor.setSmartCurrentLimit(Constants.Swerve.angleCurrentLimit);
         mAngleMotor.setInverted(Constants.Swerve.angleMotorInvert);
         mAngleMotor.setIdleMode(Constants.Swerve.angleNeutralMode);
-        mAngleMotor.getEncoder().setPositionConversionFactor(Constants.Swerve.angleGearRatio);
+        integratedEncoder.setPositionConversionFactor(Constants.Swerve.angleGearRatio);
         anglePosition.setP(Constants.Swerve.angleKP);
         anglePosition.setI(Constants.Swerve.angleKI);
         anglePosition.setD(Constants.Swerve.angleKD);
         anglePosition.setFF(Constants.Swerve.angleKFF);
+        anglePosition.setOutputRange(-1, 1);
         mAngleMotor.enableVoltageCompensation(Constants.Swerve.voltageComp);
         mAngleMotor.burnFlash();
         Timer.delay(1);

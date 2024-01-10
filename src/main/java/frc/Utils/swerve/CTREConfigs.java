@@ -2,6 +2,7 @@ package frc.Utils.swerve;
 
 import com.ctre.phoenix6.configs.CANcoderConfiguration;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
+import com.ctre.phoenix6.signals.AbsoluteSensorRangeValue;
 
 import frc.robot.Constants;
 
@@ -39,5 +40,6 @@ public final class CTREConfigs {
         
         /** Swerve CANCoder Configuration */
         swerveCANcoderConfig.MagnetSensor.SensorDirection = Constants.Swerve.cancoderInvert;
+        swerveCANcoderConfig.MagnetSensor.AbsoluteSensorRange =  AbsoluteSensorRangeValue.Unsigned_0To1;
     }
 }

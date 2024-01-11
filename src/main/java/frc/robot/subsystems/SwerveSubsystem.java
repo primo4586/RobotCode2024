@@ -29,7 +29,6 @@ public class SwerveSubsystem extends SubsystemBase {
     public SwerveDrivePoseEstimator poseEstimation;
     public SwerveModule[] mSwerveMods;
     public PigeonIMU gyro;
-    public SwerveDriveKinematics kinematics;
     public Vision vision;
 
     private static SwerveSubsystem instance;
@@ -95,7 +94,7 @@ public class SwerveSubsystem extends SubsystemBase {
     }
 
     public void setChassisSpeeds(ChassisSpeeds chassisSpeeds) {
-        setModuleStates(kinematics.toSwerveModuleStates(chassisSpeeds));
+        setModuleStates(swerveKinematics.toSwerveModuleStates(chassisSpeeds));
     }
 
     public Pose2d getPose() {

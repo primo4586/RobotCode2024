@@ -8,27 +8,24 @@ import java.util.HashMap;
 import java.util.Map;
 
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.Utils.PathPlanner.PathPlannerHelper;
 
 /** Add your docs here. */
 public class AutoContainer {
     private CommandSelector autoSelector;
     private Map<String, Command> autoPaths;
+    private PathPlannerHelper pathPlanner;
 
     public AutoContainer(){
-        this.autoPaths = new HashMap<String, Command>(); 
+        this.pathPlanner = PathPlannerHelper.getInstace();
+        this.autoPaths = new HashMap<String, Command>();
+        
+        this.autoPaths.put("test2Meter", pathPlanner.followPath("tesiopt2Meter"));
+        this.autoPaths.put("testSpin", pathPlanner.followPath("testSpin"));
 
-        // this.autoPaths.put("FF", swerve.stopModulescCommand().andThen(new FeedForwardCharacterization(
-        //     swerve, true,
-        //     new FeedForwardCharacterizationData("swerve"),
-        //     swerve::runCharacterizationVolts, swerve::getCharacterizationVelocity)));
-        this.autoPaths.put("redBumpConeCube", null);
+        this.autoPaths.put("testSplineChoreo", pathPlanner.followChoreoPath("testSplineChoreo"));
+        this.autoPaths.put("test2meterChoreo", pathPlanner.followChoreoPath("test2meterChoreo"));
 
-
-        //this.autoPaths.put("cubeAndDrive", gripper.setShouldGripConeCommand(false).andThen( new PutItemInTheUpper(bigArm, lilArm, gripper, telescopicArm)).andThen(swerve.driveUntilMeters(1.5, 5, false)));
-        //this.autoPaths.put("coneAndDrive", gripper.setShouldGripConeCommand(true).andThen( new PutItemInTheUpper(bigArm, lilArm, gripper, telescopicArm)).andThen(swerve.driveUntilMeters(1.5, 5, false)));
-        // this.autoPaths.put("cubeCharge", gripper.setShouldGripConeCommand(false).andThen(new DriveUntilOtherSide(swerve, true)).andThen(new FastCharge(false, swerve)).andThen(new PIDBalance(swerve)));
-        // this.autoPaths.put("coneCharge", gripper.setShouldGripConeCommand(true).andThen(new DriveUntilOtherSide(swerve, true)).andThen(new FastCharge(false, swerve)).andThen(new PIDBalance(swerve)));
-            
         this.autoSelector = new CommandSelector(autoPaths, PrimoShuffleboard.getInstance().getCompTabTitle());
     }
 

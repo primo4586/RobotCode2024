@@ -9,9 +9,6 @@ import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.path.GoalEndState;
 import com.pathplanner.lib.path.PathConstraints;
 import com.pathplanner.lib.path.PathPlannerPath;
-import com.pathplanner.lib.util.PIDConstants;
-import com.pathplanner.lib.util.ReplanningConfig;
-
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
@@ -40,7 +37,7 @@ public class pathPlanner {
     private pathPlanner() {
         swerve = SwerveSubsystem.getInstance();
 
-        AutoBuilder.configureHolonomic(//TODO: constants
+        AutoBuilder.configureHolonomic(
                 swerve::getPose,
                 swerve::resetOdometry,
                 swerve::getRobotVelocity,
@@ -50,8 +47,7 @@ public class pathPlanner {
                         AutoConstants.rotation_PID,
                         Constants.AutoConstants.kMaxSpeedMetersPerSecond,
                         AutoConstants.driveBaseRadius,
-                        new ReplanningConfig(true, true, 0.5,
-                                1)),
+                        AutoConstants.replanningConfig),
                 () -> {
                     // Boolean supplier that controls when the path will be mirrored for the red alliance
                     // This will flip the path being followed to the red side of the field.
@@ -70,7 +66,7 @@ public class pathPlanner {
 
         // Create a path following command using AutoBuilder. This will also trigger
         // event markers.
-        AutoBuilder.followPath(path).schedule();;
+        AutoBuilder.followPath(path).schedule();
     }
 
     public void followPath(String pathName) {
@@ -79,26 +75,35 @@ public class pathPlanner {
 
         // Create a path following command using AutoBuilder. This will also trigger
         // event markers.
-        AutoBuilder.followPath(path).schedule();;
+        AutoBuilder.followPath(path).schedule();
+    }
+    
+    public void followChoreoPath(String ChoreoTrajectory) {
+        // Load the path you want to follow using its name in the GUI
+        PathPlannerPath path = PathPlannerPath.fromChoreoTrajectory(ChoreoTrajectory);
+
+        // Create a path following command using AutoBuilder. This will also trigger
+        // event markers.
+        AutoBuilder.followPath(path).schedule();
     }
 
     public void pathFind(Pose2d targPose, PathConstraints constraints, double endVel, double rotationDelayDistance) {
         AutoBuilder.pathfindToPose(targPose, constraints, endVel, rotationDelayDistance).schedule();
     }
     
-    public void pathFind(Pose2d targetPose) {// TODO: constants
-        pathFind(targetPose, new PathConstraints(4, 400, 4, 400), 0, 0);
+    public void pathFind(Pose2d targetPose) {
+        pathFind(targetPose, AutoConstants.pathConstraints, 0, 0);
     }
 
     public PathPlannerPath generatePath(List<Translation2d> bezierPoints, GoalEndState goalEndState) {// TODO: constants
         return new PathPlannerPath(
-            bezierPoints, 
-            null, 
+            bezierPoints,
+            AutoConstants.pathConstraints, 
                 goalEndState);
     }
 
     public PathPlannerPath generatePath(List<Translation2d> bezierPoints, Rotation2d goalEndRotation) {
-        return generatePath(bezierPoints, goalEndRotation);
+        return generatePath(bezierPoints, new GoalEndState(0, goalEndRotation));
     }
 
     public void generateAndFollowPath(List<Translation2d> bezierPoints, GoalEndState goalEndState) {

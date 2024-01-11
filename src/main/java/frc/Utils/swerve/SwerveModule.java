@@ -14,9 +14,9 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.Timer;
-import frc.Utils.CANSparkMaxUtil;
-import frc.Utils.FalconConversions;
-import frc.Utils.CANSparkMaxUtil.Usage;
+import frc.Utils.motors.CANSparkMaxUtil;
+import frc.Utils.motors.FalconConversions;
+import frc.Utils.motors.CANSparkMaxUtil.Usage;
 import frc.robot.Constants;
 import frc.robot.Robot;
 
@@ -24,7 +24,6 @@ public class SwerveModule {
     public int moduleNumber;
     private Rotation2d angleOffset;
     private Rotation2d lastAngle;
-    private SwerveModuleConstants moduleConstants;
 
     private CANSparkMax mAngleMotor;
     private RelativeEncoder integratedEncoder;
@@ -111,11 +110,6 @@ public class SwerveModule {
 
     public Rotation2d getCANcoder(){
         return Rotation2d.fromRotations(mCancoder.getAbsolutePosition().getValue());
-    }
-
-    private Rotation2d waitForCANcoder(){
-        /* wait for up to 250ms for a new CANcoder position */
-        return Rotation2d.fromRotations(mCancoder.getAbsolutePosition().waitForUpdate(250).getValue());
     }
 
     public void resetToAbsolute(){

@@ -1,6 +1,5 @@
 package frc.Utils.swerve;
 
-import com.ctre.phoenix6.BaseStatusSignal;
 import com.ctre.phoenix6.controls.DutyCycleOut;
 import com.ctre.phoenix6.controls.VelocityVoltage;
 import com.ctre.phoenix6.hardware.CANcoder;
@@ -114,11 +113,11 @@ public class SwerveModule {
     }
 
     public void resetToAbsolute(){
-        mCancoder.getPosition().setUpdateFrequency(50);
+        //mCancoder.getPosition().setUpdateFrequency(50);
         double absolutePosition = mCancoder.getAbsolutePosition().waitForUpdate(250).getValue() * 360 - angleOffset.getDegrees();
         System.out.println(integratedEncoder.setPosition(absolutePosition));
-        mCancoder.getPosition().setUpdateFrequency(0);
-        mCancoder.optimizeBusUtilization();
+        //mCancoder.getPosition().setUpdateFrequency(0);
+        //mCancoder.optimizeBusUtilization();
     }
 
     private void configAngleEncoder() {

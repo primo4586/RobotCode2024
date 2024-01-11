@@ -14,6 +14,7 @@ import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 
+import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.ctre.phoenix.sensors.PigeonIMU;
 
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
@@ -28,6 +29,7 @@ public class SwerveSubsystem extends SubsystemBase {
     public SwerveDriveOdometry swerveOdometry;
     public SwerveDrivePoseEstimator poseEstimation;
     public SwerveModule[] mSwerveMods;
+    public TalonSRX talonSRX;
     public PigeonIMU gyro;
     public SwerveDriveKinematics kinematics;
     public Vision vision;
@@ -43,7 +45,8 @@ public class SwerveSubsystem extends SubsystemBase {
     }
 
     private SwerveSubsystem() {
-        gyro = new PigeonIMU(pigeonID);
+        talonSRX = new TalonSRX(pigeonID);
+        gyro = new PigeonIMU(talonSRX);
         gyro.configFactoryDefault();
         zeroGyro();
 

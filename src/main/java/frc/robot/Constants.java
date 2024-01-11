@@ -3,6 +3,7 @@ package frc.robot;
 import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 import com.ctre.phoenix6.signals.SensorDirectionValue;
+import com.pathplanner.lib.path.PathConstraints;
 import com.pathplanner.lib.util.PIDConstants;
 import com.pathplanner.lib.util.ReplanningConfig;
 import com.revrobotics.CANSparkBase.IdleMode;
@@ -164,8 +165,10 @@ public final class Constants {
 
         public static final ReplanningConfig replanningConfig = 
                 new ReplanningConfig(true, true,
-                        0.5,1);
-    
+                        0.5, 1);
+        
+        public static final PathConstraints pathConstraints = new PathConstraints(4, 9, 4, 9);
+                        
         /* Constraint for the motion profilied robot angle controller */
         public static final TrapezoidProfile.Constraints kThetaControllerConstraints =
             new TrapezoidProfile.Constraints(

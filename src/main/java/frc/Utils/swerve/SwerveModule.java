@@ -126,6 +126,7 @@ public class SwerveModule {
     }
 
     private void configAngleMotor(){
+        mAngleMotor.restoreFactoryDefaults();
         CANSparkMaxUtil.setCANSparkMaxBusUsage(mAngleMotor, Usage.kPositionOnly);
         mAngleMotor.setSmartCurrentLimit(Constants.Swerve.angleCurrentLimit);
         mAngleMotor.setInverted(Constants.Swerve.angleMotorInvert);
@@ -137,7 +138,7 @@ public class SwerveModule {
         anglePosition.setFF(Constants.Swerve.angleKFF);
         anglePosition.setOutputRange(-1, 1);
         mAngleMotor.enableVoltageCompensation(Constants.Swerve.voltageComp);
-        mAngleMotor.burnFlash();
+        System.out.println("burn "+ moduleNumber + mAngleMotor.burnFlash());
         Timer.delay(1);
         resetToAbsolute();
     }

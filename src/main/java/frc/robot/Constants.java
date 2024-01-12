@@ -58,7 +58,7 @@ public final class Constants {
         public static final SensorDirectionValue cancoderInvert = chosenModule.cancoderInvert;
 
         /* Swerve Current Limiting */
-        public static final int angleCurrentLimit = 25;
+        public static final int angleCurrentLimit = 35;
         public static final int angleCurrentThreshold = 40;
         public static final double angleCurrentThresholdTime = 0.1;
         public static final boolean angleEnableCurrentLimit = true;
@@ -75,7 +75,7 @@ public final class Constants {
         public static final double voltageComp = 12;
 
         /* Angle Motor PID Values */
-        public static final double angleKP = 0.09;//chosenModule.angleKP;
+        public static final double angleKP = 0.08;//chosenModule.angleKP;
         public static final double angleKI = chosenModule.angleKI;
         public static final double angleKD = chosenModule.angleKD;
         public static final double angleKFF = chosenModule.angleKD;

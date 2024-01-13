@@ -84,15 +84,15 @@ public final class Constants {
         public static final double angleKFF = chosenModule.angleKD;
 
         /* Drive Motor PID Values */
-        public static final double driveKP = 0.12; //TODO: This must be tuned to specific robot
+        public static final double driveKP = 0.2; //TODO: This must be tuned to specific robot
         public static final double driveKI = 0.0;
         public static final double driveKD = 0.0;
         public static final double driveKF = 0.0;
 
         /* Drive Motor Characterization Values From SYSID */
-        public static final double driveKS = 0.32; //TODO: This must be tuned to specific robot
-        public static final double driveKV = 1.51;
-        public static final double driveKA = 0.27;
+        public static final double driveKS = 0.15; //TODO: This must be tuned to specific robot
+        public static final double driveKV = 2.7;
+        public static final double driveKA = 0;
 
         /* Swerve Profiling Values */
         /** Meters per Second */
@@ -147,17 +147,13 @@ public final class Constants {
     }
 
     public static final class AutoConstants { //TODO: The below constants are used in the example auto, and must be tuned to specific robot
-        public static final double kMaxSpeedMetersPerSecond = 3;
-        public static final double kMaxAccelerationMetersPerSecondSquared = 3;
-        public static final double kMaxAngularSpeedRadiansPerSecond = Math.PI;
-        public static final double kMaxAngularSpeedRadiansPerSecondSquared = Math.PI;
-    
-        public static final double kPXController = 1;
-        public static final double kPYController = 1;
-        public static final double kPThetaController = 1;
+        public static final double kMaxSpeedMetersPerSecond = 3.5;
+        public static final double kMaxAccelerationMetersPerSecondSquared = 9;
+        public static final double kMaxAngularSpeedRadiansPerSecond = 9;
+        public static final double kMaxAngularSpeedRadiansPerSecondSquared = 9;
 
-        public static final PIDConstants rotation_PID = new PIDConstants(0, 0);
-        public static final PIDConstants XY_PID = new PIDConstants(0, 0);
+        public static final PIDConstants rotation_PID = new PIDConstants(1.5, 0);
+        public static final PIDConstants XY_PID = new PIDConstants(1.5, 0);
 
         public static final double driveBaseRadius = 
                         Math.sqrt(Math.pow((Constants.Swerve.wheelBase / 2), 2)
@@ -167,7 +163,7 @@ public final class Constants {
                 new ReplanningConfig(true, true,
                         0.5, 1);
         
-        public static final PathConstraints pathConstraints = new PathConstraints(4, 9, 4, 9);
+        public static final PathConstraints pathConstraints = new PathConstraints(kMaxSpeedMetersPerSecond, kMaxAccelerationMetersPerSecondSquared, kMaxAngularSpeedRadiansPerSecond, kMaxAngularSpeedRadiansPerSecondSquared);
                         
         /* Constraint for the motion profilied robot angle controller */
         public static final TrapezoidProfile.Constraints kThetaControllerConstraints =

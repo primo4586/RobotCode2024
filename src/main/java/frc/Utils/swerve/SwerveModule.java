@@ -165,4 +165,15 @@ public class SwerveModule {
             getAngle()
         );
     }
+
+    public void runCharacterizationVolts(double voltage){
+        anglePosition.setReference(0, ControlType.kPosition);
+        mDriveMotor.setVoltage(voltage);
+    }
+
+    public double getCharacterizationVelocity() {
+        return FalconConversions.talonToMPS(mDriveMotor.getVelocity().getValue(),
+         Constants.Swerve.wheelCircumference,
+         Constants.Swerve.driveGearRatio);
+    }
 }

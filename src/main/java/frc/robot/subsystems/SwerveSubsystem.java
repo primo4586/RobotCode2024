@@ -23,6 +23,8 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj.sysid.SysIdRoutineLog.MotorLog;
+import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class SwerveSubsystem extends SubsystemBase {
@@ -59,6 +61,8 @@ public class SwerveSubsystem extends SubsystemBase {
         };
 
         swerveOdometry = new SwerveDriveOdometry(swerveKinematics, getYaw(), getModulePositions());
+        swerveOdometry.resetPosition(new Rotation2d(0), getModulePositions(), new Pose2d(1.5,5.5,new Rotation2d(3.1415)));
+        poseEstimation = new SwerveDrivePoseEstimator(swerveKinematics, getYaw(), getModulePositions(),new Pose2d(2,2,new Rotation2d(0)));
     }
 
     public void drive(Translation2d translation, double rotation, boolean fieldRelative, boolean isOpenLoop, boolean scaled) {
@@ -164,7 +168,7 @@ public class SwerveSubsystem extends SubsystemBase {
     @Override
     public void periodic() {
         swerveOdometry.update(getYaw(), getModulePositions());
-
+/*
         vision.getRightEstimatedGlobalPose().ifPresent(
                 est -> {
                     var estPose = est.estimatedPose.toPose2d();
@@ -184,6 +188,7 @@ public class SwerveSubsystem extends SubsystemBase {
                     poseEstimation.addVisionMeasurement(
                             est.estimatedPose.toPose2d(), est.timestampSeconds, estStdDevs);
                 });
+                */
 
         for (SwerveModule mod : mSwerveMods) {
             SmartDashboard.putNumber("Mod " + mod.moduleNumber + " CANcoder", mod.getCANcoder().getDegrees());
@@ -194,4 +199,32 @@ public class SwerveSubsystem extends SubsystemBase {
         SmartDashboard.putNumberArray("ModuleStates", getAdvantageModuleStates());
         SmartDashboard.putNumberArray("DesiredModuleStates", getAdvantageDesiredModuleStates());
     }
+
+    public void stopModules() {
+        for (SwerveModule module : mSwerveMods) {
+            module.setDesiredState(new SwerveModuleState(0, Rotation2d.fromDegrees(0)), true);
+        }
+    }
+
+    public Command stopModulescCommand(){
+        return runOnce(()->{
+            stopModules();
+        });
+    }
+
+          /** Runs forwards at the commanded voltage. */
+  public void runCharacterizationVolts(double volts) {
+    for (SwerveModule mod : mSwerveMods){
+        mod.runCharacterizationVolts(volts);
+    }
+  }
+
+  /** Returns the average drive velocity in radians/sec. */
+  public double getCharacterizationVelocity() {
+    double driveVelocityAverage = 0.0;
+    for (SwerveModule mod : mSwerveMods) {
+      driveVelocityAverage += mod.getCharacterizationVelocity();
+    }
+    return driveVelocityAverage / 4.0;
+  }
 }

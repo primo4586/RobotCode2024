@@ -118,7 +118,13 @@ public class PathPlannerHelper {
         return generatePath(bezierPoints, new GoalEndState(0, goalEndRotation));
     }
 
-    public void generateAndFollowPath(List<Translation2d> bezierPoints, GoalEndState goalEndState) {
-        followPath(generatePath(bezierPoints, goalEndState));
+    public Command generateAndFollowPath(List<Translation2d> bezierPoints, GoalEndState goalEndState) {
+        return followPath(generatePath(bezierPoints, goalEndState));
     }
+
+    public Command generateAndFollowPath(Translation2d bezierPoint, GoalEndState goalEndState) {
+        return generateAndFollowPath(List.of(bezierPoint), goalEndState);
+    }
+
+
 }

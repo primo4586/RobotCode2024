@@ -9,22 +9,36 @@ import java.util.Map;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.Utils.PathPlanner.PathPlannerHelper;
+import frc.robot.Constants.Swerve;
+import frc.robot.subsystems.FeedForwardCharacterization;
+import frc.robot.subsystems.SwerveSubsystem;
+import frc.robot.subsystems.FeedForwardCharacterization.FeedForwardCharacterizationData;
 
 /** Add your docs here. */
 public class AutoContainer {
     private CommandSelector autoSelector;
     private Map<String, Command> autoPaths;
     private PathPlannerHelper pathPlanner;
+    SwerveSubsystem swerve = SwerveSubsystem.getInstance();
 
     public AutoContainer(){
         this.pathPlanner = PathPlannerHelper.getInstace();
         this.autoPaths = new HashMap<String, Command>();
         
-        this.autoPaths.put("test2Meter", pathPlanner.followPath("tesiopt2Meter"));
+        this.autoPaths.put("test2Meter", pathPlanner.followPath("test2Meter"));
         this.autoPaths.put("testSpin", pathPlanner.followPath("testSpin"));
+
 
         this.autoPaths.put("testSplineChoreo", pathPlanner.followChoreoPath("testSplineChoreo"));
         this.autoPaths.put("test2meterChoreo", pathPlanner.followChoreoPath("test2meterChoreo"));
+        this.autoPaths.put("NewPath", pathPlanner.followChoreoPath("NewPath"));
+        this.autoPaths.put("4piece", pathPlanner.followChoreoPath("4piece"));
+        
+
+                this.autoPaths.put("FF", swerve.stopModulescCommand().andThen(new FeedForwardCharacterization(
+            swerve, true,
+            new FeedForwardCharacterizationData("swerve"),
+            swerve::runCharacterizationVolts, swerve::getCharacterizationVelocity)));
 
         this.autoSelector = new CommandSelector(autoPaths, PrimoShuffleboard.getInstance().getCompTabTitle());
     }

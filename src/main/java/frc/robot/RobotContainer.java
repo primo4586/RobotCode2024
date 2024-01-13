@@ -1,11 +1,18 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj.Joystick;
+
+import com.pathplanner.lib.path.GoalEndState;
+
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
-
+import frc.Utils.PathPlanner.PathPlannerHelper;
 import frc.robot.commands.*;
 import frc.robot.subsystems.*;
 
@@ -17,15 +24,13 @@ import frc.robot.subsystems.*;
  */
 public class RobotContainer {
     /* Controllers */
-    private final Joystick driver = new Joystick(0);
+    private final CommandXboxController driver = new CommandXboxController(0);
 
     /* Drive Controls */
     private final int translationAxis = XboxController.Axis.kLeftY.value;
     private final int strafeAxis = XboxController.Axis.kLeftX.value;
     private final int rotationAxis = XboxController.Axis.kRightX.value;
-
-    /* Driver Buttons */
-    private final JoystickButton zeroGyro = new JoystickButton(driver, XboxController.Button.kY.value);
+    PathPlannerHelper pathPlannerHelper = PathPlannerHelper.getInstace();
 
     /* Subsystems */
     private final SwerveSubsystem s_Swerve = SwerveSubsystem.getInstance();
@@ -49,12 +54,13 @@ public class RobotContainer {
 
     /**
      * Use this method to define your button->command mappings. Buttons can be created by
+     * 
      * instantiating a {@link GenericHID} or one of its subclasses ({@link
      * edu.wpi.first.wpilibj.Joystick} or {@link XboxController}), and then passing it to a {@link
      * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
      */
     private void configureButtonBindings() {
         /* Driver Buttons */
-        zeroGyro.onTrue(new InstantCommand(() -> s_Swerve.zeroGyro()));
+        driver.y().onTrue(new InstantCommand(() -> s_Swerve.zeroGyro()));
     }
 }

@@ -11,7 +11,6 @@ import static frc.robot.Constants.Swerve.*;
 
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
-import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
@@ -22,13 +21,23 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
+import edu.wpi.first.units.Distance;
+import edu.wpi.first.units.Measure;
+import edu.wpi.first.units.MutableMeasure;
+import edu.wpi.first.units.Velocity;
+import edu.wpi.first.units.Voltage;
+import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
+import static edu.wpi.first.units.Units.Volts;
+import static edu.wpi.first.units.MutableMeasure.mutable;
+import static edu.wpi.first.units.Units.Meters;
+import static edu.wpi.first.units.Units.MetersPerSecond;
 
 public class SwerveSubsystem extends SubsystemBase {
-    public SwerveDriveOdometry swerveOdometry;
     public SwerveDrivePoseEstimator poseEstimation;
     public SwerveModule[] mSwerveMods;
     public TalonSRX talonSRX;
@@ -62,9 +71,6 @@ public class SwerveSubsystem extends SubsystemBase {
                 new SwerveModule(2, Mod2.constants),
                 new SwerveModule(3, Mod3.constants)
         };
-
-        swerveOdometry = new SwerveDriveOdometry(swerveKinematics, getYaw(), getModulePositions());
-        swerveOdometry.resetPosition(new Rotation2d(0), getModulePositions(), new Pose2d(1.5,5.5,new Rotation2d(3.1415)));
         poseEstimation = new SwerveDrivePoseEstimator(swerveKinematics, getYaw(), getModulePositions(),new Pose2d(2,2,new Rotation2d(0)));
     }
 
@@ -108,11 +114,11 @@ public class SwerveSubsystem extends SubsystemBase {
     }
 
     public Pose2d getPose() {
-        return swerveOdometry.getPoseMeters();
+        return poseEstimation.getEstimatedPosition();
     }
 
     public void resetOdometry(Pose2d pose) {
-        swerveOdometry.resetPosition(getYaw(), getModulePositions(), pose);
+        poseEstimation.resetPosition(getYaw(), getModulePositions(), pose);
     }
 
     public SwerveModuleState[] getModuleStates() {
@@ -170,7 +176,7 @@ public class SwerveSubsystem extends SubsystemBase {
 
     @Override
     public void periodic() {
-        swerveOdometry.update(getYaw(), getModulePositions());
+        poseEstimation.update(getYaw(), getModulePositions());
 /*
         vision.getRightEstimatedGlobalPose().ifPresent(
                 est -> {
@@ -202,7 +208,7 @@ public class SwerveSubsystem extends SubsystemBase {
         SmartDashboard.putNumberArray("ModuleStates", getAdvantageModuleStates());
         SmartDashboard.putNumberArray("DesiredModuleStates", getAdvantageDesiredModuleStates());
 
-        field2d.setRobotPose(swerveOdometry.getPoseMeters());
+        field2d.setRobotPose(poseEstimation.getEstimatedPosition());
     }
 
     public void stopModules() {
@@ -217,19 +223,77 @@ public class SwerveSubsystem extends SubsystemBase {
         });
     }
 
-          /** Runs forwards at the commanded voltage. */
-  public void runCharacterizationVolts(double volts) {
-    for (SwerveModule mod : mSwerveMods){
-        mod.runCharacterizationVolts(volts);
+    /** Runs forwards at the commanded voltage. */
+    public void runCharacterizationVolts(Measure<Voltage> volts) {
+        for (SwerveModule mod : mSwerveMods){
+            mod.runCharacterizationVolts(volts);
+        }
     }
-  }
 
-  /** Returns the average drive velocity in radians/sec. */
-  public double getCharacterizationVelocity() {
-    double driveVelocityAverage = 0.0;
-    for (SwerveModule mod : mSwerveMods) {
-      driveVelocityAverage += mod.getCharacterizationVelocity();
+      // Mutable holder for unit-safe voltage values, persisted to avoid reallocation.
+  private final MutableMeasure<Voltage> m_appliedVoltage = mutable(Volts.of(0));
+  // Mutable holder for unit-safe linear distance values, persisted to avoid reallocation.
+  private final MutableMeasure<Distance> m_distance = mutable(Meters.of(0));
+  // Mutable holder for unit-safe linear velocity values, persisted to avoid reallocation.
+  private final MutableMeasure<Velocity<Distance>> m_velocity = mutable(MetersPerSecond.of(0));
+    
+      // Create a new SysId routine for characterizing the drive.
+  private final SysIdRoutine m_sysIdRoutine =
+      new SysIdRoutine(
+          // Empty config defaults to 1 volt/second ramp rate and 7 volt step voltage.
+          new SysIdRoutine.Config(),
+          new SysIdRoutine.Mechanism(
+              // Tell SysId how to plumb the driving voltage to the motors.
+              (Measure<Voltage> volts) -> {
+                runCharacterizationVolts(volts);
+              },
+              // Tell SysId how to record a frame of data for each motor on the mechanism being
+              // characterized.
+              log -> {
+                // Record a frame for the left motors.  Since these share an encoder, we consider
+                // the entire group to be one motor.
+                log.motor("FL")
+                    .voltage(
+                        m_appliedVoltage.mut_replace(
+                            mSwerveMods[0].get() * RobotController.getBatteryVoltage(), Volts))
+                    .linearPosition(m_distance.mut_replace(mSwerveMods[0].getPosition().distanceMeters, Meters))
+                    .linearVelocity(
+                        m_velocity.mut_replace(mSwerveMods[0].getCharacterizationVelocity(), MetersPerSecond));
+                        
+                log.motor("FR")
+                    .voltage(
+                        m_appliedVoltage.mut_replace(
+                            mSwerveMods[1].get() * RobotController.getBatteryVoltage(), Volts))
+                    .linearPosition(m_distance.mut_replace(mSwerveMods[1].getPosition().distanceMeters, Meters))
+                    .linearVelocity(
+                        m_velocity.mut_replace(mSwerveMods[1].getCharacterizationVelocity(), MetersPerSecond));
+                        
+                log.motor("BL")
+                    .voltage(
+                        m_appliedVoltage.mut_replace(
+                            mSwerveMods[2].get() * RobotController.getBatteryVoltage(), Volts))
+                    .linearPosition(m_distance.mut_replace(mSwerveMods[2].getPosition().distanceMeters, Meters))
+                    .linearVelocity(
+                        m_velocity.mut_replace(mSwerveMods[2].getCharacterizationVelocity(), MetersPerSecond));
+                        
+                log.motor("BR")
+                    .voltage(
+                        m_appliedVoltage.mut_replace(
+                            mSwerveMods[3].get() * RobotController.getBatteryVoltage(), Volts))
+                    .linearPosition(m_distance.mut_replace(mSwerveMods[3].getPosition().distanceMeters, Meters))
+                    .linearVelocity(
+                        m_velocity.mut_replace(mSwerveMods[3].getCharacterizationVelocity(), MetersPerSecond));
+                
+              },
+              // Tell SysId to make generated commands require this subsystem, suffix test state in
+              // WPILog with this subsystem's name ("drive")
+              this));
+              
+    public Command sysIdQuasistatic(SysIdRoutine.Direction direction) {
+      return m_sysIdRoutine.quasistatic(direction);
     }
-    return driveVelocityAverage / 4.0;
-  }
+
+    public Command sysIdDynamic(SysIdRoutine.Direction direction) {
+        return m_sysIdRoutine.dynamic(direction);
+    }
 }

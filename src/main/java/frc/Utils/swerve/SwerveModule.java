@@ -1,5 +1,7 @@
 package frc.Utils.swerve;
 
+import static edu.wpi.first.units.Units.Volts;
+
 import com.ctre.phoenix6.controls.DutyCycleOut;
 import com.ctre.phoenix6.controls.VelocityVoltage;
 import com.ctre.phoenix6.hardware.CANcoder;
@@ -13,6 +15,8 @@ import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
+import edu.wpi.first.units.Measure;
+import edu.wpi.first.units.Voltage;
 import edu.wpi.first.wpilibj.Timer;
 import frc.Utils.motors.CANSparkMaxUtil;
 import frc.Utils.motors.FalconConversions;
@@ -166,14 +170,18 @@ public class SwerveModule {
         );
     }
 
-    public void runCharacterizationVolts(double voltage){
+    public void runCharacterizationVolts(Measure<Voltage> voltage){
         anglePosition.setReference(0, ControlType.kPosition);
-        mDriveMotor.setVoltage(voltage);
+        mDriveMotor.setVoltage(voltage.in(Volts));
     }
 
     public double getCharacterizationVelocity() {
         return FalconConversions.talonToMPS(mDriveMotor.getVelocity().getValue(),
          Constants.Swerve.wheelCircumference,
          Constants.Swerve.driveGearRatio);
+    }
+
+    public double get() {
+        return mDriveMotor.get();
     }
 }

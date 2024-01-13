@@ -6,13 +6,18 @@ import com.pathplanner.lib.path.GoalEndState;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.Utils.PathPlanner.PathPlannerHelper;
+import frc.robot.Constants.Swerve;
 import frc.robot.commands.*;
 import frc.robot.subsystems.*;
 
@@ -44,7 +49,8 @@ public class RobotContainer {
                 () -> -driver.getRawAxis(translationAxis), 
                 () -> -driver.getRawAxis(strafeAxis), 
                 () -> -driver.getRawAxis(rotationAxis), 
-                true
+                true,
+                () -> driver.rightBumper().getAsBoolean()
             )
         );
 

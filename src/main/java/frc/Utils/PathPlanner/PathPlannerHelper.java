@@ -122,8 +122,8 @@ public class PathPlannerHelper {
         return followPath(generatePath(bezierPoints, goalEndState));
     }
 
-    public Command generateAndFollowPath(Translation2d bezierPoint, GoalEndState goalEndState) {
-        return generateAndFollowPath(List.of(bezierPoint), goalEndState);
+    public Command generateAndFollowPath(Pose2d endPose, GoalEndState goalEndState) {
+        return generateAndFollowPath(PathPlannerPath.bezierFromPoses(swerve.getPose(), endPose), goalEndState);
     }
 
 

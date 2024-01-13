@@ -68,5 +68,7 @@ public class RobotContainer {
     private void configureButtonBindings() {
         /* Driver Buttons */
         driver.y().onTrue(new InstantCommand(() -> s_Swerve.zeroGyro()));
+        
+        driver.a().onTrue(pathPlannerHelper.generateAndFollowPath(new Pose2d(1.5, 5.5, new Rotation2d(0)), new GoalEndState(0, new Rotation2d(0))));
     }
 }

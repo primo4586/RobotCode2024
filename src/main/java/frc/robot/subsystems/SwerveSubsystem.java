@@ -11,6 +11,7 @@ import static frc.robot.Constants.Swerve.*;
 
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
+import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
@@ -44,6 +45,7 @@ public class SwerveSubsystem extends SubsystemBase {
     public PigeonIMU gyro;
     public Vision vision;
     Field2d field2d = new Field2d();
+    Rotation2d simYaw = new Rotation2d();
 
     private static SwerveSubsystem instance;
 
@@ -61,6 +63,7 @@ public class SwerveSubsystem extends SubsystemBase {
         gyro.configFactoryDefault();
         zeroGyro();
         
+        field2d.
         SmartDashboard.putData("field", field2d);
 
         vision = Vision.getInstance();
@@ -176,7 +179,7 @@ public class SwerveSubsystem extends SubsystemBase {
 
     @Override
     public void periodic() {
-        poseEstimation.update(getYaw(), getModulePositions());
+        //poseEstimation.update(getYaw(), getModulePositions());
 /*
         vision.getRightEstimatedGlobalPose().ifPresent(
                 est -> {
@@ -295,5 +298,39 @@ public class SwerveSubsystem extends SubsystemBase {
 
     public Command sysIdDynamic(SysIdRoutine.Direction direction) {
         return m_sysIdRoutine.dynamic(direction);
+    }
+
+    public SwerveModuleState[] getSimStates() {
+        SwerveModuleState[] states = new SwerveModuleState[4];
+        for (SwerveModule mod : mSwerveMods) {
+            states[mod.moduleNumber] = mod.getDesierdState();
+        }
+        return states;
+    }
+
+    SwerveModulePosition simModPose = new SwerveModulePosition();
+    SwerveModulePosition[] poses = new SwerveModulePosition[]{
+        simModPose,simModPose,simModPose,simModPose
+    };
+    Rotation2d rotation2d = new Rotation2d();
+    double distance = 0;
+    @Override
+    public void simulationPeriodic() {
+        super.simulationPeriodic();
+
+        ChassisSpeeds chassisSpeed =  swerveKinematics.toChassisSpeeds(getSimStates());
+
+        simYaw = Rotation2d.fromRadians(chassisSpeed.omegaRadiansPerSecond * 0.02);
+        
+        simModPose.angle = getSimStates()[0].angle;
+        simModPose.distanceMeters += getSimStates()[0].speedMetersPerSecond * 0.02;
+        
+        for (SwerveModulePosition pose : poses) {
+            pose = simModPose;
+        }
+        
+        poseEstimation.update(simYaw, poses);
+
+        field2d.setRobotPose(getPose());
     }
 }

@@ -13,6 +13,7 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 
@@ -121,7 +122,7 @@ public class PathPlannerHelper {
     public Command generateAndFollowPath(Translation2d endPoint, GoalEndState goalEndState) {
         Translation2d currentPose = swerve.getPose().getTranslation();
         Rotation2d rotation = angleBetweenPoints(currentPose, endPoint);
-
+        SmartDashboard.putNumber("rotation", rotation.getDegrees());
         Pose2d startPose = new Pose2d(currentPose, rotation);
         Pose2d endPos = new Pose2d(endPoint, rotation);
 

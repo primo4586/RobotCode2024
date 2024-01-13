@@ -62,8 +62,12 @@ public class RobotContainer {
         /* Driver Buttons */
         driver.y().onTrue(new InstantCommand(() -> swerve.zeroGyro()));
         
+        driver.button(1).onTrue(pathPlannerHelper.generateAndFollowPath(new Translation2d(1.5, 5.5),
+                new GoalEndState(0, new Rotation2d(0))).asProxy());
+
         driver.a().onTrue(pathPlannerHelper.generateAndFollowPath(new Translation2d(1.5, 5.5),
                 new GoalEndState(0, new Rotation2d(0))));
+
         driver.b().onTrue(pathPlannerHelper.generateAndFollowPath(PathPlannerPath.bezierFromPoses(
             new Pose2d(swerve.getPose().getTranslation(),new Rotation2d()),
             new Pose2d(swerve.getPose().getTranslation().plus(new Translation2d(2.0, 0.0)), new Rotation2d())),

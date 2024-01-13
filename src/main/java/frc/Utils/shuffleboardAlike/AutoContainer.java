@@ -9,10 +9,10 @@ import java.util.Map;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.Utils.PathPlanner.PathPlannerHelper;
+import frc.Utils.feedForward.FeedForwardCharacterization;
+import frc.Utils.feedForward.FeedForwardCharacterization.FeedForwardCharacterizationData;
 import frc.robot.Constants.Swerve;
-import frc.robot.subsystems.FeedForwardCharacterization;
 import frc.robot.subsystems.SwerveSubsystem;
-import frc.robot.subsystems.FeedForwardCharacterization.FeedForwardCharacterizationData;
 
 /** Add your docs here. */
 public class AutoContainer {

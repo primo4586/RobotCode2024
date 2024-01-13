@@ -97,6 +97,8 @@ public final class Constants {
         /* Swerve Profiling Values */
         /** Meters per Second */
         public static final double maxSpeed = 4.5; //TODO: This must be tuned to specific robot
+        public static final double XYSlowRatio = 0.5; // TODO: make it more accrute 
+        public static final double rotationSlowRatio = 0.5; // TODO: make it more accrute 
         /** Radians per Second */
         public static final double maxAngularVelocity = 10.0; //TODO: This must be tuned to specific robot
 
@@ -152,8 +154,8 @@ public final class Constants {
         public static final double kMaxAngularSpeedRadiansPerSecond = 9;
         public static final double kMaxAngularSpeedRadiansPerSecondSquared = 9;
 
-        public static final PIDConstants rotation_PID = new PIDConstants(1.5, 0);
-        public static final PIDConstants XY_PID = new PIDConstants(1.5, 0);
+        public static final PIDConstants rotation_PID = new PIDConstants(3, 0);
+        public static final PIDConstants XY_PID = new PIDConstants(3, 0);
 
         public static final double driveBaseRadius = 
                         Math.sqrt(Math.pow((Constants.Swerve.wheelBase / 2), 2)

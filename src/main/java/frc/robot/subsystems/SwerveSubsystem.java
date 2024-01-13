@@ -22,6 +22,7 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
+import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.sysid.SysIdRoutineLog.MotorLog;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -34,6 +35,7 @@ public class SwerveSubsystem extends SubsystemBase {
     public TalonSRX talonSRX;
     public PigeonIMU gyro;
     public Vision vision;
+    Field2d field2d = new Field2d();
 
     private static SwerveSubsystem instance;
 
@@ -50,6 +52,8 @@ public class SwerveSubsystem extends SubsystemBase {
         gyro = new PigeonIMU(talonSRX);
         gyro.configFactoryDefault();
         zeroGyro();
+        
+        SmartDashboard.putData("field", field2d);
 
         vision = Vision.getInstance();
 
@@ -198,6 +202,8 @@ public class SwerveSubsystem extends SubsystemBase {
         }
         SmartDashboard.putNumberArray("ModuleStates", getAdvantageModuleStates());
         SmartDashboard.putNumberArray("DesiredModuleStates", getAdvantageDesiredModuleStates());
+
+        field2d.setRobotPose(swerveOdometry.getPoseMeters());
     }
 
     public void stopModules() {

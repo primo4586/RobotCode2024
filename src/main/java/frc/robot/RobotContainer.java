@@ -1,23 +1,16 @@
 package frc.robot;
 
-import edu.wpi.first.wpilibj.Joystick;
-
 import com.pathplanner.lib.path.GoalEndState;
+import com.pathplanner.lib.path.PathPlannerPath;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
-import edu.wpi.first.math.kinematics.ChassisSpeeds;
-import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
-import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
-import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.Utils.PathPlanner.PathPlannerHelper;
-import frc.robot.Constants.Swerve;
 import frc.robot.commands.*;
 import frc.robot.subsystems.*;
 
@@ -38,14 +31,14 @@ public class RobotContainer {
     PathPlannerHelper pathPlannerHelper = PathPlannerHelper.getInstace();
 
     /* Subsystems */
-    private final SwerveSubsystem s_Swerve = SwerveSubsystem.getInstance();
+    private final SwerveSubsystem swerve = SwerveSubsystem.getInstance();
 
 
     /** The container for the robot. Contains subsystems, OI devices, and commands. */
     public RobotContainer() {
-        s_Swerve.setDefaultCommand(
+        swerve.setDefaultCommand(
             new TeleopSwerve(
-                s_Swerve, 
+                swerve, 
                 () -> -driver.getRawAxis(translationAxis), 
                 () -> -driver.getRawAxis(strafeAxis), 
                 () -> -driver.getRawAxis(rotationAxis), 
@@ -67,8 +60,14 @@ public class RobotContainer {
      */
     private void configureButtonBindings() {
         /* Driver Buttons */
-        driver.y().onTrue(new InstantCommand(() -> s_Swerve.zeroGyro()));
+        driver.y().onTrue(new InstantCommand(() -> swerve.zeroGyro()));
         
-        driver.a().onTrue(pathPlannerHelper.generateAndFollowPath(new Pose2d(1.5, 5.5, new Rotation2d(0)), new GoalEndState(0, new Rotation2d(0))));
+        driver.a().onTrue(pathPlannerHelper.generateAndFollowPath(new Translation2d(1.5, 5.5),
+                new GoalEndState(0, new Rotation2d(0))));
+        driver.b().onTrue(pathPlannerHelper.generateAndFollowPath(PathPlannerPath.bezierFromPoses(
+            new Pose2d(swerve.getPose().getTranslation(),new Rotation2d()),
+            new Pose2d(swerve.getPose().getTranslation().plus(new Translation2d(2.0, 0.0)), new Rotation2d())),
+                new GoalEndState(0, new Rotation2d(0))));
+
     }
 }

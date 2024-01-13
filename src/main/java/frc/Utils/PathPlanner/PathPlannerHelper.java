@@ -107,24 +107,38 @@ public class PathPlannerHelper {
         return pathFind(targetPose, AutoConstants.pathConstraints, 0, 0);
     }
 
-    public PathPlannerPath generatePath(List<Translation2d> bezierPoints, GoalEndState goalEndState) {// TODO: constants
+    public PathPlannerPath generatePath(List<Translation2d> bezierPoints, GoalEndState goalEndState) {
         return new PathPlannerPath(
-            bezierPoints,
-            AutoConstants.pathConstraints, 
+                bezierPoints,
+                AutoConstants.pathConstraints,
                 goalEndState);
-    }
-
-    public PathPlannerPath generatePath(List<Translation2d> bezierPoints, Rotation2d goalEndRotation) {
-        return generatePath(bezierPoints, new GoalEndState(0, goalEndRotation));
     }
 
     public Command generateAndFollowPath(List<Translation2d> bezierPoints, GoalEndState goalEndState) {
         return followPath(generatePath(bezierPoints, goalEndState));
     }
 
-    public Command generateAndFollowPath(Pose2d endPose, GoalEndState goalEndState) {
-        return generateAndFollowPath(PathPlannerPath.bezierFromPoses(swerve.getPose(), endPose), goalEndState);
+    public Command generateAndFollowPath(Translation2d endPoint, GoalEndState goalEndState) {
+        Translation2d currentPose = swerve.getPose().getTranslation();
+        Rotation2d rotation = angleBetweenPoints(currentPose, endPoint);
+
+        Pose2d startPose = new Pose2d(currentPose, rotation);
+        Pose2d endPos = new Pose2d(endPoint, rotation);
+
+        return followPath(generatePath(PathPlannerPath.bezierFromPoses(startPose, endPos), goalEndState));
     }
 
+    public Rotation2d angleBetweenPoints(Translation2d point1, Translation2d point2) {
+        Translation2d anglePoint = point1.minus(point2);
 
+        // Calculate the angle in radians
+        double angleRad = Math.atan2(anglePoint.getY(),anglePoint.getX());
+
+        // Ensure the angle is between 0 and 2π (0 and 360 degrees)
+        if (angleRad < 0) {
+            angleRad += 2 * Math.PI;
+        }
+
+        return new Rotation2d(angleRad);
+    }
 }

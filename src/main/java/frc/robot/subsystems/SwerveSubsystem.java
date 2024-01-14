@@ -63,7 +63,6 @@ public class SwerveSubsystem extends SubsystemBase {
         gyro.configFactoryDefault();
         zeroGyro();
         
-        field2d.
         SmartDashboard.putData("field", field2d);
 
         vision = Vision.getInstance();

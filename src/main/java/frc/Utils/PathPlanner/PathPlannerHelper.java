@@ -100,14 +100,6 @@ public class PathPlannerHelper {
         }
     }
 
-    public Command pathFind(Pose2d targPose, PathConstraints constraints, double endVel, double rotationDelayDistance) {
-        return AutoBuilder.pathfindToPose(targPose, constraints, endVel, rotationDelayDistance);
-    }
-    
-    public Command pathFind(Pose2d targetPose) {
-        return pathFind(targetPose, AutoConstants.pathConstraints, 0, 0);
-    }
-
     public PathPlannerPath generatePath(List<Translation2d> bezierPoints, GoalEndState goalEndState) {
         return new PathPlannerPath(
                 bezierPoints,
@@ -116,17 +108,21 @@ public class PathPlannerHelper {
     }
 
     public Command generateAndFollowPath(List<Translation2d> bezierPoints, GoalEndState goalEndState) {
-        return followPath(generatePath(bezierPoints, goalEndState));
+        return Commands.runOnce(() -> {
+            followPath(generatePath(bezierPoints, goalEndState));
+        });
     }
 
     public Command generateAndFollowPath(Translation2d endPoint, GoalEndState goalEndState) {
-        Translation2d currentPose = swerve.getPose().getTranslation();
-        Rotation2d rotation = angleBetweenPoints(currentPose, endPoint);
-        SmartDashboard.putNumber("rotation", rotation.getDegrees());
-        Pose2d startPose = new Pose2d(currentPose, rotation);
-        Pose2d endPos = new Pose2d(endPoint, rotation);
+        return Commands.runOnce(() -> {
+            Translation2d currentPose = swerve.getPose().getTranslation();
+            Rotation2d rotation = angleBetweenPoints(currentPose, endPoint);
+            //rotation = Rotation2d.fromDegrees(0);
+            Pose2d startPose = new Pose2d(currentPose, rotation);
+            Pose2d endPos = new Pose2d(endPoint, rotation);
 
-        return followPath(generatePath(PathPlannerPath.bezierFromPoses(startPose, endPos), goalEndState));
+            followPath(generatePath(PathPlannerPath.bezierFromPoses(startPose, endPos), goalEndState)).schedule();
+        });
     }
 
     public Rotation2d angleBetweenPoints(Translation2d point1, Translation2d point2) {

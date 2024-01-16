@@ -97,8 +97,8 @@ public final class Constants {
         /* Swerve Profiling Values */
         /** Meters per Second */
         public static final double maxSpeed = 4.5; //TODO: This must be tuned to specific robot
-        public static final double XYSlowRatio = 0.5; // TODO: make it more accrute 
-        public static final double rotationSlowRatio = 0.5; // TODO: make it more accrute 
+        public static final double XYSlowRatio = 0.25; // TODO: make it more accrute 
+        public static final double rotationSlowRatio = 0.25; // TODO: make it more accrute 
         /** Radians per Second */
         public static final double maxAngularVelocity = 10.0; //TODO: This must be tuned to specific robot
 

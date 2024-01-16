@@ -8,6 +8,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
 import frc.Utils.PathPlanner.PathPlannerHelper;
 import frc.robot.Constants.Swerve;
 import frc.robot.subsystems.SwerveSubsystem;
@@ -31,6 +32,10 @@ public class AutoContainer {
         this.autoPaths.put("test2meterChoreo", pathPlanner.followChoreoPath("test2meterChoreo"));
         this.autoPaths.put("NewPath", pathPlanner.followChoreoPath("NewPath"));
         this.autoPaths.put("4piece", pathPlanner.followChoreoPath("4piece"));
+
+        this.autoPaths.put("ForQuasistatic", swerve.sysIdQuasistatic(Direction.kForward));
+
+        this.autoSelector = new CommandSelector(autoPaths, PrimoShuffleboard.getInstance().getCompTabTitle());
     }
 
     public Command getAutonomousCommand() {

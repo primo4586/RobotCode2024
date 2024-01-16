@@ -174,7 +174,7 @@ public final class Constants {
     }
 
     public static class Vision {
-    public static final String kRightCameraName = "YOUR CAMERA NAME";
+    public static final String kRightCameraName = "Arducam_OV9281_USB_Camera";
     public static final String kLeftCameraName = "YOUR CAMERA NAME";
     // Cam mounted facing forward, half a meter forward of center, half a meter up
     // from center.

@@ -37,6 +37,7 @@ import static edu.wpi.first.units.Units.Volts;
 import static edu.wpi.first.units.MutableMeasure.mutable;
 import static edu.wpi.first.units.Units.Meters;
 import static edu.wpi.first.units.Units.MetersPerSecond;
+import static edu.wpi.first.units.Units.Seconds;
 
 public class SwerveSubsystem extends SubsystemBase {
     public SwerveDrivePoseEstimator poseEstimation;
@@ -178,8 +179,8 @@ public class SwerveSubsystem extends SubsystemBase {
 
     @Override
     public void periodic() {
-        //poseEstimation.update(getYaw(), getModulePositions());
-/*
+        poseEstimation.update(getYaw(), getModulePositions());
+
         vision.getRightEstimatedGlobalPose().ifPresent(
                 est -> {
                     var estPose = est.estimatedPose.toPose2d();
@@ -190,7 +191,7 @@ public class SwerveSubsystem extends SubsystemBase {
                             est.estimatedPose.toPose2d(), est.timestampSeconds, estStdDevs);
                 });
 
-        vision.getLeftEstimatedGlobalPose().ifPresent(
+        /*vision.getLeftEstimatedGlobalPose().ifPresent(
                 est -> {
                     var estPose = est.estimatedPose.toPose2d();
                     // Change our trust in the measurement based on the tags we can see
@@ -198,8 +199,7 @@ public class SwerveSubsystem extends SubsystemBase {
 
                     poseEstimation.addVisionMeasurement(
                             est.estimatedPose.toPose2d(), est.timestampSeconds, estStdDevs);
-                });
-                */
+                });*/
 
         for (SwerveModule mod : mSwerveMods) {
             SmartDashboard.putNumber("Mod " + mod.moduleNumber + " CANcoder", mod.getCANcoder().getDegrees());
@@ -238,12 +238,13 @@ public class SwerveSubsystem extends SubsystemBase {
   private final MutableMeasure<Distance> m_distance = mutable(Meters.of(0));
   // Mutable holder for unit-safe linear velocity values, persisted to avoid reallocation.
   private final MutableMeasure<Velocity<Distance>> m_velocity = mutable(MetersPerSecond.of(0));
+
     
       // Create a new SysId routine for characterizing the drive.
   private final SysIdRoutine m_sysIdRoutine =
       new SysIdRoutine(
           // Empty config defaults to 1 volt/second ramp rate and 7 volt step voltage.
-          new SysIdRoutine.Config(),
+          new SysIdRoutine.Config(Volts.of(0.25).per(Seconds.of(1)), Volts.of(7), Seconds.of(25)),
           new SysIdRoutine.Mechanism(
               // Tell SysId how to plumb the driving voltage to the motors.
               (Measure<Voltage> volts) -> {

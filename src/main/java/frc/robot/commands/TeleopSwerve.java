@@ -17,9 +17,11 @@ public class TeleopSwerve extends Command {
     private DoubleSupplier strafeSup;
     private DoubleSupplier rotationSup;
     private Boolean fieldSentric;
+    private BooleanSupplier slowMode;
 
-    public TeleopSwerve(SwerveSubsystem s_Swerve, DoubleSupplier translationSup, DoubleSupplier strafeSup, DoubleSupplier rotationSup, boolean fieldSentric) {
+    public TeleopSwerve(SwerveSubsystem s_Swerve, DoubleSupplier translationSup, DoubleSupplier strafeSup, DoubleSupplier rotationSup, boolean fieldSentric, BooleanSupplier slowMode) {
         this.s_Swerve = s_Swerve;
+        this.slowMode = slowMode;
         addRequirements(s_Swerve);
 
         this.translationSup = translationSup;
@@ -36,12 +38,23 @@ public class TeleopSwerve extends Command {
         double rotationVal = MathUtil.applyDeadband(rotationSup.getAsDouble(), Constants.stickDeadband);
 
         /* Drive */
-        s_Swerve.drive(
-            new Translation2d(translationVal, strafeVal).times(Constants.Swerve.maxSpeed), 
-            rotationVal * Constants.Swerve.maxAngularVelocity, 
-            fieldSentric, 
-            true,
-            true
-        );
+        if (!slowMode.getAsBoolean()){
+            s_Swerve.drive(
+                new Translation2d(translationVal, strafeVal).times(Constants.Swerve.maxSpeed), 
+                rotationVal * Constants.Swerve.maxAngularVelocity, 
+                fieldSentric, 
+                true,
+                true
+            );
+        /* Slow mode drive */
+        }else{
+            s_Swerve.drive(
+                new Translation2d(translationVal, strafeVal).times(Constants.Swerve.maxSpeed * Constants.Swerve.XYSlowRatio), 
+                rotationVal * Constants.Swerve.maxAngularVelocity * Constants.Swerve.rotationSlowRatio, 
+                fieldSentric, 
+                true,
+                true
+            );
+        }
     }
 }

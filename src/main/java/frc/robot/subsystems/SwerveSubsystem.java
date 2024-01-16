@@ -11,7 +11,6 @@ import static frc.robot.Constants.Swerve.*;
 
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
-import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
@@ -325,8 +324,8 @@ public class SwerveSubsystem extends SubsystemBase {
         simModPose.angle = getSimStates()[0].angle;
         simModPose.distanceMeters += getSimStates()[0].speedMetersPerSecond * 0.02;
         
-        for (SwerveModulePosition pose : poses) {
-            pose = simModPose;
+        for (int i = 0; i<4; i++) {
+            poses[i] = simModPose;
         }
         
         poseEstimation.update(simYaw, poses);

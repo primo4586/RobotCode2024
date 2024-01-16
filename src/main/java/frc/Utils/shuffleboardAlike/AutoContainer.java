@@ -10,7 +10,6 @@ import java.util.Map;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
 import frc.Utils.PathPlanner.PathPlannerHelper;
-import frc.robot.Constants.Swerve;
 import frc.robot.subsystems.SwerveSubsystem;
 
 /** Add your docs here. */

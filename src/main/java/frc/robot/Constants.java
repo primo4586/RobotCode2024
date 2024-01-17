@@ -20,6 +20,7 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.util.Units;
+import frc.Utils.interpolation.InterpolationMap;
 import frc.Utils.swerve.COTSFalconSwerveConstants;
 import frc.Utils.swerve.SwerveModuleConstants;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
@@ -197,4 +198,38 @@ public final class Constants {
 
     public static final Pose2d target = new Pose2d(1, 1, new Rotation2d(Units.degreesToRadians(0)));
   }
+
+    public static class ShooterConstants {
+        //m_shooterMotor ID
+        public static final int kMotorShooterID = 20;
+
+        //Motion Magic Values
+        public static final int MotionMagicCruiseVelocity = 5;
+        public static final int MotionMagicAcceleration = 10;
+        public static final int MotionMagicJerk = 50;
+
+        public static final double PeakForwardVoltage = 11.5;
+        public static final double PeakReverseVoltage = -11.5;
+
+        public static final int SensorToMechanismRatio = 50;
+
+        public static final int MaxError = 13;
+        
+        //PID values
+        public static final int kP = 24;
+        public static final double kD = 0.1;
+        public static final double kS = 0.12;
+        public static final double kV = 0.25;
+
+        //Interpolation Map
+        public static final InterpolationMap ShooterInterpolation = new InterpolationMap()
+        .put(1,9)
+        .put(1.2, 9.2)
+        .put(1.4, 9.4)
+        .put(1.6, 9.6)
+        .put(1.8, 9.8)
+        .put(2, 10)
+        .put(2.1, 10.2);
+
+    }
 }

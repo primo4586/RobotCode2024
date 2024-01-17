@@ -6,12 +6,13 @@ package frc.robot.commands.IntakeArmCommands;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.IntakeArmSubsystem;
+import static frc.robot.Constants.IntakeArm.*;
 
-public class SetSpeed extends Command {
+public class IntakeZero extends Command {
   /** Creates a new SetSpeed. */
   private final IntakeArmSubsystem intakeArm = IntakeArmSubsystem.getInstance();
   private double speed;
-  public SetSpeed(double speed) {
+  public IntakeZero(double speed) {
     // Use addRequirements() here to declare subsystem dependencies.
     this.speed = speed;
   }
@@ -31,7 +32,7 @@ public class SetSpeed extends Command {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    intakeArm.setSpeed(0);
+    intakeArm.setSpeed(zeroSpeed);
   }
 
   // Returns true when the command should end.

@@ -12,8 +12,6 @@ import com.ctre.phoenix6.hardware.TalonFX;
 
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
-
 import static frc.robot.Constants.IntakeArm.*;
 
 public class IntakeArmSubsystem extends SubsystemBase {

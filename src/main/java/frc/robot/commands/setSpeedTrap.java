@@ -7,9 +7,9 @@ package frc.robot.commands;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.SubsystemTrap;
 
+
 public class setSpeedTrap extends Command {
   private final SubsystemTrap subsystemTrap = SubsystemTrap.getInstance();
-  private final 
   double speed;
   /** Creates a new setSpeedTrap. */
   public setSpeedTrap(double speed) {
@@ -22,7 +22,7 @@ public class setSpeedTrap extends Command {
   @Override
   public void initialize() {
     this.subsystemTrap.setSpeed(speed);
-    
+
   }
 
   // Called every time the scheduler runs while the command is scheduled.

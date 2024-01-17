@@ -28,7 +28,33 @@ import edu.wpi.first.math.numbers.N3;
 
 public final class Constants {
     public static final double stickDeadband = 0.1;
-
+    
+    public static final class IntakeArm{ //TODO: This must be tuned to specific robot
+        // mm
+        public static final int KMotorID = 0;
+        public static final double mmVelocity = 5.0;
+        public static final double mmAcceleration = 10.0;
+        public static final double mmJerk = 50;
+        public static final double KP = 24.0;
+        public static final double KD = 0.1;
+        public static final double KV = 0.12;
+        public static final double KS = 0.25;
+        public static final double PeakForwardVoltage = 11.5;
+        public static final double PeakReverseVoltage = -11.5;
+        public static final double SensorToMechanismRatio = 0;
+        public static final boolean ForwardSoftLimitEnable = true;
+        public static final double ForwardSoftLimitThreshold = 300;
+        public static final boolean ReverseSoftLimitEnable = true;
+        public static final double RevesrseSoftLimitThreshold = 0;  
+        // not mm
+        public static final double minimumError = 0;
+        public static final double startingValue = 0;
+        public static final double zeroEncoderValue = 0;
+        public static final double intakeArmSpeed = 0;
+        // switch
+        public static final int switchID = 0;
+        
+    }
     public static final class Swerve {
         public static final int pigeonID = 10;
         public static final boolean invertGyro = false; // Always ensure Gyro is CCW+ CW-

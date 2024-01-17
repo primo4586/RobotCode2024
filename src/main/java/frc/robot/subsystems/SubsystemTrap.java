@@ -8,6 +8,7 @@ import com.ctre.phoenix.motorcontrol.TalonSRXControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import com.ctre.phoenix6.hardware.TalonFX;
+import static frc.robot.Constants.trapConstants.*;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
@@ -27,10 +28,11 @@ public class SubsystemTrap extends SubsystemBase {
 
 
   /** Creates a new SubsystemTrap. */
-  public SubsystemTrap() {
+  private SubsystemTrap() {
 
   }
-  public void setSpeed(double speed){
+  private void setSpeed(double speed){
+    trapMotor = new WPI_TalonSRX(DEVICE_NUMBER);
     trapMotor.set(speed);
     
   }

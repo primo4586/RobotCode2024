@@ -223,4 +223,9 @@ public final class Constants {
 
     public static final Pose2d target = new Pose2d(1, 1, new Rotation2d(Units.degreesToRadians(0)));
   }
+  public static class trapConstants {
+    public static final int DEVICE_NUMBER = 0;
+  
+    
+  }
 }

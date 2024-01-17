@@ -4,6 +4,7 @@
 
 package frc.robot.subsystems;
 
+import com.ctre.phoenix.motorcontrol.TalonSRXControlMode;
 import com.ctre.phoenix6.StatusCode;
 import com.ctre.phoenix6.configs.MotionMagicConfigs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
@@ -73,12 +74,21 @@ public class IntakeArmSubsystem extends SubsystemBase {
   public void moveArmTo(double degrees){
       m_IntakeArmMotor.setControl(motionMagic.withPosition(degrees));
   }
+  //set speed
+  public void setSpeed(double speed){
+    m_IntakeArmMotor.set(speed);
+  }
   // set incoder idk
   public void setIncodre (double incoder){
     m_IntakeArmMotor.setPosition(incoder);
   }
+  // get if a switch is press
   public boolean getSwitch(){
     return !driver.rightBumper().getAsBoolean(); // TODO change it from rightBumper to idk what 
+  }
+  // check if intake arm is in place 
+  public boolean checkIntakeArmPosion(){
+    return Math.abs(m_IntakeArmMotor.getClosedLoopError().getValue()) < minimumError;
   }
 
   @Override

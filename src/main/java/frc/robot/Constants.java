@@ -48,6 +48,7 @@ public final class Constants {
         public static final boolean ReverseSoftLimitEnable = true;
         public static final double RevesrseSoftLimitThreshold = 0;  
         // not mm
+        public static final double minimumError = 0;
         
     }
     public static final class Swerve {

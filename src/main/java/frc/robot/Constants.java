@@ -197,4 +197,38 @@ public final class Constants {
 
     public static final Pose2d target = new Pose2d(1, 1, new Rotation2d(Units.degreesToRadians(0)));
   }
+
+  public static class ShooterArmConstants {
+
+    // technical Constants
+    public static final int ShooterArmID = 0;
+    public static final int SwitchID = 1
+    public static final int encoderCountsPerRevolution = 1024;
+    public static final double gearRatio = 50.0;
+    public static final double TICKS_PER_DEGREE = encoderCountsPerRevolution * gearRatio / 360.0;
+
+    // condition Costants
+    public static final double minimumError = 2.0;
+
+    // motionMagic Constants
+    public static final double mmCruise = 5;
+    public static final double mmAcceleration = 10;
+    public static final double mmJerk = 50;
+
+    public static final double kp = 24;
+    public static final double kd = 0.1;
+    public static final double ks = 24;
+    public static final double ka = 24;
+    public static final double kv = 24;
+
+    // MaxVol Constant
+    public static final double peekReverseVoltage = -11.5;
+    public static final double peekForwardVoltage = 11.5;
+
+    // Constant limit values
+    public static final double forwardLimit = 300;
+    public static final double backwordLimit = 300;
+
+    // HoodPoseReset Constant
+    public static final double poseReset = 0.0;
 }

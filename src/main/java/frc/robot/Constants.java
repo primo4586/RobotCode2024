@@ -32,7 +32,6 @@ public final class Constants {
     public static final class IntakeArm{ //TODO: This must be tuned to specific robot
         // mm
         public static final int KMotorID = 0;
-        public static final double CollectMotorSpeed = 0.5;
         public static final double mmVelocity = 5.0;
         public static final double mmAcceleration = 10.0;
         public static final double mmJerk = 50;
@@ -49,7 +48,9 @@ public final class Constants {
         public static final double RevesrseSoftLimitThreshold = 0;  
         // not mm
         public static final double minimumError = 0;
-        public static final double zeroSpeed = 0;
+        public static final double startingValue = 0;
+        public static final double zeroEncoder = 0;
+        public static final double intakeArmSpeed = 0;
         
     }
     public static final class Swerve {

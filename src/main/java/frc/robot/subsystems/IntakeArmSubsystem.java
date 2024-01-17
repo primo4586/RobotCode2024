@@ -15,7 +15,6 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import static frc.robot.Constants.IntakeArm.*;
 
 public class IntakeArmSubsystem extends SubsystemBase {
-  private final CommandXboxController driver = new CommandXboxController(0);
   private TalonFX m_IntakeArmMotor;
   private final MotionMagicVoltage motionMagic = new MotionMagicVoltage(0);
 
@@ -29,7 +28,7 @@ public class IntakeArmSubsystem extends SubsystemBase {
     return instance;
   }
   /** Creates a new IntakeArmSubsystem. */
-  public IntakeArmSubsystem() {
+  private IntakeArmSubsystem() {
     this.m_IntakeArmMotor = new TalonFX(KMotorID);
     TalonFXConfiguration configs = new TalonFXConfiguration();
     MotionMagicConfigs mm = new MotionMagicConfigs();
@@ -78,12 +77,12 @@ public class IntakeArmSubsystem extends SubsystemBase {
     m_IntakeArmMotor.set(speed);
   }
   // set incoder idk
-  public void setIncodre (double incoder){
+  public void setEncoder (double incoder){
     m_IntakeArmMotor.setPosition(incoder);
   }
   // get if a switch is press
   public boolean getSwitch(){
-    return !driver.rightBumper().getAsBoolean(); // TODO change it from rightBumper to idk what 
+    return true;
   }
   // check if intake arm is in place 
   public boolean checkIntakeArmPosion(){

@@ -11,17 +11,14 @@ import static frc.robot.Constants.IntakeArm.*;
 public class IntakeZero extends Command {
   /** Creates a new SetSpeed. */
   private final IntakeArmSubsystem intakeArm = IntakeArmSubsystem.getInstance();
-  private double speed;
-  public IntakeZero(double speed) {
+  public IntakeZero() {
     // Use addRequirements() here to declare subsystem dependencies.
-    this.speed = speed;
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    IntakeArmSubsystem.getInstance();
-    intakeArm.setSpeed(speed);
+    intakeArm.setSpeed(intakeArmSpeed);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -32,7 +29,8 @@ public class IntakeZero extends Command {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    intakeArm.setSpeed(zeroSpeed);
+    intakeArm.setSpeed(0);
+    intakeArm.setEncoder(zeroEncoder);
   }
 
   // Returns true when the command should end.

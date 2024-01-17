@@ -21,12 +21,12 @@ public class IntakeZero extends Command {
   @Override
   public void initialize() {
     IntakeArmSubsystem.getInstance();
+    intakeArm.setSpeed(speed);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    intakeArm.setSpeed(speed);
   }
 
   // Called once the command ends or is interrupted.

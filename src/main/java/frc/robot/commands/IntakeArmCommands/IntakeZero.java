@@ -30,7 +30,7 @@ public class IntakeZero extends Command {
   @Override
   public void end(boolean interrupted) {
     intakeArm.setSpeed(0);
-    intakeArm.setEncoder(zeroEncoder);
+    intakeArm.setEncoder(zeroEncoderValue);
   }
 
   // Returns true when the command should end.

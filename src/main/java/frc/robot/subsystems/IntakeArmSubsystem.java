@@ -67,8 +67,8 @@ public class IntakeArmSubsystem extends SubsystemBase {
       System.out.println("Turret could not apply configs, error code: " + status.toString());
     }
 
-    // make sure we start at 0.
-    m_IntakeArmMotor.setPosition(0);
+
+    m_IntakeArmMotor.setPosition(startingValue);
   }
 
   // moving the arm
@@ -80,8 +80,8 @@ public class IntakeArmSubsystem extends SubsystemBase {
     m_IntakeArmMotor.set(speed);
   }
   // set incoder idk
-  public void setEncoder (double incoder){
-    m_IntakeArmMotor.setPosition(incoder);
+  public void setEncoder (double EncoderValue){
+    m_IntakeArmMotor.setPosition(EncoderValue);
   }
   // get if a switch is press
   public boolean getSwitch(){

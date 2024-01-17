@@ -49,7 +49,7 @@ public final class Constants {
         // not mm
         public static final double minimumError = 0;
         public static final double startingValue = 0;
-        public static final double zeroEncoder = 0;
+        public static final double zeroEncoderValue = 0;
         public static final double intakeArmSpeed = 0;
         // switch
         public static final int switchID = 0;

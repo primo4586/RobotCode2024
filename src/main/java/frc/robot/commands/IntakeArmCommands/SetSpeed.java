@@ -13,13 +13,15 @@ import static frc.robot.Constants.IntakeArm.*;
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
 public class SetSpeed extends InstantCommand {
   private final IntakeArmSubsystem intakeArm = IntakeArmSubsystem.getInstance();
+  private double speed;
   public SetSpeed(double speed) {
     // Use addRequirements() here to declare subsystem dependencies.
+    this.speed = speed;
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    intakeArm.setSpeed(intakeArmSpeed);
+    intakeArm.setSpeed(speed);
   }
 }

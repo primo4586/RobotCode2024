@@ -80,8 +80,8 @@ public class IntakeArmSubsystem extends SubsystemBase {
     m_IntakeArmMotor.set(speed);
   }
   // set incoder idk
-  public void setEncoder (double EncoderValue){
-    m_IntakeArmMotor.setPosition(EncoderValue);
+  public void setEncoder (double encoderValue){
+    m_IntakeArmMotor.setPosition(encoderValue);
   }
   // get if a switch is press
   public boolean getSwitch(){

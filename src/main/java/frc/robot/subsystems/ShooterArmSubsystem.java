@@ -9,9 +9,8 @@ import com.ctre.phoenix6.configs.MotionMagicConfigs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.MotionMagicVoltage;
 import com.ctre.phoenix6.hardware.TalonFX;
-import edu.wpi.first.wpilibj2.coP mmand.SubsystemBase;
-import frc.robot.util.interpolation.InterpolateUtil;
 import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 import static frc.robot.Constants.ShooterArmConstants.*;
 
@@ -35,7 +34,7 @@ public class ShooterArmSubsystem extends SubsystemBase {
 
   public ShooterArmSubsystem() {
     this.m_ArmMotor = new TalonFX(ShooterArmID);
-    this.limitSwitch = new DigitalInput(SwitchID)
+    this.limitSwitch = new DigitalInput(SwitchID);
 
     // creat the full MotionMagic
     TalonFXConfiguration configuration = new TalonFXConfiguration();
@@ -75,7 +74,6 @@ public class ShooterArmSubsystem extends SubsystemBase {
       System.out.println("Arm could not apply config, error code:" + statusCode.toString());
 
     m_ArmMotor.setPosition(0);
-    this.setDefaultCommand(new ArmAngleFromDistanceCommand());
 
   }
 
@@ -96,7 +94,7 @@ public class ShooterArmSubsystem extends SubsystemBase {
 
   //geting if the switch is open
   public boolean getSwitch(){
-    return this.limitSwitch.get()
+    return this.limitSwitch.get();
   }
 
 

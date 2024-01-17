@@ -9,6 +9,8 @@ import com.ctre.phoenix6.configs.MotionMagicConfigs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.MotionMagicVoltage;
 import com.ctre.phoenix6.hardware.TalonFX;
+
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 
@@ -17,7 +19,7 @@ import static frc.robot.Constants.IntakeArm.*;
 public class IntakeArmSubsystem extends SubsystemBase {
   private TalonFX m_IntakeArmMotor;
   private final MotionMagicVoltage motionMagic = new MotionMagicVoltage(0);
-
+  private final DigitalInput intakeSwitch = new DigitalInput(switchID);
   // singleton
   private static IntakeArmSubsystem instance;
 
@@ -52,6 +54,7 @@ public class IntakeArmSubsystem extends SubsystemBase {
     configs.SoftwareLimitSwitch.ReverseSoftLimitEnable = ReverseSoftLimitEnable;
     configs.SoftwareLimitSwitch.ReverseSoftLimitThreshold = RevesrseSoftLimitThreshold;
 
+
     // gives code to TalonFX
     StatusCode status = StatusCode.StatusCodeNotInitialized;
     for (int i = 0; i < 5; i++) {
@@ -82,7 +85,7 @@ public class IntakeArmSubsystem extends SubsystemBase {
   }
   // get if a switch is press
   public boolean getSwitch(){
-    return true;
+    return intakeSwitch.get();
   }
   // check if intake arm is in place 
   public boolean checkIntakeArmPosion(){

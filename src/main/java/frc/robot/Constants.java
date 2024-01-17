@@ -51,6 +51,8 @@ public final class Constants {
         public static final double startingValue = 0;
         public static final double zeroEncoder = 0;
         public static final double intakeArmSpeed = 0;
+        // switch
+        public static final int switchID = 0;
         
     }
     public static final class Swerve {

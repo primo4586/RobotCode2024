@@ -14,7 +14,7 @@ public class ShooterSetSpeedInterpolation extends Command {
 
   /** Creates a new ShooterSetSpeedInterpolation. */
   public ShooterSetSpeedInterpolation() {
-    this.addRequirements(shooterSubsystem, swerve);
+    this.addRequirements(shooterSubsystem);
     // Use addRequirements() here to declare subsystem dependencies.
   }
 

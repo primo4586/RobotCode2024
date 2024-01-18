@@ -33,7 +33,7 @@ public class ShooterSubsysem extends SubsystemBase {
   }
 
   /** Creates a new ShooterSubsysem. */
-  public ShooterSubsysem() {
+  private ShooterSubsysem() {
     // giving values to the motors
     this.m_shooterMotor = new TalonFX(kMotorShooterID);
 

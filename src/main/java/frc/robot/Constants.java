@@ -197,4 +197,11 @@ public final class Constants {
 
     public static final Pose2d target = new Pose2d(1, 1, new Rotation2d(Units.degreesToRadians(0)));
   }
+
+  public static class FeederConstants{
+
+    public static final int FeederMotorId = 3;
+    public static final double FeederMotorSpeed = 0.8;
+
+  }
 }

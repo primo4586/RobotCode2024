@@ -32,7 +32,7 @@ public class ShooterArmSubsystem extends SubsystemBase {
       return instance;
     }
 
-  public ShooterArmSubsystem() {
+  private ShooterArmSubsystem() {
     this.m_ArmMotor = new TalonFX(ShooterArmID);
     this.limitSwitch = new DigitalInput(SwitchID);
 

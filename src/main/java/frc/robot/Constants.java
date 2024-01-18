@@ -229,7 +229,7 @@ public final class Constants {
     public static final double forwardLimit = 300;
     public static final double backwordLimit = 300;
 
-    // HoodPoseReset Constant
+    // ArmPoseReset Constant
     public static final double poseReset = 0.0;
 }
 }

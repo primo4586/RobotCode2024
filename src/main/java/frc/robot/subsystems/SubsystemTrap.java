@@ -31,7 +31,7 @@ public class SubsystemTrap extends SubsystemBase {
   private SubsystemTrap() {
 
   }
-  private void setSpeed(double speed){
+  public void setSpeed(double speed){
     trapMotor = new WPI_TalonSRX(DEVICE_NUMBER);
     trapMotor.set(speed);
     

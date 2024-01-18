@@ -47,7 +47,6 @@ public class ShooterArmSubsystem extends SubsystemBase {
 
     configuration.Slot0.kP = kp;
     configuration.Slot0.kD = kd;
-    configuration.Slot0.kS = ks;
     configuration.Slot0.kV = kv;
     configuration.Slot0.kS = ks;
 

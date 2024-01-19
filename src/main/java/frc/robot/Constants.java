@@ -302,4 +302,10 @@ public final class Constants {
         .put(2.1, 10.2);
 
     }
+    public static class TrapArmConstants{
+        public static final int ArmMotorID = 10;
+        public static final int InnerSwitchID= 0;
+        public static final int OuterSwitchID= 10;
+
+    }
 }

@@ -5,7 +5,6 @@
 package frc.robot.commands.ShooterArmCommands;
 
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.Constants;
 import frc.robot.subsystems.ShooterArmSubsystem;
 
 import static frc.robot.Constants.ShooterArmConstants.*;

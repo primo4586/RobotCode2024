@@ -29,11 +29,12 @@ public class SubsystemTrap extends SubsystemBase {
 
   /** Creates a new SubsystemTrap. */
   private SubsystemTrap() {
+    trapMotor = new WPI_TalonSRX(TRAP_MOTOR_ID);
+
 
   }
   public void setSpeed(double speed){
-    trapMotor = new WPI_TalonSRX(DEVICE_NUMBER);
-    trapMotor.set(speed);
+   trapMotor.set(speed);
     
   }
 

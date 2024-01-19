@@ -35,8 +35,8 @@ public class FeederSubsystem extends SubsystemBase {
   } 
 
   // set speed function
-  public void setSpeed(){
-    m_Feeder.set(ControlMode.PercentOutput, FeederMotorSpeed);
+  public void setSpeed(double motorSpeed){
+    m_Feeder.set(ControlMode.PercentOutput, motorSpeed);
   }
 
   @Override

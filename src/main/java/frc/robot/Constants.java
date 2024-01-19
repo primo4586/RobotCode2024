@@ -224,7 +224,10 @@ public final class Constants {
     public static final Pose2d target = new Pose2d(1, 1, new Rotation2d(Units.degreesToRadians(0)));
   }
   public static class trapConstants {
-    public static final int DEVICE_NUMBER = 0;
+    public static final int TRAP_MOTOR_ID = 0;
+    public static final int M_CLIMBINGRIGHT_MOTOR_ID = 1;
+    public static final int M_CLIMBINGLEFT_MOTOR_ID = 2;
+
   
     
   }

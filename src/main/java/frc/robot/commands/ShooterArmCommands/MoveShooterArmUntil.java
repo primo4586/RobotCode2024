@@ -22,14 +22,14 @@ public class MoveShooterArmUntil extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    shooterArmSubsystem.movementArmToReset();
+    shooterArmSubsystem.moveArmBySpeed(resetSpeed);
   }
 
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    shooterArmSubsystem.setPosition(resetPose);
+    shooterArmSubsystem.setPosition(startPose);
   }
 
   // Returns true when the command should end.

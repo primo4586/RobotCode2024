@@ -231,6 +231,9 @@ public final class Constants {
 
     // ArmPoseReset Constant
     public static final double resetPose = 0.0;
-    public static final double resetSpeed = -1;
+    public static final double resetSpeed = -1.0;
+
+    public static final double startPose =0.0;
+
 }
 }

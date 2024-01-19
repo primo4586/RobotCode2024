@@ -72,7 +72,7 @@ public class ShooterArmSubsystem extends SubsystemBase {
     if (!statusCode.isOK())
       System.out.println("Arm could not apply config, error code:" + statusCode.toString());
 
-    m_ArmMotor.setPosition(0);
+    m_ArmMotor.setPosition(startPose);
 
   }
 
@@ -101,8 +101,8 @@ public class ShooterArmSubsystem extends SubsystemBase {
     return this.limitSwitch.get();
   }
 
-  public void movementArmToReset(){
-    m_ArmMotor.set(resetSpeed);
+  public void moveArmBySpeed(double speed){
+    m_ArmMotor.set(speed);
   }
 
 

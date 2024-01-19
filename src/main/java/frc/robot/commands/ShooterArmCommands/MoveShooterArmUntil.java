@@ -7,19 +7,30 @@ package frc.robot.commands.ShooterArmCommands;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.ShooterArmSubsystem;
 
-public class SetShooterArmPos extends Command {
-  /** Creates a new SetShooterArmPos. */
+public class MoveShooterArmUntil extends Command {
+  /** Creates a new ResetShooterArmPos. */
   private final ShooterArmSubsystem shooterArmSubsystem = ShooterArmSubsystem.getInstance();
-  double degree;
-  public SetShooterArmPos(double degree) {
-    // Use addRequirements() here to declare subsystem dependencies.
+  
+  public MoveShooterArmUntil() {
     addRequirements(shooterArmSubsystem);
-    this.degree = degree;  
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    shooterArmSubsystem.setPosition(degree);
+    shooterArmSubsystem.moveArmByVoltage();
+  }
+
+
+  // Called once the command ends or is interrupted.
+  @Override
+  public void end(boolean interrupted) {
+    shooterArmSubsystem.setPosition(0);
+  }
+
+  // Returns true when the command should end.
+  @Override
+  public boolean isFinished() {
+    return shooterArmSubsystem.getSwitch();
   }
 }

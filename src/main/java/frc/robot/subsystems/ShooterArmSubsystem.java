@@ -76,6 +76,7 @@ public class ShooterArmSubsystem extends SubsystemBase {
 
   }
 
+  //set the postition of the arm
   public void setPosition(double pose){
     m_ArmMotor.setPosition(pose);
   }
@@ -98,6 +99,10 @@ public class ShooterArmSubsystem extends SubsystemBase {
   //geting if the switch is open
   public boolean getSwitch(){
     return this.limitSwitch.get();
+  }
+
+  public void moveArmByVoltage(){
+    m_ArmMotor.setVoltage(ArmStaticMovmentSpeed);
   }
 
 

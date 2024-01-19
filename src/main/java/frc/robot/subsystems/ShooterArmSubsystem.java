@@ -76,6 +76,10 @@ public class ShooterArmSubsystem extends SubsystemBase {
 
   }
 
+  public void setPosition(double pose){
+    m_ArmMotor.setPosition(pose);
+  }
+
   // moving function for the Arm
   public void moveArmTo(double degrees) {
     m_ArmMotor.setControl(motionMagic.withPosition(degrees));

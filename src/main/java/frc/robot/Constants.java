@@ -203,7 +203,7 @@ public final class Constants {
     // technical Constants
     public static final int ShooterArmID = 0;
     public static final int SwitchID = 1;
-    public static final int encoderCountsPerRevolution = 1;
+    public static final int encoderCountsPerRevolution =1;
     public static final double gearRatio = 50.0;
     public static final double TICKS_PER_DEGREE = encoderCountsPerRevolution * gearRatio / 360.0;
 
@@ -231,5 +231,7 @@ public final class Constants {
 
     // ArmPoseReset Constant
     public static final double poseReset = 0.0;
+
+    public static final double ArmStaticMovmentSpeed = -1;
 }
 }

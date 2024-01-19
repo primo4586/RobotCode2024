@@ -101,8 +101,8 @@ public class ShooterArmSubsystem extends SubsystemBase {
     return this.limitSwitch.get();
   }
 
-  public void moveArmByVoltage(){
-    m_ArmMotor.setVoltage(ArmStaticMovmentSpeed);
+  public void movementArmToReset(){
+    m_ArmMotor.set(resetSpeed);
   }
 
 

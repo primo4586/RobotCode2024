@@ -5,7 +5,11 @@
 package frc.robot.commands.ShooterArmCommands;
 
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.Constants;
 import frc.robot.subsystems.ShooterArmSubsystem;
+
+import static frc.robot.Constants.ShooterArmConstants.*;
+
 
 public class MoveShooterArmUntil extends Command {
   /** Creates a new ResetShooterArmPos. */
@@ -18,14 +22,14 @@ public class MoveShooterArmUntil extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    shooterArmSubsystem.moveArmByVoltage();
+    shooterArmSubsystem.movementArmToReset();
   }
 
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    shooterArmSubsystem.setPosition(0);
+    shooterArmSubsystem.setPosition(resetPose);
   }
 
   // Returns true when the command should end.

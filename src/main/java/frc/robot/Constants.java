@@ -230,8 +230,7 @@ public final class Constants {
     public static final double backwordLimit = 300;
 
     // ArmPoseReset Constant
-    public static final double poseReset = 0.0;
-
-    public static final double ArmStaticMovmentSpeed = -1;
+    public static final double resetPose = 0.0;
+    public static final double resetSpeed = -1;
 }
 }

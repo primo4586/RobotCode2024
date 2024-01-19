@@ -302,4 +302,8 @@ public final class Constants {
         .put(2.1, 10.2);
 
     }
+    public static class CollectingConstants{
+        public static final int SwitchID=1;
+        public static final int CollectingMotorID=10;
+    }
 }

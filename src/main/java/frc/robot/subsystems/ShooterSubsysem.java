@@ -18,14 +18,13 @@ import frc.Utils.vision.Vision;
 
 public class ShooterSubsysem extends SubsystemBase {
   private TalonFX m_shooterMotor;
-  private final SwerveSubsystem swerve = SwerveSubsystem.getInstance();
   private final Vision vision = Vision.getInstance();
 
   private final MotionMagicVelocityVoltage motionMagic = new MotionMagicVelocityVoltage(0);
 
   private static ShooterSubsysem instance;
 
-  public static ShooterSubsysem getInstance(){
+  public static ShooterSubsysem getInstance() {
     if (instance == null) {
       instance = new ShooterSubsysem();
     }
@@ -39,54 +38,54 @@ public class ShooterSubsysem extends SubsystemBase {
 
     // declaring Configs
     TalonFXConfiguration configs = new TalonFXConfiguration();
-    MotionMagicConfigs shooterMM =  new MotionMagicConfigs();
-    
-    //giving motion magic values
+    MotionMagicConfigs shooterMM = new MotionMagicConfigs();
+
+    // giving motion magic values
     shooterMM.MotionMagicCruiseVelocity = MotionMagicCruiseVelocity;
     shooterMM.MotionMagicAcceleration = MotionMagicAcceleration;
     shooterMM.MotionMagicJerk = MotionMagicJerk;
     configs.MotionMagic = shooterMM;
 
-    //giving PID values
-    configs.Slot0.kP =kP;
+    // giving PID values
+    configs.Slot0.kP = kP;
     configs.Slot0.kD = kD;
     configs.Slot0.kS = kS;
     configs.Slot0.kV = kV;
 
-    //max voltage for m_shooterMotor
+    // max voltage for m_shooterMotor
     configs.Voltage.PeakForwardVoltage = PeakForwardVoltage;
-    configs.Voltage.PeakReverseVoltage = PeakReverseVoltage; 
+    configs.Voltage.PeakReverseVoltage = PeakReverseVoltage;
 
     configs.Feedback.SensorToMechanismRatio = SensorToMechanismRatio;
 
-    //Checking if m_shooterMotor apply configs
+    // Checking if m_shooterMotor apply configs
     StatusCode status = StatusCode.StatusCodeNotInitialized;
-    for (int i = 0; i<5; ++i){
+    for (int i = 0; i < 5; ++i) {
       status = m_shooterMotor.getConfigurator().apply(configs);
       if (status.isOK())
         break;
     }
-    if (!status.isOK()){
+    if (!status.isOK()) {
       System.out.println("Shooter could not apply configs, error code " + status.toString());
     }
-    }
+  }
 
-    //set (active) shooter motor speed
-    public void setShooterSpeed(double speed){
-      this.m_shooterMotor.setControl(motionMagic.withVelocity(speed));
-    }
+  // set (active) shooter motor speed
+  public void setShooterSpeed(double speed) {
+    this.m_shooterMotor.setControl(motionMagic.withVelocity(speed));
+  }
 
-    public double getShooterSpeed(){
-        return m_shooterMotor.getVelocity().getValue();
-    }
+  public double getShooterSpeed() {
+    return m_shooterMotor.getVelocity().getValue();
+  }
 
-    public boolean checkIfShooterAtSpeed(){
-      return (Math.abs(m_shooterMotor.getClosedLoopError().getValue()) < MaxError);
-    }
-    
-    public double InterpolationValue(Pose2d pose2d){
-      return InterpolateUtil.interpolate(ShooterInterpolation, vision.DistanceFromTarget(swerve.getPose()));
-   }    
+  public boolean checkIfShooterAtSpeed() {
+    return (Math.abs(m_shooterMotor.getClosedLoopError().getValue()) < MaxError);
+  }
+
+  public double InterpolationValue(Pose2d pose2d) {
+    return InterpolateUtil.interpolate(ShooterInterpolation, vision.DistanceFromTarget(pose2d));
+  }
 
   @Override
   public void periodic() {

@@ -13,7 +13,7 @@ import static frc.robot.Constants.trapConstants.*;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class SubsystemTrap extends SubsystemBase {
-  private WPI_TalonSRX trapMotor;
+  private WPI_TalonSRX m_trapMotor;
   double speed;
    private static SubsystemTrap instance;
   
@@ -29,12 +29,12 @@ public class SubsystemTrap extends SubsystemBase {
 
   /** Creates a new SubsystemTrap. */
   private SubsystemTrap() {
-    trapMotor = new WPI_TalonSRX(TRAP_MOTOR_ID);
+    m_trapMotor = new WPI_TalonSRX(TRAP_MOTOR_ID);
 
 
   }
   public void setSpeed(double speed){
-   trapMotor.set(speed);
+   m_trapMotor.set(speed);
     
   }
 

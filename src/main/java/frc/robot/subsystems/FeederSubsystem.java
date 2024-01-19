@@ -7,6 +7,7 @@ package frc.robot.subsystems;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.DemandType;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
+import com.fasterxml.jackson.annotation.JsonCreator.Mode;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
@@ -16,23 +17,26 @@ public class FeederSubsystem extends SubsystemBase {
   /** Creates a new FeederSubsystem. */
 
   //the feeder's motor
-  TalonSRX m_Feeder = new TalonSRX(FeederMotorId);
+  TalonSRX m_Feeder;
+
+  //constructor
+  private FeederSubsystem(){
+    m_Feeder = new TalonSRX(FeederMotorId);
+  }
 
   // singelton
-  public static FeederSubsystem instance;
+  private static FeederSubsystem instance;
 
   public static FeederSubsystem getInstance() {
     if (instance == null) {
-        instance = new FeederSubsystem();
+        instance = new FeederSubsystem();  
     }
     return instance;
   } 
 
   // set speed function
-  public void setSpeed(double MotorSpeed){
-
-    MotorSpeed = FeederMotorSpeed;
-    m_Feeder.set(ControlMode.PercentOutput, MotorSpeed, DemandType.Neutral, 0);
+  public void setSpeed(){
+    m_Feeder.set(ControlMode.PercentOutput, FeederMotorSpeed);
   }
 
   @Override

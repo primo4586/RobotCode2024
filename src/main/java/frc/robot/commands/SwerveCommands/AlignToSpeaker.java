@@ -5,7 +5,7 @@
 package frc.robot.commands.SwerveCommands;
 
 import static frc.robot.Constants.IntakeArm.minimumError;
-import static frc.robot.Constants.Swerve.minimumErrorTurn;
+import static frc.robot.Constants.Swerve.*;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -19,7 +19,7 @@ import frc.robot.subsystems.SwerveSubsystem;
 public class AlignToSpeaker extends Command {
   /** Creates a new TurnToDegree. */
   SwerveSubsystem swerve = SwerveSubsystem.getInstance();
-  private PIDController pid = new PIDController(0, 0, 0);
+  private PIDController pid = swervePID;
   private Vision vision = Vision.getInstance();
   double angleFromTarget = vision.GetAngleFromTarget().getDegrees();
 
@@ -47,7 +47,7 @@ public class AlignToSpeaker extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return Math.abs(vision.GetAngleFromTarget().getDegrees() - 180) < minimumErrorTurn ;
+    return Math.abs(vision.GetAngleFromTarget().getDegrees() - 180) < minimumErrorAligning ;
   }
 
   public void optimize() {

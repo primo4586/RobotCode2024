@@ -12,6 +12,7 @@ import edu.wpi.first.apriltag.AprilTagFieldLayout;
 import edu.wpi.first.apriltag.AprilTagFields;
 import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.VecBuilder;
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Rotation3d;
@@ -27,7 +28,7 @@ import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
 
 public final class Constants {
-    
+
     public static final double stickDeadband = 0.1;
     
     public static final class IntakeArm{ //TODO: This must be tuned to specific robot
@@ -57,7 +58,8 @@ public final class Constants {
         
     }
     public static final class Swerve {
-        public static final double minimumErrorTurn = 0; // TODO: This must be tuned to specific robot
+        public static final double minimumErrorAligning = 0; // TODO: This must be tuned to specific robot
+        public static final PIDController swervePID = new PIDController(0, 0, 0);
 
         public static final int pigeonID = 10;
         public static final boolean invertGyro = false; // Always ensure Gyro is CCW+ CW-

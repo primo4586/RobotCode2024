@@ -5,8 +5,10 @@
 package frc.robot.subsystems;
 
 import com.revrobotics.CANSparkMax;
+import com.revrobotics.CANSparkLowLevel.MotorType;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import static frc.robot.Constants.trapConstants.*;
 
 
 public class ClimbingSubsystem extends SubsystemBase {
@@ -29,6 +31,10 @@ public class ClimbingSubsystem extends SubsystemBase {
 
   public ClimbingSubsystem() 
   {
+    m_climbingLeft = new CANSparkMax(M_CLIMBINGLEFT_MOTOR_ID, MotorType.kBrushless);
+    m_climbingRight = new CANSparkMax(M_CLIMBINGRIGHT_MOTOR_ID, MotorType.kBrushless);
+
+
 
   }
   public void setSpeedClimbing(double speed){

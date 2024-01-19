@@ -56,6 +56,8 @@ public final class Constants {
         
     }
     public static final class Swerve {
+        public static final double minimumErrorTurn = 0; // TODO: This must be tuned to specific robot
+
         public static final int pigeonID = 10;
         public static final boolean invertGyro = false; // Always ensure Gyro is CCW+ CW-
 

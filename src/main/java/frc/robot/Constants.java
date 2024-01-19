@@ -193,9 +193,7 @@ public final class Constants {
                         Math.sqrt(Math.pow((Constants.Swerve.wheelBase / 2), 2)
                         + Math.pow((Constants.Swerve.trackWidth / 2), 2));
 
-        public static final ReplanningConfig replanningConfig = 
-                new ReplanningConfig(true, true,
-                        0.5, 1);
+        public static final ReplanningConfig replanningConfig = new ReplanningConfig(true, true);
         
         public static final PathConstraints pathConstraints = new PathConstraints(kMaxSpeedMetersPerSecond, kMaxAccelerationMetersPerSecondSquared, kMaxAngularSpeedRadiansPerSecond, kMaxAngularSpeedRadiansPerSecondSquared);
                         

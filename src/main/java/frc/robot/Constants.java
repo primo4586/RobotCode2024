@@ -310,4 +310,10 @@ public final class Constants {
     public static final double FeederMotorSpeed = 0.8;
 
   }
+    public static class TrapArmConstants{
+        public static final int ArmMotorID = 10;
+        public static final int InnerSwitchID= 0;
+        public static final int OuterSwitchID= 10;
+
+    }
 }

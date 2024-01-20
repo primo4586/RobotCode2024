@@ -314,6 +314,7 @@ public final class Constants {
     }
   public static class FeederConstants{
 
+    public static final int speed = 20;
     public static final int FeederMotorId = 3;
     public static final double FeederMotorSpeed = 0.8;
 

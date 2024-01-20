@@ -8,16 +8,16 @@ import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.FeederSubsystem;
 import frc.robot.subsystems.ShooterArmSubsystem;
 import frc.robot.subsystems.ShooterSubsysem;
+import static frc.robot.Constants.FeederConstants.*;
 
-public class StartFeeder extends Command {
+
+public class FeedToShooter extends Command {
   private final ShooterSubsysem shooterSubsysem = ShooterSubsysem.getInstance();
   private final ShooterArmSubsystem shooterArmSubsystem = ShooterArmSubsystem.getInstance();
   private final FeederSubsystem feederSubsystem = FeederSubsystem.getInstance();
-  double speed;
   /** Creates a new StartFeeder. */
-  public StartFeeder(double speed) {
-    this.addRequirements(shooterSubsysem);
-    this.speed = speed;
+  public FeedToShooter() {
+    this.addRequirements(feederSubsystem, shooterArmSubsystem, shooterSubsysem);
     // Use addRequirements() here to declare subsystem dependencies.
   }
 

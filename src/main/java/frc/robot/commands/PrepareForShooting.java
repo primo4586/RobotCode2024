@@ -7,17 +7,19 @@ package frc.robot.commands;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import frc.robot.commands.ShooterArmCommands.ShooterAngleFromDistanceInterpolation;
 import frc.robot.commands.ShooterCommands.ShooterSetSpeedInterpolation;
+import frc.robot.subsystems.ShooterArmSubsystem;
 import frc.robot.subsystems.ShooterSubsysem;
 
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
-public class PreperForShootting extends ParallelCommandGroup {
+public class PrepareForShooting extends ParallelCommandGroup {
   private final ShooterSubsysem shooterSubsysem = ShooterSubsysem.getInstance();
+  private final ShooterArmSubsystem shooterArmSubsystem = ShooterArmSubsystem.getInstance();
   double degree;
   /** Creates a new PreperForShootting. */
-  public PreperForShootting(double degree) {
-    this.addRequirements(shooterSubsysem);;
+  public PrepareForShooting(double degree) {
+    this.addRequirements(shooterSubsysem, shooterArmSubsystem);
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(

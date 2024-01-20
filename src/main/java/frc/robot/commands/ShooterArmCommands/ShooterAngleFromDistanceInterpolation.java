@@ -2,37 +2,34 @@
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
-package frc.robot.commands;
+package frc.robot.commands.ShooterArmCommands;
 
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.subsystems.ShooterSubsysem;
-import frc.robot.subsystems.SwerveSubsystem;
+import frc.Utils.vision.Vision;
+import frc.robot.subsystems.ShooterArmSubsystem;
 
-public class ShooterSetSpeedInterpolation extends Command {
-  private final ShooterSubsysem shooterSubsystem = ShooterSubsysem.getInstance();
-  private final SwerveSubsystem swerve = SwerveSubsystem.getInstance();
-
-  /** Creates a new ShooterSetSpeedInterpolation. */
-  public ShooterSetSpeedInterpolation() {
-    this.addRequirements(shooterSubsystem);
+public class ShooterAngleFromDistanceInterpolation extends Command {
+  private final ShooterArmSubsystem shooterArmSubsystem = ShooterArmSubsystem.getInstance();
+  private final Vision vision = Vision.getInstance(); 
+  /** Creates a new ShooterAngleFromDistanceInterpolation. */
+  public ShooterAngleFromDistanceInterpolation() {
+    this.addRequirements(shooterArmSubsystem);
     // Use addRequirements() here to declare subsystem dependencies.
   }
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {
-  }
+  public void initialize() {}
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    this.shooterSubsystem.setShooterSpeed(shooterSubsystem.InterpolationValue(swerve.getPose()));
+    shooterArmSubsystem.moveArmTo(shooterArmSubsystem.angleFromDistance(vision.DistanceFromTarget()));
   }
-
+  
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {
-  }
+  public void end(boolean interrupted) {}
 
   // Returns true when the command should end.
   @Override

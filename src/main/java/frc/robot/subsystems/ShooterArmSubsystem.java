@@ -11,6 +11,7 @@ import com.ctre.phoenix6.controls.MotionMagicVoltage;
 import com.ctre.phoenix6.hardware.TalonFX;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.Utils.interpolation.InterpolateUtil;
 
 import static frc.robot.Constants.ShooterArmConstants.*;
 
@@ -105,6 +106,9 @@ public class ShooterArmSubsystem extends SubsystemBase {
     m_ArmMotor.set(speed);
   }
 
+   public double angleFromDistance(double distance) {
+    return InterpolateUtil.interpolate(SHOOTER_ANGLE_INTERPOLATION_MAP, distance);
+  }
 
   @Override
   public void periodic() {

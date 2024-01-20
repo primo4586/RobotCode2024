@@ -316,4 +316,9 @@ public final class Constants {
         public static final int OuterSwitchID= 10;
 
     }
+
+    public static class LedsConstants {
+        public static final int LedsPort = 4;
+        public static final int LedsLength = 55;
+    }
 }

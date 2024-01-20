@@ -4,10 +4,10 @@
 
 package frc.robot.commands.TrapArmCommands;
 
-import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import frc.robot.subsystems.TrapArmSubsystem;
 
-public class setSpeedCommand extends Command {
+public class setSpeedCommand extends InstantCommand {
   private final TrapArmSubsystem trapArmSubsystem= TrapArmSubsystem.getInstance();
   double speed;
   /** Creates a new setSpeedCommand. */
@@ -21,19 +21,5 @@ public class setSpeedCommand extends Command {
   @Override
   public void initialize() {
     trapArmSubsystem.setSpeed(speed);
-  }
-
-  // Called every time the scheduler runs while the command is scheduled.
-  @Override
-  public void execute() {}
-
-  // Called once the command ends or is interrupted.
-  @Override
-  public void end(boolean interrupted) {}
-
-  // Returns true when the command should end.
-  @Override
-  public boolean isFinished() {
-    return false;
   }
 }

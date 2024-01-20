@@ -32,11 +32,6 @@ public class goInSwitchCommand extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    if (trapArmSubsystem.getInnerSwitch()){
-      return true;
-    }
-    else{
-      return false;
-    }
+    return trapArmSubsystem.getInnerSwitch();
   }
 }

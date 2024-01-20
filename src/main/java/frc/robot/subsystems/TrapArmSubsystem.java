@@ -6,11 +6,7 @@ package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
-import com.ctre.phoenix6.StatusCode;
-import com.ctre.phoenix6.configs.TalonFXConfiguration;
-import com.ctre.phoenix6.hardware.TalonFX;
 import static frc.robot.Constants.TrapArmConstants.*;
-import com.ctre.phoenix.motorcontrol.ControlMode;
 
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -30,7 +26,7 @@ public class TrapArmSubsystem extends SubsystemBase {
   }
   
   /** Creates a new TrapArmSubsystem. */
-  public TrapArmSubsystem() {
+  private TrapArmSubsystem() {
     this.m_TrapMotor = new TalonSRX(ArmMotorID);
     this.innerSwitch = new DigitalInput(InnerSwitchID);
     this.outerSwitch = new DigitalInput(OuterSwitchID);

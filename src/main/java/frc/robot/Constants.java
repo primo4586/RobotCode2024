@@ -193,9 +193,7 @@ public final class Constants {
                         Math.sqrt(Math.pow((Constants.Swerve.wheelBase / 2), 2)
                         + Math.pow((Constants.Swerve.trackWidth / 2), 2));
 
-        public static final ReplanningConfig replanningConfig = 
-                new ReplanningConfig(true, true,
-                        0.5, 1);
+        public static final ReplanningConfig replanningConfig = new ReplanningConfig(true, true);
         
         public static final PathConstraints pathConstraints = new PathConstraints(kMaxSpeedMetersPerSecond, kMaxAccelerationMetersPerSecondSquared, kMaxAngularSpeedRadiansPerSecond, kMaxAngularSpeedRadiansPerSecondSquared);
                         
@@ -302,6 +300,16 @@ public final class Constants {
         .put(2.1, 10.2);
 
     }
+    public static class CollectingConstants{
+        public static final int SwitchID=1;
+        public static final int CollectingMotorID=10;
+    }
+  public static class FeederConstants{
+
+    public static final int FeederMotorId = 3;
+    public static final double FeederMotorSpeed = 0.8;
+
+  }
     public static class TrapArmConstants{
         public static final int ArmMotorID = 10;
         public static final int InnerSwitchID= 0;

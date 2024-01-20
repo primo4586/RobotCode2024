@@ -6,20 +6,21 @@ package frc.robot.commands.CollectingCommands;
 
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.subsystems.CollectingSubsystem;
+import frc.robot.commands.IntakeArmCommands.*;
 
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
 public class loweringArmCommandGroup extends SequentialCommandGroup {
   private static CollectingSubsystem collectingSubsystem = CollectingSubsystem.getInstance();
-  double speed;
+  double deg;
 
   /** Creates a new loweringArmCommandGroup. */
-  public loweringArmCommandGroup(double speed) {
+  public loweringArmCommandGroup(double deg) {
     addRequirements(collectingSubsystem);
-    this.speed = speed;
+    this.deg = deg;
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
-    addCommands(new setSpeedCommand(speed));
+    addCommands(new MoveIntakeArmToDegree(deg));
   }
 }

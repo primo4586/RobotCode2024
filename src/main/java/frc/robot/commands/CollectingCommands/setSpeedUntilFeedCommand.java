@@ -10,15 +10,19 @@ import frc.robot.subsystems.CollectingSubsystem;
 
 public class setSpeedUntilFeedCommand extends Command {
   private final CollectingSubsystem collectingSubsystem = CollectingSubsystem.getInstance();
+  double speed;
   /** Creates a new setSpeedUntilFeedCommand. */
-  public setSpeedUntilFeedCommand() {
+  public setSpeedUntilFeedCommand(double speed) {
     addRequirements(collectingSubsystem);
+    this.speed=speed;
     // Use addRequirements() here to declare subsystem dependencies.
   }
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {}
+  public void initialize() {
+    collectingSubsystem.setSpeed(speed);
+  }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
@@ -33,12 +37,6 @@ public class setSpeedUntilFeedCommand extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    if (collectingSubsystem.getSwitch()){
-      return true;
-    }
-    else{
-      return false;
-    }
-
+    return (collectingSubsystem.getSwitch()); 
   }
 }

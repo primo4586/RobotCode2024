@@ -15,7 +15,7 @@ import static frc.robot.Constants.CollectingConstants.*;
 
 public class CollectingSubsystem extends SubsystemBase {
   private TalonSRX m_collecting;
-  DigitalInput limitSwitch;
+  DigitalInput lazerSensor;
 
   private static CollectingSubsystem instance;
   
@@ -25,11 +25,11 @@ public class CollectingSubsystem extends SubsystemBase {
       }
       return instance;
     }
-    
+
   /** Creates a new CollectingSubsystem. */
   public CollectingSubsystem() {
     this.m_collecting = new TalonSRX(CollectingMotorID);
-    this.limitSwitch = new DigitalInput(SwitchID);
+    this.lazerSensor = new DigitalInput(SwitchID);
   }
 
   public void setSpeed(double speed){
@@ -37,7 +37,7 @@ public class CollectingSubsystem extends SubsystemBase {
   }
 
   public boolean getSwitch(){
-    return limitSwitch.get();
+    return lazerSensor.get();
   }
 
   @Override

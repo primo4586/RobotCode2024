@@ -304,4 +304,10 @@ public final class Constants {
         public static final int SwitchID=1;
         public static final int CollectingMotorID=10;
     }
+  public static class FeederConstants{
+
+    public static final int FeederMotorId = 3;
+    public static final double FeederMotorSpeed = 0.8;
+
+  }
 }

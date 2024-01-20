@@ -5,7 +5,6 @@
 package frc.robot.commands.CollectingCommands;
 
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.Constants.CollectingConstants;
 import frc.robot.subsystems.CollectingSubsystem;
 
 public class setSpeedUntilFeedCommand extends Command {

@@ -6,6 +6,8 @@ package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
+
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 import static frc.robot.Constants.FeederConstants.*;
@@ -15,10 +17,12 @@ public class FeederSubsystem extends SubsystemBase {
 
   //the feeder's motor
   TalonSRX m_Feeder;
+  DigitalInput lazerSensor;
 
   //constructor
   private FeederSubsystem(){
     m_Feeder = new TalonSRX(FeederMotorId);
+    this.lazerSensor = new DigitalInput(SwitchID);
   }
 
   // singelton
@@ -34,6 +38,10 @@ public class FeederSubsystem extends SubsystemBase {
   // set speed function
   public void setSpeed(double motorSpeed){
     m_Feeder.set(ControlMode.PercentOutput, motorSpeed);
+  }
+
+  public boolean getSwitch(){
+    return lazerSensor.get();
   }
 
   @Override

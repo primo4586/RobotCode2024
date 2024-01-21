@@ -32,6 +32,6 @@ public class FeederIntakeCommandGroup extends SequentialCommandGroup {
     addRequirements(collectingSubsystem);
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
-    addCommands(new MoveIntakeArmToDegree(intakeDegree), new setSpeedUntilFeedCommand(collectingSpeed),new MoveIntakeArmToDegree(feederDegree) ,new FeederSetSpeed(FeederMotorSpeed), new setSpeedCommand(collectingGivingSpeed),new setSpeedCommand(0),new FeederSetSpeed(0)); // wating for feeder switch  
+    addCommands(new MoveIntakeArmToDegree(intakeDegree), new setSpeedUntilFeedCommand(collectingSpeed),new MoveIntakeArmToDegree(feederDegree) ,new FeedShooter(), new setSpeedCommand(collectingGivingSpeed),new setSpeedCommand(0),new FeederSetSpeed(0)); // wating for feeder switch  
   }
 }

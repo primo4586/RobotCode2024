@@ -54,6 +54,8 @@ public final class Constants {
         public static final double startingValue = 0;
         public static final double zeroEncoderValue = 0;
         public static final double intakeArmSpeed = 0;
+        public static final double intakeDegree = 0;
+        public static final double feederDegree = 0;
         // switch
         public static final int switchID = 0;
         
@@ -308,6 +310,7 @@ public final class Constants {
 
     public static final int FeederMotorId = 3;
     public static final double FeederMotorSpeed = 0.8;
+
 
   }
     public static class TrapArmConstants{

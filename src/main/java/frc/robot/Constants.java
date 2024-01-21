@@ -305,6 +305,8 @@ public final class Constants {
     public static class CollectingConstants{
         public static final int SwitchID=1;
         public static final int CollectingMotorID=10;
+        public static final double collectingSpeed = 0; //TODO: This must be tuned to specific 
+        public static final double collectingGivingSpeed = 0;
     }
   public static class FeederConstants{
 

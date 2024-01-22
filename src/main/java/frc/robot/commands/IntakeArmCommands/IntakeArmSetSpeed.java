@@ -10,10 +10,10 @@ import frc.robot.subsystems.IntakeArmSubsystem;
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
-public class SetSpeed extends InstantCommand {
+public class IntakeArmSetSpeed extends InstantCommand {
   private final IntakeArmSubsystem intakeArm = IntakeArmSubsystem.getInstance();
   private double speed;
-  public SetSpeed(double speed) {
+  public IntakeArmSetSpeed(double speed) {
     // Use addRequirements() here to declare subsystem dependencies.
     this.speed = speed;
   }

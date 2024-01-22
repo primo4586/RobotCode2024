@@ -4,40 +4,33 @@
 
 package frc.robot.subsystems;
 
-import com.ctre.phoenix.motorcontrol.TalonSRXControlMode;
-import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
-import com.ctre.phoenix6.hardware.TalonFX;
 import static frc.robot.Constants.trapConstants.*;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class SubsystemTrap extends SubsystemBase {
   private WPI_TalonSRX m_trapMotor;
-  double speed;
-   private static SubsystemTrap instance;
-  
-  public static SubsystemTrap getInstance()
-  {
-   if (instance == null)
-    {
+
+  private static SubsystemTrap instance;
+
+  public static SubsystemTrap getInstance() {
+    if (instance == null) {
       instance = new SubsystemTrap();
     }
     return instance;
   }
 
-
   /** Creates a new SubsystemTrap. */
   private SubsystemTrap() {
     m_trapMotor = new WPI_TalonSRX(TRAP_MOTOR_ID);
 
-
-  }
-  public void setSpeed(double speed){
-   m_trapMotor.set(speed);
-    
   }
 
+  public void setSpeed(double speed) {
+    m_trapMotor.set(speed);
+
+  }
 
   @Override
   public void periodic() {

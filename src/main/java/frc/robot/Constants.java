@@ -54,6 +54,8 @@ public final class Constants {
         public static final double startingValue = 0;
         public static final double zeroEncoderValue = 0;
         public static final double intakeArmSpeed = 0;
+        public static final double intakeSetPoint = 0;
+        public static final double trapSetPoint = 0;
         // switch
         public static final int switchID = 0;
         
@@ -321,6 +323,7 @@ public final class Constants {
     public static final int SwitchID = 0;
     public static final double FeederMotorSpeed = 0.8;
     public static final double getNoteSpeed = 0;
+
 
   }
   

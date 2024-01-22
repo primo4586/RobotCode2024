@@ -265,6 +265,14 @@ public final class Constants {
 
     public static final double startPose =0.0;
 
+    public static final InterpolationMap SHOOTER_ANGLE_INTERPOLATION_MAP = new InterpolationMap()
+        .put(1, 14100)
+        .put(1.2, 13800)
+        .put(1.4, 12800)
+        .put(1.6, 12800)
+        .put(1.8, 12900)
+        .put(2, 13200)
+        .put(2.1, 13300);
 }
 
     public static class ShooterConstants {
@@ -308,12 +316,14 @@ public final class Constants {
     }
   public static class FeederConstants{
 
+    public static final int FeederShootSpeed = 20;
     public static final int FeederMotorId = 3;
     public static final int SwitchID = 0;
     public static final double FeederMotorSpeed = 0.8;
     public static final double getNoteSpeed = 0;
 
   }
+  
     public static class TrapArmConstants{
         public static final int ArmMotorID = 10;
         public static final int InnerSwitchID= 0;

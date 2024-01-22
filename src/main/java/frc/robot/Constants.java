@@ -225,10 +225,10 @@ public final class Constants {
   }
   public static class trapConstants {
     public static final int TRAP_MOTOR_ID = 0;
+    
+  }
+  public static class climbingConstants{
     public static final int M_CLIMBINGRIGHT_MOTOR_ID = 1;
     public static final int M_CLIMBINGLEFT_MOTOR_ID = 2;
-
-  
-    
   }
 }

@@ -25,7 +25,7 @@ public class IntakeSubsystem extends SubsystemBase {
     }
 
   /** Creates a new IntakeSubsystem. */
-  public IntakeSubsystem() {
+  private IntakeSubsystem() {
     this.m_Intake = new TalonSRX(IntakeMotorID);
     this.lazerSensor = new DigitalInput(SwitchID);
   }

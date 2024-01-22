@@ -17,7 +17,7 @@ public class FeedToShooter extends Command {
   private final FeederSubsystem feederSubsystem = FeederSubsystem.getInstance();
   /** Creates a new StartFeeder. */
   public FeedToShooter() {
-    this.addRequirements(feederSubsystem, shooterArmSubsystem, shooterSubsysem);
+    this.addRequirements(feederSubsystem);
     // Use addRequirements() here to declare subsystem dependencies.
   }
 
@@ -32,7 +32,7 @@ public class FeedToShooter extends Command {
   public void execute() {
     if (shooterSubsysem.checkIfShooterAtSpeed() && shooterArmSubsystem.isArmReady())
     {
-      feederSubsystem.setSpeed(speed);
+      feederSubsystem.setSpeed(FeederShootSpeed);
     }
   }
 

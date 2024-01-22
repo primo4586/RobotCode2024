@@ -11,10 +11,10 @@ import frc.robot.subsystems.ClimbingSubsystem;
 // information, see:
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
 public class SetSpeedLeftMotorClimbing extends InstantCommand {
-  private final ClimbingSubsystem leftMotorClimbing = ClimbingSubsystem.getInstance();
+  private final ClimbingSubsystem climbingSubsystem = ClimbingSubsystem.getInstance();
   double speed;
   public SetSpeedLeftMotorClimbing(double speed) {
-      this.addRequirements(leftMotorClimbing);
+      this.addRequirements(climbingSubsystem);
       this.speed = speed;
     // Use addRequirements() here to declare subsystem dependencies.
   }
@@ -22,7 +22,7 @@ public class SetSpeedLeftMotorClimbing extends InstantCommand {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    this.leftMotorClimbing.setSpeedClimbing(speed);
+    this.climbingSubsystem.setSpeedClimbing(speed);
 
   }
 }

@@ -2,16 +2,16 @@
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
-package frc.robot.commands.CollectingCommands;
+package frc.robot.commands.IntakeCommands;
 
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.subsystems.CollectingSubsystem;
+import frc.robot.subsystems.IntakeSubsystem;
 
-public class setSpeedUntilFeedCommand extends Command {
-  private final CollectingSubsystem collectingSubsystem = CollectingSubsystem.getInstance();
+public class InatkeUntilNote extends Command {
+  private final IntakeSubsystem collectingSubsystem = IntakeSubsystem.getInstance();
   double speed;
   /** Creates a new setSpeedUntilFeedCommand. */
-  public setSpeedUntilFeedCommand(double speed) {
+  public InatkeUntilNote(double speed) {
     addRequirements(collectingSubsystem);
     this.speed=speed;
     // Use addRequirements() here to declare subsystem dependencies.

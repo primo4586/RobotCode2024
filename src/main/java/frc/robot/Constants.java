@@ -54,8 +54,8 @@ public final class Constants {
         public static final double startingValue = 0;
         public static final double zeroEncoderValue = 0;
         public static final double intakeArmSpeed = 0;
-        public static final double intakeDegree = 0;
-        public static final double feederDegree = 0;
+        public static final double intakeSetPoint = 0;
+        public static final double trapSetPoint = 0;
         // switch
         public static final int switchID = 0;
         
@@ -267,6 +267,14 @@ public final class Constants {
 
     public static final double startPose =0.0;
 
+    public static final InterpolationMap SHOOTER_ANGLE_INTERPOLATION_MAP = new InterpolationMap()
+        .put(1, 14100)
+        .put(1.2, 13800)
+        .put(1.4, 12800)
+        .put(1.6, 12800)
+        .put(1.8, 12900)
+        .put(2, 13200)
+        .put(2.1, 13300);
 }
 
     public static class ShooterConstants {
@@ -302,19 +310,23 @@ public final class Constants {
         .put(2.1, 10.2);
 
     }
-    public static class CollectingConstants{
+    public static class IntakeConstants{
         public static final int SwitchID=1;
-        public static final int CollectingMotorID=10;
-        public static final double collectingSpeed = 0; //TODO: This must be tuned to specific 
-        public static final double collectingGivingSpeed = 0;
+        public static final int IntakeMotorID=10;
+        public static final double getNoteSpeed = 0.0;
+        public static final double GroundIntakePose = 0.0;
     }
   public static class FeederConstants{
 
+    public static final int FeederShootSpeed = 20;
     public static final int FeederMotorId = 3;
+    public static final int SwitchID = 0;
     public static final double FeederMotorSpeed = 0.8;
+    public static final double getNoteSpeed = 0;
 
 
   }
+  
     public static class TrapArmConstants{
         public static final int ArmMotorID = 10;
         public static final int InnerSwitchID= 0;

@@ -2,20 +2,17 @@
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
-package frc.robot.commands.CollectingCommands;
+package frc.robot.commands.TrapArmCommands;
 
 import edu.wpi.first.wpilibj2.command.InstantCommand;
-import frc.robot.subsystems.CollectingSubsystem;
+import frc.robot.subsystems.TrapArmSubsystem;
 
-// NOTE:  Consider using this command inline, rather than writing a subclass.  For more
-// information, see:
-// https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
 public class setSpeedCommand extends InstantCommand {
-  private final CollectingSubsystem collectingSubsystem = CollectingSubsystem.getInstance();
+  private final TrapArmSubsystem trapArmSubsystem= TrapArmSubsystem.getInstance();
   double speed;
-/** Creates a new setSpeedCommand. */
+  /** Creates a new setSpeedCommand. */
   public setSpeedCommand(double speed) {
-    addRequirements(collectingSubsystem);
+    addRequirements(trapArmSubsystem);
     this.speed = speed;
     // Use addRequirements() here to declare subsystem dependencies.
   }
@@ -23,6 +20,6 @@ public class setSpeedCommand extends InstantCommand {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    collectingSubsystem.setSpeed(speed);
+    trapArmSubsystem.setSpeed(speed);
   }
 }

@@ -308,16 +308,26 @@ public final class Constants {
         .put(2.1, 10.2);
 
     }
-    public static class CollectingConstants{
+    public static class IntakeConstants{
         public static final int SwitchID=1;
-        public static final int CollectingMotorID=10;
+        public static final int IntakeMotorID=10;
+        public static final double getNoteSpeed = 0.0;
+        public static final double GroundIntakePose = 0.0;
     }
   public static class FeederConstants{
 
     public static final int FeederShootSpeed = 20;
     public static final int FeederMotorId = 3;
+    public static final int SwitchID = 0;
     public static final double FeederMotorSpeed = 0.8;
+    public static final double getNoteSpeed = 0;
 
   }
+  
+    public static class TrapArmConstants{
+        public static final int ArmMotorID = 10;
+        public static final int InnerSwitchID= 0;
+        public static final int OuterSwitchID= 10;
 
+    }
 }

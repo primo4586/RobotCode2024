@@ -9,29 +9,29 @@ import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
-import static frc.robot.Constants.CollectingConstants.*;
+import static frc.robot.Constants.IntakeConstants.*;
 
-public class CollectingSubsystem extends SubsystemBase {
-  private TalonSRX m_collecting;
+public class IntakeSubsystem extends SubsystemBase {
+  private TalonSRX m_Intake;
   DigitalInput lazerSensor;
 
-  private static CollectingSubsystem instance;
+  private static IntakeSubsystem instance;
   
-    public static CollectingSubsystem getInstance() {
+    public static IntakeSubsystem getInstance() {
       if (instance == null) {
-        instance = new CollectingSubsystem();
+        instance = new IntakeSubsystem();
       }
       return instance;
     }
 
-  /** Creates a new CollectingSubsystem. */
-  public CollectingSubsystem() {
-    this.m_collecting = new TalonSRX(CollectingMotorID);
+  /** Creates a new IntakeSubsystem. */
+  private IntakeSubsystem() {
+    this.m_Intake = new TalonSRX(IntakeMotorID);
     this.lazerSensor = new DigitalInput(SwitchID);
   }
 
   public void setSpeed(double speed){
-    m_collecting.set(ControlMode.PercentOutput, speed);
+    m_Intake.set(ControlMode.PercentOutput, speed);
   }
 
   public boolean getSwitch(){

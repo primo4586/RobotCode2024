@@ -32,9 +32,9 @@ public final class Constants {
 
     public static final double stickDeadband = 0.1;
 
-    public static final class IntakeArm { // TODO: This must be tuned to specific robot
+    public static final class IntakeArmConstants { // TODO: This must be tuned to specific robot
         // mm
-        public static final int KMotorID = 0;
+        public static final int IntakeArmMotorID = 0;
         public static final double mmVelocity = 5.0;
         public static final double mmAcceleration = 10.0;
         public static final double mmJerk = 50;
@@ -51,13 +51,14 @@ public final class Constants {
         public static final double RevesrseSoftLimitThreshold = 0;
         // not mm
         public static final double minimumError = 0;
-        public static final double startingValue = 0;
+        public static final double intakeArmStartingValue = 0;
         public static final double zeroEncoderValue = 0;
-        public static final double intakeArmSpeed = 0;
+        public static final double intakeArmZeroSpeed = 0;
         public static final double intakeSetPoint = 0;
         public static final double trapSetPoint = 0;
         // switch
-        public static final int switchID = 0;
+        public static final int intakeArmSwitchID = 0;
+        public static final double AmpSetPoint = 0;
 
     }
 
@@ -273,7 +274,7 @@ public final class Constants {
         public static final double resetPose = 0.0;
         public static final double resetSpeed = -1.0;
 
-        public static final double startPose = 0.0;
+        public static final double shooterArmStartPose = 0.0;
 
         public static final InterpolationMap SHOOTER_ANGLE_INTERPOLATION_MAP = new InterpolationMap()
                 .put(1, 14100)
@@ -320,7 +321,7 @@ public final class Constants {
     }
 
     public static class IntakeConstants {
-        public static final int SwitchID = 1;
+        public static final int intakeNoteSensorID = 1;
         public static final int IntakeMotorID = 10;
         public static final double getNoteSpeed = 0.0;
         public static final double GroundIntakePose = 0.0;
@@ -330,7 +331,7 @@ public final class Constants {
 
         public static final int FeederShootSpeed = 20;
         public static final int FeederMotorId = 3;
-        public static final int SwitchID = 0;
+        public static final int feederNoteSensorID = 0;
         public static final double FeederMotorSpeed = 0.8;
         public static final double getNoteSpeed = 0;
 
@@ -340,12 +341,15 @@ public final class Constants {
         public static final int ArmMotorID = 10;
         public static final int InnerSwitchID = 0;
         public static final int OuterSwitchID = 10;
+        public static final double GoInSpeed = -0.1;
+        public static final double GoOutSpeed = 0.1;
 
     }
 
     public static class trapConstants {
         public static final int TRAP_MOTOR_ID = 0;
-
+        public static final int TrapNoteSensorID = 0;
+        public static final double TrapCollectSpeed = 0.1;
     }
 
     public static class climbingConstants {

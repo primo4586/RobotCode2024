@@ -12,12 +12,15 @@ import com.ctre.phoenix6.hardware.TalonFX;
 
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import static frc.robot.Constants.IntakeArm.*;
+import static frc.robot.Constants.IntakeArmConstants.*;
+
+import java.util.function.DoubleSupplier;
 
 public class IntakeArmSubsystem extends SubsystemBase {
   private TalonFX m_IntakeArmMotor;
-  private final MotionMagicVoltage motionMagic = new MotionMagicVoltage(0);
-  private final DigitalInput intakeSwitch = new DigitalInput(switchID);
+  private final MotionMagicVoltage motionMagic = new MotionMagicVoltage(intakeArmStartingValue);
+  private final DigitalInput intakeArmSwitch = new DigitalInput(intakeArmSwitchID);
+
   // singleton
   private static IntakeArmSubsystem instance;
 
@@ -27,9 +30,10 @@ public class IntakeArmSubsystem extends SubsystemBase {
     }
     return instance;
   }
+
   /** Creates a new IntakeArmSubsystem. */
   private IntakeArmSubsystem() {
-    this.m_IntakeArmMotor = new TalonFX(KMotorID);
+    this.m_IntakeArmMotor = new TalonFX(IntakeArmMotorID);
     TalonFXConfiguration configs = new TalonFXConfiguration();
     MotionMagicConfigs mm = new MotionMagicConfigs();
 
@@ -52,7 +56,6 @@ public class IntakeArmSubsystem extends SubsystemBase {
     configs.SoftwareLimitSwitch.ReverseSoftLimitEnable = ReverseSoftLimitEnable;
     configs.SoftwareLimitSwitch.ReverseSoftLimitThreshold = RevesrseSoftLimitThreshold;
 
-
     // gives code to TalonFX
     StatusCode status = StatusCode.StatusCodeNotInitialized;
     for (int i = 0; i < 5; i++) {
@@ -62,31 +65,34 @@ public class IntakeArmSubsystem extends SubsystemBase {
       }
     }
     if (!status.isOK()) {
-      System.out.println("Turret could not apply configs, error code: " + status.toString());
+      System.out.println("intake arm could not apply configs, error code: " + status.toString());
     }
 
-
-    m_IntakeArmMotor.setPosition(startingValue);
+    m_IntakeArmMotor.setPosition(intakeArmStartingValue);
   }
 
   // moving the arm
-  public void moveArmTo(double degrees){
-      m_IntakeArmMotor.setControl(motionMagic.withPosition(degrees));
+  public void moveArmTo(double degrees) {
+    m_IntakeArmMotor.setControl(motionMagic.withPosition(degrees));
   }
-  //set speed
-  public void setSpeed(double speed){
-    m_IntakeArmMotor.set(speed);
+
+  // set speed
+  public void setSpeed(DoubleSupplier speed) {
+    m_IntakeArmMotor.set(speed.getAsDouble());
   }
-  // set incoder idk
-  public void setEncoder (double encoderValue){
+
+  // set encoder
+  public void setEncoder(double encoderValue) {
     m_IntakeArmMotor.setPosition(encoderValue);
   }
+
   // get if a switch is press
-  public boolean getSwitch(){
-    return intakeSwitch.get();
+  public boolean getSwitch() {
+    return intakeArmSwitch.get();
   }
-  // check if intake arm is in place 
-  public boolean checkIntakeArmPosion(){
+
+  // check if intake arm is in place
+  public boolean checkIntakeArmPosion() {
     return Math.abs(m_IntakeArmMotor.getClosedLoopError().getValue()) < minimumError;
   }
 

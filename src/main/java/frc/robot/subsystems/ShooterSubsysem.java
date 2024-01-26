@@ -83,7 +83,7 @@ public class ShooterSubsysem extends SubsystemBase {
     return (Math.abs(m_shooterMotor.getClosedLoopError().getValue()) < MaxError);
   }
 
-  public double InterpolationValue(Pose2d pose2d) {
+  public double speakerInterpolate(Pose2d pose2d) {
     return InterpolateUtil.interpolate(ShooterInterpolation, vision.DistanceFromTarget(pose2d));
   }
 

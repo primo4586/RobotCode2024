@@ -15,29 +15,31 @@ import frc.Utils.interpolation.InterpolateUtil;
 
 import static frc.robot.Constants.ShooterArmConstants.*;
 
+import java.util.function.DoubleSupplier;
+
 public class ShooterArmSubsystem extends SubsystemBase {
   /** Creates a new ShooterArmSubsystem. */
 
-    // created the motor and MotionMagic
-    private TalonFX m_ArmMotor;
-    private final MotionMagicVoltage motionMagic = new MotionMagicVoltage(0);
-    DigitalInput limitSwitch; 
-  
-    // the instance
-    private static ShooterArmSubsystem instance;
-  
-    public static ShooterArmSubsystem getInstance() {
-      if (instance == null) {
-        instance = new ShooterArmSubsystem();
-      }
-      return instance;
+  // created the motor and MotionMagic
+  private TalonFX m_shooterArmMotor;
+  private final MotionMagicVoltage motionMagic = new MotionMagicVoltage(shooterArmStartPose);
+  DigitalInput limitSwitch;
+
+  // the instance
+  private static ShooterArmSubsystem instance;
+
+  public static ShooterArmSubsystem getInstance() {
+    if (instance == null) {
+      instance = new ShooterArmSubsystem();
     }
+    return instance;
+  }
 
   private ShooterArmSubsystem() {
-    this.m_ArmMotor = new TalonFX(ShooterArmID);
+    this.m_shooterArmMotor = new TalonFX(ShooterArmID);
     this.limitSwitch = new DigitalInput(SwitchID);
 
-    // creat the full MotionMagic
+    // create the full MotionMagic
     TalonFXConfiguration configuration = new TalonFXConfiguration();
     MotionMagicConfigs mm = new MotionMagicConfigs();
 
@@ -66,47 +68,47 @@ public class ShooterArmSubsystem extends SubsystemBase {
     StatusCode statusCode = StatusCode.StatusCodeNotInitialized;
 
     for (int i = 0; i < 5; i++) {
-      statusCode = m_ArmMotor.getConfigurator().apply(configuration);
+      statusCode = m_shooterArmMotor.getConfigurator().apply(configuration);
       if (statusCode.isOK())
         break;
     }
     if (!statusCode.isOK())
-      System.out.println("Arm could not apply config, error code:" + statusCode.toString());
+      System.out.println("shooter Arm could not apply config, error code:" + statusCode.toString());
 
-    m_ArmMotor.setPosition(startPose);
+    m_shooterArmMotor.setPosition(shooterArmStartPose);
 
   }
 
-  //set the postition of the arm
-  public void setPosition(double pose){
-    m_ArmMotor.setPosition(pose);
+  // set the position of the arm
+  public void setPosition(double pose) {
+    m_shooterArmMotor.setPosition(pose);
   }
 
   // moving function for the Arm
   public void moveArmTo(double degrees) {
-    m_ArmMotor.setControl(motionMagic.withPosition(degrees));
+    m_shooterArmMotor.setControl(motionMagic.withPosition(degrees));
   }
 
   // get function for the Arm pose
   public double getArmPose() {
-    return m_ArmMotor.getPosition().getValue();
+    return m_shooterArmMotor.getPosition().getValue();
   }
 
   // Checking the degree difference conditions
   public boolean isArmReady() {
-    return (Math.abs(m_ArmMotor.getClosedLoopError().getValue()) < minimumError);
+    return (Math.abs(m_shooterArmMotor.getClosedLoopError().getValue()) < minimumError);
   }
 
-  //geting if the switch is open
-  public boolean getSwitch(){
+  // geting if the switch is open
+  public boolean getSwitch() {
     return this.limitSwitch.get();
   }
 
-  public void moveArmBySpeed(double speed){
-    m_ArmMotor.set(speed);
+  public void moveArmBySpeed(DoubleSupplier speed) {
+    m_shooterArmMotor.set(speed.getAsDouble());
   }
 
-   public double angleFromDistance(double distance) {
+  public double angleFromDistance(double distance) {
     return InterpolateUtil.interpolate(SHOOTER_ANGLE_INTERPOLATION_MAP, distance);
   }
 

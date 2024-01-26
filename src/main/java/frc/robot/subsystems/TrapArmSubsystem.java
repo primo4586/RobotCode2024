@@ -8,6 +8,7 @@ import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import static frc.robot.Constants.TrapArmConstants.*;
 
+import java.util.function.DoubleSupplier;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
@@ -24,7 +25,7 @@ public class TrapArmSubsystem extends SubsystemBase {
     }
     return instance;
   }
-  
+
   /** Creates a new TrapArmSubsystem. */
   private TrapArmSubsystem() {
     this.m_TrapMotor = new TalonSRX(ArmMotorID);
@@ -32,22 +33,17 @@ public class TrapArmSubsystem extends SubsystemBase {
     this.outerSwitch = new DigitalInput(OuterSwitchID);
   }
 
-
-  public void setSpeed(double speed){
-    m_TrapMotor.set(ControlMode.PercentOutput,speed);
+  public void setSpeed(DoubleSupplier speed) {
+    m_TrapMotor.set(ControlMode.PercentOutput, speed.getAsDouble());
   }
 
-
-  public boolean getInnerSwitch(){
+  public boolean getInnerSwitch() {
     return innerSwitch.get();
   }
 
-
-  public boolean getOuterSwitch(){
+  public boolean getOuterSwitch() {
     return outerSwitch.get();
   }
-
-  
 
   @Override
   public void periodic() {

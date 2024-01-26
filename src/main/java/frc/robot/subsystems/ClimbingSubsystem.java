@@ -10,6 +10,8 @@ import com.revrobotics.CANSparkLowLevel.MotorType;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import static frc.robot.Constants.climbingConstants.*;
 
+import java.util.function.DoubleSupplier;
+
 public class ClimbingSubsystem extends SubsystemBase {
   /** Creates a new ClimbingSubsystem. */
   private CANSparkMax m_climbingRight;
@@ -25,22 +27,21 @@ public class ClimbingSubsystem extends SubsystemBase {
   }
 
   private ClimbingSubsystem() {
-    m_climbingLeft = new CANSparkMax(M_CLIMBINGLEFT_MOTOR_ID, MotorType.kBrushless);
     m_climbingRight = new CANSparkMax(M_CLIMBINGRIGHT_MOTOR_ID, MotorType.kBrushless);
-
+    m_climbingLeft = new CANSparkMax(M_CLIMBINGLEFT_MOTOR_ID, MotorType.kBrushless);
   }
 
-  public void setSpeedClimbing(double speed) {
-    m_climbingLeft.set(speed);
-    m_climbingRight.set(speed);
+  public void setSpeedClimbing(DoubleSupplier speed) {
+    m_climbingRight.set(speed.getAsDouble());
+    m_climbingLeft.set(speed.getAsDouble());
   }
 
-  public void setRightSpeed(double speed) {
-    m_climbingRight.set(speed);
+  public void setRightSpeed(DoubleSupplier speed) {
+    m_climbingRight.set(speed.getAsDouble());
   }
 
-  public void setLeftSpeed(double speed) {
-    m_climbingLeft.set(speed);
+  public void setLeftSpeed(DoubleSupplier speed) {
+    m_climbingLeft.set(speed.getAsDouble());
   }
 
   @Override

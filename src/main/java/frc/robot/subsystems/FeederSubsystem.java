@@ -15,33 +15,33 @@ import static frc.robot.Constants.FeederConstants.*;
 public class FeederSubsystem extends SubsystemBase {
   /** Creates a new FeederSubsystem. */
 
-  //the feeder's motor
+  // the feeder's motor
   TalonSRX m_Feeder;
-  DigitalInput lazerSensor;
-
-  //constructor
-  private FeederSubsystem(){
-    m_Feeder = new TalonSRX(FeederMotorId);
-    this.lazerSensor = new DigitalInput(SwitchID);
-  }
+  DigitalInput m_feederNoteSensor;
 
   // singelton
   private static FeederSubsystem instance;
 
   public static FeederSubsystem getInstance() {
     if (instance == null) {
-        instance = new FeederSubsystem();  
+      instance = new FeederSubsystem();
     }
     return instance;
-  } 
+  }
+
+  // constructor
+  private FeederSubsystem() {
+    m_Feeder = new TalonSRX(FeederMotorId);
+    this.m_feederNoteSensor = new DigitalInput(feederNoteSensorID);
+  }
 
   // set speed function
-  public void setSpeed(double motorSpeed){
+  public void setSpeed(double motorSpeed) {
     m_Feeder.set(ControlMode.PercentOutput, motorSpeed);
   }
 
-  public boolean getSwitch(){
-    return lazerSensor.get();
+  public boolean getSwitch() {
+    return m_feederNoteSensor.get();
   }
 
   @Override

@@ -12,6 +12,7 @@ import com.ctre.phoenix6.hardware.TalonFX;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.Utils.interpolation.InterpolateUtil;
+import frc.robot.Constants;
 
 import static frc.robot.Constants.ShooterArmConstants.*;
 
@@ -36,7 +37,7 @@ public class ShooterArmSubsystem extends SubsystemBase {
   }
 
   private ShooterArmSubsystem() {
-    this.m_shooterArmMotor = new TalonFX(ShooterArmID);
+    this.m_shooterArmMotor = new TalonFX(ShooterArmID, Constants.canBus_name);
     this.limitSwitch = new DigitalInput(SwitchID);
 
     // create the full MotionMagic

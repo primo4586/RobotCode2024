@@ -15,6 +15,7 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.Utils.interpolation.InterpolateUtil;
 import frc.Utils.vision.Vision;
+import frc.robot.Constants;
 
 public class ShooterSubsysem extends SubsystemBase {
   private TalonFX m_shooterMotor;
@@ -34,7 +35,7 @@ public class ShooterSubsysem extends SubsystemBase {
   /** Creates a new ShooterSubsysem. */
   private ShooterSubsysem() {
     // giving values to the motors
-    this.m_shooterMotor = new TalonFX(kMotorShooterID);
+    this.m_shooterMotor = new TalonFX(kMotorShooterID, Constants.canBus_name);
 
     // declaring Configs
     TalonFXConfiguration configs = new TalonFXConfiguration();

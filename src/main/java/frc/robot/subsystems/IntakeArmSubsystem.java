@@ -12,6 +12,8 @@ import com.ctre.phoenix6.hardware.TalonFX;
 
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants;
+
 import static frc.robot.Constants.IntakeArmConstants.*;
 
 import java.util.function.DoubleSupplier;
@@ -33,7 +35,7 @@ public class IntakeArmSubsystem extends SubsystemBase {
 
   /** Creates a new IntakeArmSubsystem. */
   private IntakeArmSubsystem() {
-    this.m_IntakeArmMotor = new TalonFX(IntakeArmMotorID);
+    this.m_IntakeArmMotor = new TalonFX(IntakeArmMotorID, Constants.canBus_name);
     TalonFXConfiguration configs = new TalonFXConfiguration();
     MotionMagicConfigs mm = new MotionMagicConfigs();
 

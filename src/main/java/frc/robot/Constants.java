@@ -31,6 +31,8 @@ import edu.wpi.first.math.numbers.N3;
 public final class Constants {
 
     public static final double stickDeadband = 0.1;
+    
+    public static final String canBus_name = "canBus";
 
     public static final class IntakeArmConstants { // TODO: This must be tuned to specific robot
         // mm

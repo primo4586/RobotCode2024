@@ -1,6 +1,5 @@
 package frc.robot.subsystems;
 
-import frc.Utils.swerve.SwerveModule;
 import frc.Utils.vision.Vision;
 import frc.robot.Constants.Swerve.Mod0;
 import frc.robot.Constants.Swerve.Mod1;

@@ -1,4 +1,4 @@
-package frc.Utils.swerve;
+package frc.robot.subsystems;
 
 import static edu.wpi.first.units.Units.Volts;
 
@@ -21,6 +21,8 @@ import edu.wpi.first.wpilibj.Timer;
 import frc.Utils.motors.CANSparkMaxUtil;
 import frc.Utils.motors.FalconConversions;
 import frc.Utils.motors.CANSparkMaxUtil.Usage;
+import frc.Utils.swerve.CTREModuleState;
+import frc.Utils.swerve.SwerveModuleConstants;
 import frc.robot.Constants;
 import frc.robot.Robot;
 
@@ -60,7 +62,7 @@ public class SwerveModule {
         configAngleMotor();
 
         /* Drive Motor Config */
-        mDriveMotor = new TalonFX(moduleConstants.driveMotorID);
+        mDriveMotor = new TalonFX(moduleConstants.driveMotorID, Constants.canBus_name);
         configDriveMotor();
 
         lastAngle = getState().angle;

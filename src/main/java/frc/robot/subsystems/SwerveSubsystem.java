@@ -15,14 +15,19 @@ import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.ctre.phoenix.sensors.PigeonIMU;
 
+import java.util.function.Supplier;
+
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.geometry.Twist2d;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class SwerveSubsystem extends SubsystemBase {
@@ -33,6 +38,8 @@ public class SwerveSubsystem extends SubsystemBase {
     public Vision vision;
     Field2d field2d = new Field2d();
     Rotation2d simYaw = new Rotation2d();
+    Supplier<Rotation2d> headingSupplier = null;
+    PIDController headingPid = aligningPID;
 
     private static SwerveSubsystem instance;
 
@@ -62,6 +69,8 @@ public class SwerveSubsystem extends SubsystemBase {
         };
         poseEstimation = new SwerveDrivePoseEstimator(swerveKinematics, getYaw(), getModulePositions(),
                 new Pose2d(2, 2, new Rotation2d(0)));
+                
+        headingPid.enableContinuousInput(-180, 180);
     }
 
     public void drive(Translation2d translation, double rotation, boolean fieldRelative, boolean isOpenLoop,
@@ -70,7 +79,8 @@ public class SwerveSubsystem extends SubsystemBase {
                 fieldRelative ? ChassisSpeeds.fromFieldRelativeSpeeds(
                         translation.getX(),
                         translation.getY(),
-                        rotation,
+                        headingSupplier == null ? rotation
+                                : headingPid.calculate(getPose().getRotation().getDegrees(), headingSupplier.get().getDegrees()),
                         getYaw())
                         : new ChassisSpeeds(
                                 translation.getX(),
@@ -164,6 +174,14 @@ public class SwerveSubsystem extends SubsystemBase {
         return swerveKinematics.toChassisSpeeds(getModuleStates());
     }
 
+    public Twist2d fieldVelocity() {
+        ChassisSpeeds robotVelocity = getRobotVelocity();
+        Translation2d linearFieldVelocity = new Translation2d(robotVelocity.vxMetersPerSecond,
+                robotVelocity.vyMetersPerSecond)
+                .rotateBy(poseEstimation.getEstimatedPosition().getRotation());
+        return new Twist2d(
+                linearFieldVelocity.getX(), linearFieldVelocity.getY(), robotVelocity.omegaRadiansPerSecond);
+    }
 
     @Override
     public void periodic() {
@@ -265,5 +283,13 @@ public class SwerveSubsystem extends SubsystemBase {
         poseEstimation.update(simYaw, poses);
 
         field2d.setRobotPose(getPose());
+    }
+
+    public Command setHeadingCommand(Supplier<Rotation2d> heading) {
+        return Commands.runOnce(() -> headingSupplier = heading);
+    }
+
+    public Command disableHeadingCommand() {
+        return Commands.runOnce(() -> headingSupplier = null);
     }
 }

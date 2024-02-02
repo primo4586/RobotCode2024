@@ -56,11 +56,14 @@ public final class Constants {
         public static final double intakeArmStartingValue = 0;
         public static final double zeroEncoderValue = 0;
         public static final double intakeArmZeroSpeed = 0;
-        public static final double intakeSetPoint = 0;
-        public static final double trapSetPoint = 0;
         // switch
         public static final int intakeArmSwitchID = 0;
+
+        // set points
         public static final double AmpSetPoint = 0;
+        public static final double SafeSetPoint = 0;
+        public static final double intakeSetPoint = 0;
+        public static final double trapSetPoint = 0;
 
     }
 

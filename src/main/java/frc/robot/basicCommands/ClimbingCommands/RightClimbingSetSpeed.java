@@ -7,11 +7,11 @@ package frc.robot.basicCommands.ClimbingCommands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import frc.robot.subsystems.ClimbingSubsystem;
 
-public class SetSpeedLeftMotorClimbing extends InstantCommand {
+public class RightClimbingSetSpeed extends InstantCommand {
   private final ClimbingSubsystem climbingSubsystem = ClimbingSubsystem.getInstance();
   double speed;
 
-  public SetSpeedLeftMotorClimbing(double speed) {
+  public RightClimbingSetSpeed(double speed) {
     this.addRequirements(climbingSubsystem);
     this.speed = speed;
   }
@@ -19,7 +19,7 @@ public class SetSpeedLeftMotorClimbing extends InstantCommand {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    this.climbingSubsystem.setLeftSpeed(() -> speed);
+    this.climbingSubsystem.setRightSpeed(() -> speed);
 
   }
 }

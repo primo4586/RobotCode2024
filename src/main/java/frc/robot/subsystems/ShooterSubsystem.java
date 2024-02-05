@@ -10,6 +10,7 @@ import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.MotionMagicVelocityVoltage;
 import com.ctre.phoenix6.hardware.TalonFX;
 import static frc.robot.Constants.ShooterConstants.*;
+import static frc.robot.Constants.Swerve.maxAngularVelocity;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -17,23 +18,23 @@ import frc.Utils.interpolation.InterpolateUtil;
 import frc.Utils.vision.Vision;
 import frc.robot.Constants;
 
-public class ShooterSubsysem extends SubsystemBase {
+public class ShooterSubsystem extends SubsystemBase {
   private TalonFX m_shooterMotor;
   private final Vision vision = Vision.getInstance();
 
   private final MotionMagicVelocityVoltage motionMagic = new MotionMagicVelocityVoltage(0);
 
-  private static ShooterSubsysem instance;
+  private static ShooterSubsystem instance;
 
-  public static ShooterSubsysem getInstance() {
+  public static ShooterSubsystem getInstance() {
     if (instance == null) {
-      instance = new ShooterSubsysem();
+      instance = new ShooterSubsystem();
     }
     return instance;
   }
 
   /** Creates a new ShooterSubsysem. */
-  private ShooterSubsysem() {
+  private ShooterSubsystem() {
     // giving values to the motors
     this.m_shooterMotor = new TalonFX(kMotorShooterID, Constants.canBus_name);
 
@@ -72,7 +73,7 @@ public class ShooterSubsysem extends SubsystemBase {
   }
 
   // set (active) shooter motor speed
-  public void setShooterSpeed(double speed) {
+  public void setSpeedShooterd(double speed) {
     this.m_shooterMotor.setControl(motionMagic.withVelocity(speed));
   }
 
@@ -86,6 +87,14 @@ public class ShooterSubsysem extends SubsystemBase {
 
   public double speakerInterpolate(Pose2d pose2d) {
     return InterpolateUtil.interpolate(ShooterInterpolation, vision.DistanceFromTarget(pose2d));
+  }
+
+  public void runCharacterizationVolts(Double voltage) {
+    m_shooterMotor.setVoltage(voltage);
+  }
+
+  public double getCharacterizationVelocity() {
+    return m_shooterMotor.getVelocity().getValueAsDouble();
   }
 
   @Override

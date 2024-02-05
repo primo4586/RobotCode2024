@@ -7,11 +7,11 @@ package frc.robot.basicCommands.feederCommands;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.FeederSubsystem;
 import frc.robot.subsystems.ShooterArmSubsystem;
-import frc.robot.subsystems.ShooterSubsysem;
+import frc.robot.subsystems.ShooterSubsystem;
 import static frc.robot.Constants.FeederConstants.*;
 
 public class FeedToShooter extends Command {
-  private final ShooterSubsysem shooterSubsysem = ShooterSubsysem.getInstance();
+  private final ShooterSubsystem shooterSubsysem = ShooterSubsystem.getInstance();
   private final ShooterArmSubsystem shooterArmSubsystem = ShooterArmSubsystem.getInstance();
   private final FeederSubsystem feederSubsystem = FeederSubsystem.getInstance();
 

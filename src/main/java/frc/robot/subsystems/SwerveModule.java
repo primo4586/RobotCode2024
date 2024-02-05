@@ -172,9 +172,9 @@ public class SwerveModule {
         );
     }
 
-    public void runCharacterizationVolts(Measure<Voltage> voltage){
+    public void runCharacterizationVolts(Double voltage){
         anglePosition.setReference(0, ControlType.kPosition);
-        mDriveMotor.setVoltage(voltage.in(Volts));
+        mDriveMotor.setVoltage(voltage);
     }
 
     public double getCharacterizationVelocity() {

@@ -63,7 +63,6 @@ public class ShooterArmSubsystem extends SubsystemBase {
     configuration.SoftwareLimitSwitch.ReverseSoftLimitEnable = true;
     configuration.SoftwareLimitSwitch.ReverseSoftLimitThreshold = backwordLimit;
 
-    // set Ratio to 50:1
     configuration.Feedback.SensorToMechanismRatio = TICKS_PER_DEGREE;
 
     StatusCode statusCode = StatusCode.StatusCodeNotInitialized;
@@ -105,12 +104,20 @@ public class ShooterArmSubsystem extends SubsystemBase {
     return this.limitSwitch.get();
   }
 
-  public void moveArmBySpeed(DoubleSupplier speed) {
+  public void setSpeedArm(DoubleSupplier speed) {
     m_shooterArmMotor.set(speed.getAsDouble());
   }
 
   public double angleFromDistance(double distance) {
     return InterpolateUtil.interpolate(SHOOTER_ANGLE_INTERPOLATION_MAP, distance);
+  }
+
+  public void runCharacterizationVolts(Double voltage) {
+    m_shooterArmMotor.setVoltage(voltage);
+  }
+
+  public double getCharacterizationVelocity() {
+    return m_shooterArmMotor.getVelocity().getValueAsDouble();
   }
 
   @Override

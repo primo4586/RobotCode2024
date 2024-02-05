@@ -5,10 +5,10 @@
 package frc.robot.basicCommands.ShooterCommands;
 
 import edu.wpi.first.wpilibj2.command.InstantCommand;
-import frc.robot.subsystems.ShooterSubsysem;
+import frc.robot.subsystems.ShooterSubsystem;
 
 public class ShooterSetSpeed extends InstantCommand {
-  private final ShooterSubsysem shooterSubsystem = ShooterSubsysem.getInstance();
+  private final ShooterSubsystem shooterSubsystem = ShooterSubsystem.getInstance();
   double speed;
 
   /** Creates a new ShooterSetSpeed. */
@@ -20,6 +20,6 @@ public class ShooterSetSpeed extends InstantCommand {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    this.shooterSubsystem.setShooterSpeed(speed);
+    this.shooterSubsystem.setSpeedShooterd(speed);
   }
 }

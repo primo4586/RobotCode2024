@@ -5,8 +5,8 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
-import frc.robot.autos.AutoCommands;
 import frc.robot.autos.FieldConstants;
+import frc.robot.autos.Regions;
 
 /** Utility functions for flipping from the blue to red alliance. */
 public class AllianceFlipUtil {
@@ -49,11 +49,11 @@ public class AllianceFlipUtil {
   /**
    * Flip rectangular region to the correct side of the field based on the current alliance color
    */
-  public static AutoCommands.RectangularRegion apply(AutoCommands.RectangularRegion region) {
+  public static Regions.RectangularRegion apply(Regions.RectangularRegion region) {
     if (shouldFlip()) {
       Translation2d topRight = apply(region.topLeft);
       Translation2d bottomLeft = apply(region.bottomRight);
-      return new AutoCommands.RectangularRegion(
+      return new Regions.RectangularRegion(
           new Translation2d(bottomLeft.getX(), topRight.getY()),
           new Translation2d(topRight.getX(), bottomLeft.getY()));
     } else {
@@ -62,9 +62,9 @@ public class AllianceFlipUtil {
   }
 
   /** Flip circular region to the correct side of the field based on the current alliance color */
-  public static AutoCommands.CircularRegion apply(AutoCommands.CircularRegion region) {
+  public static Regions.CircularRegion apply(Regions.CircularRegion region) {
     if (shouldFlip()) {
-      return new AutoCommands.CircularRegion(apply(region.center()), region.radius());
+      return new Regions.CircularRegion(apply(region.center()), region.radius());
     } else {
       return region;
     }

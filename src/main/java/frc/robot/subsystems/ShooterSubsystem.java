@@ -13,6 +13,7 @@ import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 
 import static frc.robot.Constants.ShooterConstants.*;
+
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.Utils.interpolation.InterpolateUtil;
@@ -78,7 +79,7 @@ public class ShooterSubsystem extends SubsystemBase {
   }
 
   // set (active) shooter motor speed
-  public void setSpeedShooterd(double speed) {
+  public void setSpeedShooter(double speed) {
     this.m_shooterMotor.setControl(motionMagic.withVelocity(speed));
   }
 

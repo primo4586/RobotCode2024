@@ -38,7 +38,7 @@ public class SwerveSubsystem extends SubsystemBase {
     public Vision vision;
     Field2d field2d = new Field2d();
     Rotation2d simYaw = new Rotation2d();
-    Supplier<Rotation2d> headingSupplier = null;
+    public Supplier<Rotation2d> headingSupplier = null;
     PIDController headingPid = aligningPID;
 
     private static SwerveSubsystem instance;

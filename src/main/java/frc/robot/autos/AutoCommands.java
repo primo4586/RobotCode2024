@@ -6,9 +6,13 @@ import edu.wpi.first.math.geometry.Twist2d;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import frc.Utils.AllianceFlipUtil;
+import frc.robot.Constants.FeederConstants;
 import frc.robot.aRobotOperations.CollectToFeeder;
 import frc.robot.aRobotOperations.InakeSafe;
+import frc.robot.autos.Regions.Region;
+import frc.robot.basicCommands.feederCommands.FeederSetSpeed;
 import frc.robot.subsystems.SwerveSubsystem;
+
 
 import java.util.function.Supplier;
 
@@ -17,8 +21,10 @@ public class AutoCommands {
   public static Command moveWhileShooting() {
     return SwerveSubsystem.getInstance()
         .setHeadingCommand(AutoCommands::calculateShootHeading)
+          .alongWith(new AutoShooterSpeaker())
         .andThen(Commands.waitSeconds(0.7))
-        .andThen(SwerveSubsystem.getInstance().disableHeadingCommand());
+        .andThen(SwerveSubsystem.getInstance().disableHeadingCommand()
+          .alongWith(new FeederSetSpeed(FeederConstants.FeederShootSpeed).deadlineWith(Commands.waitSeconds(FeederConstants.TimeToFeed))));
   }
 
   private static Rotation2d calculateShootHeading() {
@@ -46,35 +52,4 @@ public class AutoCommands {
         new InakeSafe());
   }
 
-  public interface Region {
-    boolean contains(Translation2d point);
-  }
-
-  public static class RectangularRegion implements Region {
-    public final Translation2d topLeft;
-    public final Translation2d bottomRight;
-
-    public RectangularRegion(Translation2d topLeft, Translation2d bottomRight) {
-      this.topLeft = topLeft;
-      this.bottomRight = bottomRight;
-    }
-
-    public RectangularRegion(Translation2d center, double width, double height) {
-      topLeft = new Translation2d(center.getX() - width / 2, center.getY() + height / 2);
-      bottomRight = new Translation2d(center.getX() + width / 2, center.getY() - height / 2);
-    }
-
-    public boolean contains(Translation2d point) {
-      return point.getX() >= topLeft.getX()
-          && point.getX() <= bottomRight.getX()
-          && point.getY() <= topLeft.getY()
-          && point.getY() >= bottomRight.getY();
-    }
-  }
-
-  public record CircularRegion(Translation2d center, double radius) implements Region {
-    public boolean contains(Translation2d point) {
-      return center.getDistance(point) <= radius;
-    }
-  }
 }

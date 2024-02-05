@@ -17,13 +17,13 @@ import frc.Utils.PathPlanner.PathPlannerHelper;
 public class FourNote extends SequentialCommandGroup {
   /** Creates a new FourNote. */
   // bottom to top
-  private AutoCommands.CircularRegion spikeIntakeRegion(int i) {
-    return new AutoCommands.CircularRegion(
+  private Regions.CircularRegion spikeIntakeRegion(int i) {
+    return new Regions.CircularRegion(
         FieldConstants.StagingLocations.spikeTranslations[i], 2);// TODO: const
   }
 
-  private AutoCommands.CircularRegion centerlineIntakeRegion(int i) {
-    return new AutoCommands.CircularRegion(
+  private Regions.CircularRegion centerlineIntakeRegion(int i) {
+    return new Regions.CircularRegion(
         FieldConstants.StagingLocations.centerlineTranslations[i], 2);
   }
 
@@ -39,9 +39,9 @@ public class FourNote extends SequentialCommandGroup {
         AutoCommands.intakeWhileInRegion(
             () -> AllianceFlipUtil.apply(centerlineIntakeRegion(4))));
 
-    var secondShotRegion = new AutoCommands.RectangularRegion(new Translation2d(2.11, 6.37), 0.5, 0.1);
-    var thirdShotRegion = new AutoCommands.RectangularRegion(new Translation2d(3.83, 5.99), 0.1, 0.5);
-    var fourthShotRegion = new AutoCommands.RectangularRegion(new Translation2d(4.08, 7.18), 0.1, 0.5);
+    var secondShotRegion = new Regions.RectangularRegion(new Translation2d(2.11, 6.37), 0.5, 0.1);
+    var thirdShotRegion = new Regions.RectangularRegion(new Translation2d(3.83, 5.99), 0.1, 0.5);
+    var fourthShotRegion = new Regions.RectangularRegion(new Translation2d(4.08, 7.18), 0.1, 0.5);
     Command sequenceShots = Commands.sequence(
         AutoCommands.moveWhileShooting(),
         AutoCommands.waitForRegion(() -> AllianceFlipUtil.apply(secondShotRegion)),

@@ -124,6 +124,14 @@ public class ShooterArmSubsystem extends SubsystemBase {
     return m_shooterArmMotor.getVelocity().getValueAsDouble();
   }
 
+  public void runCharacterizationVolts(Double voltage) {
+    m_shooterArmMotor.setVoltage(voltage);
+  }
+
+  public double getCharacterizationVelocity() {
+    return m_shooterArmMotor.getVelocity().getValueAsDouble();
+  }
+
   @Override
   public void periodic() {
     // This method will be called once per scheduler run

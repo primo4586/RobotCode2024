@@ -339,6 +339,7 @@ public final class Constants {
         public static final int feederNoteSensorID = 0;
         public static final double FeederMotorSpeed = 0.8;
         public static final double getNoteSpeed = 0;
+        public static final double TimeToFeed = 0.7;
 
     }
 

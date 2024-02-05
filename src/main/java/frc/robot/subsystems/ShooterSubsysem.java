@@ -8,7 +8,10 @@ import com.ctre.phoenix6.StatusCode;
 import com.ctre.phoenix6.configs.MotionMagicConfigs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.MotionMagicVelocityVoltage;
+import com.ctre.phoenix6.controls.NeutralOut;
 import com.ctre.phoenix6.hardware.TalonFX;
+import com.ctre.phoenix6.signals.NeutralModeValue;
+
 import static frc.robot.Constants.ShooterConstants.*;
 
 import edu.wpi.first.math.geometry.Pose2d;
@@ -24,6 +27,8 @@ public class ShooterSubsysem extends SubsystemBase {
   private final MotionMagicVelocityVoltage motionMagic = new MotionMagicVelocityVoltage(0);
 
   private static ShooterSubsysem instance;
+
+  NeutralOut neutralOut = new NeutralOut();
 
   public static ShooterSubsysem getInstance() {
     if (instance == null) {
@@ -58,6 +63,8 @@ public class ShooterSubsysem extends SubsystemBase {
     configs.Voltage.PeakReverseVoltage = PeakReverseVoltage;
 
     configs.Feedback.SensorToMechanismRatio = SensorToMechanismRatio;
+    
+    m_shooterMotor.setNeutralMode(NeutralModeValue.Coast);
 
     // Checking if m_shooterMotor apply configs
     StatusCode status = StatusCode.StatusCodeNotInitialized;
@@ -86,6 +93,10 @@ public class ShooterSubsysem extends SubsystemBase {
 
   public double speakerInterpolate(Pose2d pose2d) {
     return InterpolateUtil.interpolate(ShooterInterpolation, vision.DistanceFromTarget(pose2d));
+  }
+
+  public void coast() {
+    m_shooterMotor.setControl(neutralOut);
   }
 
   @Override

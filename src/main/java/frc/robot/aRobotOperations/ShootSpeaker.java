@@ -4,10 +4,10 @@
 
 package frc.robot.aRobotOperations;
 
-import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
+import edu.wpi.first.wpilibj2.command.ParallelRaceGroup;
 import frc.robot.basicCommands.feederCommands.FeedToShooter;
 
-public class ShootSpeaker extends ParallelCommandGroup {
+public class ShootSpeaker extends ParallelRaceGroup {
   /** Creates a new ShootSpeaker. */
   public ShootSpeaker() {
     addCommands(

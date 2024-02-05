@@ -5,12 +5,12 @@
 package frc.robot.basicCommands.ShooterArmCommands;
 
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.Utils.vision.Vision;
 import frc.robot.subsystems.ShooterArmSubsystem;
+import frc.robot.subsystems.SwerveSubsystem;
 
 public class ShooterArmSpeakerAngle extends Command {
   private final ShooterArmSubsystem shooterArmSubsystem = ShooterArmSubsystem.getInstance();
-  private final Vision vision = Vision.getInstance();
+  private final SwerveSubsystem swerve = SwerveSubsystem.getInstance();
 
   /** Creates a new ShooterAngleFromDistanceInterpolation. */
   public ShooterArmSpeakerAngle() {
@@ -25,7 +25,7 @@ public class ShooterArmSpeakerAngle extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    shooterArmSubsystem.moveArmTo(shooterArmSubsystem.angleFromDistance(vision.DistanceFromTarget()));
+    shooterArmSubsystem.moveArmTo(shooterArmSubsystem.angleFromDistance(swerve.getPose()));
   }
 
   // Called once the command ends or is interrupted.

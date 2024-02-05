@@ -8,12 +8,12 @@ import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.ShooterSubsysem;
 import frc.robot.subsystems.SwerveSubsystem;
 
-public class ShooterSpeakerSetSpeed extends Command {
+public class ShooterSpeaker extends Command {
   private final ShooterSubsysem shooterSubsystem = ShooterSubsysem.getInstance();
   private final SwerveSubsystem swerve = SwerveSubsystem.getInstance();
 
   /** Creates a new ShooterSetSpeedInterpolation. */
-  public ShooterSpeakerSetSpeed() {
+  public ShooterSpeaker() {
     this.addRequirements(shooterSubsystem);
   }
 
@@ -31,6 +31,7 @@ public class ShooterSpeakerSetSpeed extends Command {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
+    shooterSubsystem.coast();
   }
 
   // Returns true when the command should end.

@@ -4,16 +4,20 @@
 
 package frc.robot.basicCommands.feederCommands;
 
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.Constants.FeederConstants;
 import frc.robot.subsystems.FeederSubsystem;
 import frc.robot.subsystems.ShooterArmSubsystem;
 import frc.robot.subsystems.ShooterSubsysem;
 import static frc.robot.Constants.FeederConstants.*;
 
 public class FeedToShooter extends Command {
-  private final ShooterSubsysem shooterSubsysem = ShooterSubsysem.getInstance();
+  private final ShooterSubsysem shooterSubsystem = ShooterSubsysem.getInstance();
   private final ShooterArmSubsystem shooterArmSubsystem = ShooterArmSubsystem.getInstance();
   private final FeederSubsystem feederSubsystem = FeederSubsystem.getInstance();
+  Timer timer = new Timer();
+  boolean startedShooting = false;
 
   /** Creates a new StartFeeder. */
   public FeedToShooter() {
@@ -29,8 +33,10 @@ public class FeedToShooter extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    if (shooterSubsysem.checkIfShooterAtSpeed() && shooterArmSubsystem.isArmReady()) {
+    if (!startedShooting && shooterSubsystem.checkIfShooterAtSpeed() && shooterArmSubsystem.isArmReady()) {
       feederSubsystem.setSpeed(FeederShootSpeed);
+      startedShooting = true;
+      timer.restart();
     }
   }
 
@@ -43,6 +49,6 @@ public class FeedToShooter extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return false;
+    return timer.hasElapsed(FeederConstants.TimeToFeed);
   }
 }

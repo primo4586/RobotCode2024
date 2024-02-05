@@ -20,7 +20,7 @@ public class ZeroShooterArm extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    shooterArmSubsystem.moveArmBySpeed(() -> resetSpeed);
+    shooterArmSubsystem.setSpeedArm(() -> resetSpeed);
   }
 
   // Called once the command ends or is interrupted.

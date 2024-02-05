@@ -9,7 +9,6 @@ import com.ctre.phoenix6.configs.MotionMagicConfigs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.MotionMagicVoltage;
 import com.ctre.phoenix6.hardware.TalonFX;
-
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
@@ -51,7 +50,7 @@ public class IntakeArmSubsystem extends SubsystemBase {
 
     configs.Voltage.PeakForwardVoltage = PeakForwardVoltage;
     configs.Voltage.PeakReverseVoltage = PeakReverseVoltage;
-    configs.Feedback.SensorToMechanismRatio = SensorToMechanismRatio;
+    configs.Feedback.SensorToMechanismRatio = TICKS_PER_DEGREE;
 
     configs.SoftwareLimitSwitch.ForwardSoftLimitEnable = ForwardSoftLimitEnable;
     configs.SoftwareLimitSwitch.ForwardSoftLimitThreshold = ForwardSoftLimitThreshold;
@@ -96,6 +95,14 @@ public class IntakeArmSubsystem extends SubsystemBase {
   // check if intake arm is in place
   public boolean checkIntakeArmPosion() {
     return Math.abs(m_IntakeArmMotor.getClosedLoopError().getValue()) < minimumError;
+  }
+
+  public void runCharacterizationVolts(Double voltage) {
+    m_IntakeArmMotor.setVoltage(voltage);
+  }
+
+  public double getCharacterizationVelocity() {
+    return m_IntakeArmMotor.getVelocity().getValueAsDouble();
   }
 
   @Override

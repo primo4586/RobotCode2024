@@ -9,6 +9,10 @@ import java.util.Map;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.Utils.PathPlanner.PathPlannerHelper;
+import frc.Utils.feedForward.FeedForwardCharacterization;
+import frc.robot.subsystems.IntakeArmSubsystem;
+import frc.robot.subsystems.ShooterArmSubsystem;
+import frc.robot.subsystems.ShooterSubsystem;
 import frc.robot.subsystems.SwerveSubsystem;
 
 /** Add your docs here. */
@@ -17,19 +21,29 @@ public class AutoContainer {
     private Map<String, Command> autoPaths;
     private PathPlannerHelper pathPlanner;
     SwerveSubsystem swerve = SwerveSubsystem.getInstance();
+    IntakeArmSubsystem intakeArm = IntakeArmSubsystem.getInstance();
+    ShooterArmSubsystem shooterArm = ShooterArmSubsystem.getInstance();
+    ShooterSubsystem shooter = ShooterSubsystem.getInstance();
 
-    public AutoContainer(){
+    public AutoContainer() {
         this.pathPlanner = PathPlannerHelper.getInstace();
         this.autoPaths = new HashMap<String, Command>();
-        
-        this.autoPaths.put("test2Meter", pathPlanner.followPath("test2Meter"));
-        this.autoPaths.put("testSpin", pathPlanner.followPath("testSpin"));
 
+        this.autoPaths.put("Drive FF Characterization", new FeedForwardCharacterization(swerve,
+                swerve::runCharacterizationVolts,
+                swerve::getCharacterizationVelocity));
 
-        this.autoPaths.put("testSplineChoreo", pathPlanner.followChoreoPath("testSplineChoreo"));
-        this.autoPaths.put("test2meterChoreo", pathPlanner.followChoreoPath("test2meterChoreo"));
-        this.autoPaths.put("NewPath", pathPlanner.followChoreoPath("NewPath"));
-        this.autoPaths.put("4piece", pathPlanner.followChoreoPath("4piece"));
+        this.autoPaths.put("Shooter Arm FF Characterization", new FeedForwardCharacterization(intakeArm,
+                intakeArm::runCharacterizationVolts,
+                intakeArm::getCharacterizationVelocity));
+                
+        this.autoPaths.put("Shooter Arm FF Characterization", new FeedForwardCharacterization(shooterArm,
+                shooterArm::runCharacterizationVolts,
+                shooterArm::getCharacterizationVelocity));
+                
+        this.autoPaths.put("Shooter FF Characterization", new FeedForwardCharacterization(shooter,
+                shooter::runCharacterizationVolts,
+                shooter::getCharacterizationVelocity));
 
         this.autoSelector = new CommandSelector(autoPaths, PrimoShuffleboard.getInstance().getCompTabTitle());
     }
@@ -38,4 +52,3 @@ public class AutoContainer {
         return this.autoSelector.getCommand();
     }
 }
-    

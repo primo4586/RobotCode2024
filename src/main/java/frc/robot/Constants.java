@@ -46,7 +46,9 @@ public final class Constants {
         public static final double KS = 0.25;
         public static final double PeakForwardVoltage = 11.5;
         public static final double PeakReverseVoltage = -11.5;
-        public static final double SensorToMechanismRatio = 0;
+        public static final int encoderCountsPerRevolution = 1;
+        public static final double gearRatio = 70;
+        public static final double TICKS_PER_DEGREE = encoderCountsPerRevolution * gearRatio / 360.0;
         public static final boolean ForwardSoftLimitEnable = true;
         public static final double ForwardSoftLimitThreshold = 300;
         public static final boolean ReverseSoftLimitEnable = true;
@@ -55,7 +57,7 @@ public final class Constants {
         public static final double minimumError = 0;
         public static final double intakeArmStartingValue = 0;
         public static final double zeroEncoderValue = 0;
-        public static final double intakeArmZeroSpeed = 0;
+        public static final double intakeArmZeroSpeed = 0.1;
         // switch
         public static final int intakeArmSwitchID = 0;
 
@@ -126,9 +128,9 @@ public final class Constants {
 
         /* Angle Motor PID Values */
         public static final double angleKP = 0.08;// chosenModule.angleKP;
-        public static final double angleKI = chosenModule.angleKI;
-        public static final double angleKD = chosenModule.angleKD;
-        public static final double angleKFF = chosenModule.angleKD;
+        public static final double angleKI = 0.0;
+        public static final double angleKD = 0.0;
+        public static final double angleKFF = 0.0;
 
         /* Drive Motor PID Values */
         public static final double driveKP = 0.2; // TODO: This must be tuned to specific robot
@@ -250,7 +252,7 @@ public final class Constants {
         public static final int ShooterArmID = 0;
         public static final int SwitchID = 1;
         public static final int encoderCountsPerRevolution = 1;
-        public static final double gearRatio = 50.0;
+        public static final double gearRatio = 100;
         public static final double TICKS_PER_DEGREE = encoderCountsPerRevolution * gearRatio / 360.0;
 
         // condition Costants
@@ -277,7 +279,7 @@ public final class Constants {
 
         // ArmPoseReset Constant
         public static final double resetPose = 0.0;
-        public static final double resetSpeed = -1.0;
+        public static final double resetSpeed = -0.1;
 
         public static final double shooterArmStartPose = 0.0;
 
@@ -303,7 +305,7 @@ public final class Constants {
         public static final double PeakForwardVoltage = 11.5;
         public static final double PeakReverseVoltage = -11.5;
 
-        public static final int SensorToMechanismRatio = 50;
+        public static final double SensorToMechanismRatio = 0.5;
 
         public static final int MaxError = 13;
 

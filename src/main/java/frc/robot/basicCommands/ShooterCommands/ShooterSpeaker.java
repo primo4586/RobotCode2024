@@ -5,11 +5,11 @@
 package frc.robot.basicCommands.ShooterCommands;
 
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.subsystems.ShooterSubsysem;
+import frc.robot.subsystems.ShooterSubsystem;
 import frc.robot.subsystems.SwerveSubsystem;
 
 public class ShooterSpeaker extends Command {
-  private final ShooterSubsysem shooterSubsystem = ShooterSubsysem.getInstance();
+  private final ShooterSubsystem shooterSubsystem = ShooterSubsystem.getInstance();
   private final SwerveSubsystem swerve = SwerveSubsystem.getInstance();
 
   /** Creates a new ShooterSetSpeedInterpolation. */
@@ -25,7 +25,7 @@ public class ShooterSpeaker extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    this.shooterSubsystem.setShooterSpeed(shooterSubsystem.speakerInterpolate(swerve.getPose()));
+    this.shooterSubsystem.setSpeedShooterd(shooterSubsystem.speakerInterpolate(swerve.getPose()));
   }
 
   // Called once the command ends or is interrupted.

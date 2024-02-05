@@ -9,11 +9,11 @@ import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants.FeederConstants;
 import frc.robot.subsystems.FeederSubsystem;
 import frc.robot.subsystems.ShooterArmSubsystem;
-import frc.robot.subsystems.ShooterSubsysem;
+import frc.robot.subsystems.ShooterSubsystem;
 import static frc.robot.Constants.FeederConstants.*;
 
 public class FeedToShooter extends Command {
-  private final ShooterSubsysem shooterSubsystem = ShooterSubsysem.getInstance();
+  private final ShooterSubsystem shooterSubsystem = ShooterSubsystem.getInstance();
   private final ShooterArmSubsystem shooterArmSubsystem = ShooterArmSubsystem.getInstance();
   private final FeederSubsystem feederSubsystem = FeederSubsystem.getInstance();
   Timer timer = new Timer();

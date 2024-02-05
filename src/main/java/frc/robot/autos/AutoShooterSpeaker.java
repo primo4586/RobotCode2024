@@ -9,6 +9,8 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.Constants.AutoConstants;
+import frc.robot.Constants.FeederConstants;
 import frc.robot.subsystems.FeederSubsystem;
 import frc.robot.subsystems.ShooterArmSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
@@ -24,7 +26,7 @@ public class AutoShooterSpeaker extends Command {
   boolean startedShooting = false;
 
   public AutoShooterSpeaker() {
-    this.addRequirements(shooterSubsystem, shooterArmSubsystem);
+    this.addRequirements(shooterSubsystem, shooterArmSubsystem, feederSubsystem);
   }
 
   // Called when the command is initially scheduled.
@@ -37,14 +39,16 @@ public class AutoShooterSpeaker extends Command {
   private double translationX;
   private double translationY;
   private Transform2d heading;
+  double translationMagnitude = AutoConstants.AutoShootSpeed * FeederConstants.TimeToFeed;
+
   @Override
   public void execute() {
     pose = swerve.getPose();
     directionOfTravel = swerve.headingSupplier.get();
-    translationX = Math.cos(directionOfTravel.getRadians());
-    translationY = Math.sin(directionOfTravel.getRadians());
+    translationX = translationMagnitude * Math.cos(directionOfTravel.getRadians());
+    translationY = translationMagnitude * Math.sin(directionOfTravel.getRadians());
     heading = new Transform2d(translationX, translationY, new Rotation2d());
-    pose.transformBy(heading);
+    pose = pose.transformBy(heading);
     shooterSubsystem.setSpeedShooter(shooterSubsystem.speakerInterpolate(pose));
     shooterArmSubsystem.moveArmTo(shooterArmSubsystem.angleFromDistance(swerve.getPose()));
 

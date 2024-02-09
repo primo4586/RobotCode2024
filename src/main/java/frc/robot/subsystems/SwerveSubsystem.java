@@ -164,7 +164,6 @@ public class SwerveSubsystem extends SubsystemBase {
         return swerveKinematics.toChassisSpeeds(getModuleStates());
     }
 
-
     @Override
     public void periodic() {
         poseEstimation.update(getYaw(), getModulePositions());
@@ -202,6 +201,12 @@ public class SwerveSubsystem extends SubsystemBase {
         SmartDashboard.putNumberArray("DesiredModuleStates", getAdvantageDesiredModuleStates());
 
         field2d.setRobotPose(poseEstimation.getEstimatedPosition());
+    }
+
+    public void refreshClosedLoopRamp(double openLoopRampTime) {
+        for (SwerveModule module : mSwerveMods) {
+            module.refreshClosedLoopRamp(openLoopRampTime);
+        }
     }
 
     public void stopModules() {

@@ -222,6 +222,12 @@ public class SwerveSubsystem extends SubsystemBase {
         field2d.setRobotPose(poseEstimation.getEstimatedPosition());
     }
 
+    public void refreshClosedLoopRamp(double openLoopRampTime) {
+        for (SwerveModule module : mSwerveMods) {
+            module.refreshClosedLoopRamp(openLoopRampTime);
+        }
+    }
+
     public void stopModules() {
         for (SwerveModule module : mSwerveMods) {
             module.setDesiredState(new SwerveModuleState(0, Rotation2d.fromDegrees(0)), true);

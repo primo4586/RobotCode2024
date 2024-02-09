@@ -1,5 +1,6 @@
 package frc.robot.subsystems;
 
+import com.ctre.phoenix6.configs.OpenLoopRampsConfigs;
 import com.ctre.phoenix6.controls.DutyCycleOut;
 import com.ctre.phoenix6.controls.VelocityVoltage;
 import com.ctre.phoenix6.hardware.CANcoder;
@@ -34,7 +35,8 @@ public class SwerveModule {
 
     private SwerveModuleState desiredState = new SwerveModuleState(0, Rotation2d.fromDegrees(0));
 
-    private final SimpleMotorFeedforward driveFeedForward = new SimpleMotorFeedforward(Constants.Swerve.driveKS, Constants.Swerve.driveKV, Constants.Swerve.driveKA);
+    private final SimpleMotorFeedforward driveFeedForward = new SimpleMotorFeedforward(Constants.Swerve.driveKS,
+            Constants.Swerve.driveKV, Constants.Swerve.driveKA);
 
     /* drive motor control requests */
     private final DutyCycleOut driveDutyCycle = new DutyCycleOut(0);
@@ -43,10 +45,10 @@ public class SwerveModule {
     /* angle motor control requests */
     private SparkPIDController anglePosition;
 
-    public SwerveModule(int moduleNumber, SwerveModuleConstants moduleConstants){
+    public SwerveModule(int moduleNumber, SwerveModuleConstants moduleConstants) {
         this.moduleNumber = moduleNumber;
         this.angleOffset = moduleConstants.angleOffset;
-        
+
         /* Angle Encoder Config */
         mCancoder = new CANcoder(moduleConstants.cancoderID);
         configAngleEncoder();
@@ -64,8 +66,11 @@ public class SwerveModule {
         lastAngle = getState().angle;
     }
 
-    public void setDesiredState(SwerveModuleState desiredState, boolean isOpenLoop){
-        /* This is a custom optimize function, since default WPILib optimize assumes continuous controller which CTRE and Rev onboard is not */
+    public void setDesiredState(SwerveModuleState desiredState, boolean isOpenLoop) {
+        /*
+         * This is a custom optimize function, since default WPILib optimize assumes
+         * continuous controller which CTRE and Rev onboard is not
+         */
         desiredState = CTREModuleState.optimize(desiredState, getState().angle);
         setAngle(desiredState);
         setSpeed(desiredState, isOpenLoop);
@@ -73,7 +78,10 @@ public class SwerveModule {
     }
 
     public void scaledSetDesiredState(SwerveModuleState desiredState, boolean isOpenLoop) {
-                /* This is a custom optimize function, since default WPILib optimize assumes continuous controller which CTRE and Rev onboard is not */
+        /*
+         * This is a custom optimize function, since default WPILib optimize assumes
+         * continuous controller which CTRE and Rev onboard is not
+         */
         desiredState = CTREModuleState.optimize(desiredState, getState().angle);
         desiredState.speedMetersPerSecond *= desiredState.angle.minus(getAngle()).getCos();
         setAngle(desiredState);
@@ -81,45 +89,45 @@ public class SwerveModule {
         this.desiredState = desiredState;
     }
 
-    private void setSpeed(SwerveModuleState desiredState, boolean isOpenLoop){
-        if(isOpenLoop){
+    private void setSpeed(SwerveModuleState desiredState, boolean isOpenLoop) {
+        if (isOpenLoop) {
             driveDutyCycle.Output = desiredState.speedMetersPerSecond / Constants.Swerve.maxSpeed;
             mDriveMotor.setControl(driveDutyCycle);
-        }
-        else {
-            driveVelocity.Velocity = FalconConversions.MPSToTalon(desiredState.speedMetersPerSecond, Constants.Swerve.wheelCircumference, Constants.Swerve.driveGearRatio);
+        } else {
+            driveVelocity.Velocity = FalconConversions.MPSToTalon(desiredState.speedMetersPerSecond,
+                    Constants.Swerve.wheelCircumference, Constants.Swerve.driveGearRatio);
             driveVelocity.FeedForward = driveFeedForward.calculate(desiredState.speedMetersPerSecond);
             mDriveMotor.setControl(driveVelocity);
         }
         this.desiredState = desiredState;
     }
-    
 
-    private void setAngle(SwerveModuleState desiredState){
+    private void setAngle(SwerveModuleState desiredState) {
         // Prevent rotating module if speed is less then 1%. Prevents jittering.
         Rotation2d angle = (Math.abs(desiredState.speedMetersPerSecond) <= (Constants.Swerve.maxSpeed * 0.01))
                 ? lastAngle
                 : desiredState.angle;
-        
+
         anglePosition.setReference(angle.getDegrees(), ControlType.kPosition);
         lastAngle = angle;
         this.desiredState = desiredState;
     }
 
-    private Rotation2d getAngle(){
+    private Rotation2d getAngle() {
         return Rotation2d.fromDegrees(mAngleMotor.getEncoder().getPosition());
     }
 
-    public Rotation2d getCANcoder(){
+    public Rotation2d getCANcoder() {
         return Rotation2d.fromRotations(mCancoder.getAbsolutePosition().getValue());
     }
 
-    public void resetToAbsolute(){
-        //mCancoder.getPosition().setUpdateFrequency(50);
-        double absolutePosition = mCancoder.getAbsolutePosition().waitForUpdate(250).getValue() * 360 - angleOffset.getDegrees();
+    public void resetToAbsolute() {
+        // mCancoder.getPosition().setUpdateFrequency(50);
+        double absolutePosition = mCancoder.getAbsolutePosition().waitForUpdate(250).getValue() * 360
+                - angleOffset.getDegrees();
         System.out.println(integratedEncoder.setPosition(absolutePosition));
-        //mCancoder.getPosition().setUpdateFrequency(0);
-        //mCancoder.optimizeBusUtilization();
+        // mCancoder.getPosition().setUpdateFrequency(0);
+        // mCancoder.optimizeBusUtilization();
     }
 
     private void configAngleEncoder() {
@@ -127,7 +135,7 @@ public class SwerveModule {
         mCancoder.getConfigurator().apply(Robot.ctreConfigs.swerveCANcoderConfig);
     }
 
-    private void configAngleMotor(){
+    private void configAngleMotor() {
         mAngleMotor.restoreFactoryDefaults();
         CANSparkMaxUtil.setCANSparkMaxBusUsage(mAngleMotor, Usage.kPositionOnly);
         mAngleMotor.setSmartCurrentLimit(Constants.Swerve.angleCurrentLimit);
@@ -140,43 +148,50 @@ public class SwerveModule {
         anglePosition.setFF(Constants.Swerve.angleKFF);
         anglePosition.setOutputRange(-1, 1);
         mAngleMotor.enableVoltageCompensation(Constants.Swerve.voltageComp);
-        System.out.println("burn "+ moduleNumber + mAngleMotor.burnFlash());
+        System.out.println("burn " + moduleNumber + mAngleMotor.burnFlash());
         Timer.delay(1);
         resetToAbsolute();
     }
 
-    private void configDriveMotor(){
+    private void configDriveMotor() {
         mDriveMotor.getConfigurator().apply(Robot.ctreConfigs.swerveDriveFXConfig);
         mDriveMotor.getConfigurator().setPosition(0);
     }
 
-    public SwerveModuleState getState(){
-        return new SwerveModuleState(
-            FalconConversions.talonToMPS(mDriveMotor.getVelocity().getValue(), Constants.Swerve.wheelCircumference, Constants.Swerve.driveGearRatio), 
-            getAngle()
-        ); 
+    public void refreshClosedLoopRamp(double openLoopRampTime) {
+        OpenLoopRampsConfigs rampsConfigs = new OpenLoopRampsConfigs();
+        rampsConfigs.DutyCycleOpenLoopRampPeriod = openLoopRampTime;
+        rampsConfigs.VoltageOpenLoopRampPeriod = openLoopRampTime;
+        mDriveMotor.getConfigurator().refresh(rampsConfigs);
     }
 
-    public SwerveModuleState getDesierdState(){
+    public SwerveModuleState getState() {
+        return new SwerveModuleState(
+                FalconConversions.talonToMPS(mDriveMotor.getVelocity().getValue(), Constants.Swerve.wheelCircumference,
+                        Constants.Swerve.driveGearRatio),
+                getAngle());
+    }
+
+    public SwerveModuleState getDesierdState() {
         return desiredState;
     }
 
-    public SwerveModulePosition getPosition(){
+    public SwerveModulePosition getPosition() {
         return new SwerveModulePosition(
-            FalconConversions.talonToMeters(mDriveMotor.getPosition().getValue(), Constants.Swerve.wheelCircumference, Constants.Swerve.driveGearRatio), 
-            getAngle()
-        );
+                FalconConversions.talonToMeters(mDriveMotor.getPosition().getValue(),
+                        Constants.Swerve.wheelCircumference, Constants.Swerve.driveGearRatio),
+                getAngle());
     }
 
-    public void runCharacterizationVolts(Double voltage){
+    public void runCharacterizationVolts(Double voltage) {
         anglePosition.setReference(0, ControlType.kPosition);
         mDriveMotor.setVoltage(voltage);
     }
 
     public double getCharacterizationVelocity() {
         return FalconConversions.talonToMPS(mDriveMotor.getVelocity().getValue(),
-         Constants.Swerve.wheelCircumference,
-         Constants.Swerve.driveGearRatio);
+                Constants.Swerve.wheelCircumference,
+                Constants.Swerve.driveGearRatio);
     }
 
     public double get() {

@@ -50,7 +50,7 @@ public class SwerveModule {
         this.angleOffset = moduleConstants.angleOffset;
 
         /* Angle Encoder Config */
-        mCancoder = new CANcoder(moduleConstants.cancoderID);
+        mCancoder = new CANcoder(moduleConstants.cancoderID, Constants.canBus_name);
         configAngleEncoder();
 
         /* Angle Motor Config */

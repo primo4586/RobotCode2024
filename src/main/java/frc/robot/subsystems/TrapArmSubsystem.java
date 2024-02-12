@@ -29,16 +29,11 @@ public class TrapArmSubsystem extends SubsystemBase {
   /** Creates a new TrapArmSubsystem. */
   private TrapArmSubsystem() {
     this.m_TrapMotor = new TalonSRX(ArmMotorID);
-    this.innerSwitch = new DigitalInput(InnerSwitchID);
     this.outerSwitch = new DigitalInput(OuterSwitchID);
   }
 
   public void setSpeed(DoubleSupplier speed) {
     m_TrapMotor.set(ControlMode.PercentOutput, speed.getAsDouble());
-  }
-
-  public boolean getInnerSwitch() {
-    return innerSwitch.get();
   }
 
   public boolean getOuterSwitch() {

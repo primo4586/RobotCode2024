@@ -9,15 +9,13 @@ import frc.robot.Constants.IntakeArmConstants;
 import frc.robot.Constants.IntakeConstants;
 import frc.robot.basicCommands.IntakeArmCommands.MoveIntakeArmToDegree;
 import frc.robot.basicCommands.IntakeCommands.IntakeSetSpeed;
-import frc.robot.basicCommands.TrapArmCommands.goInSwitchCommand;
 import frc.robot.basicCommands.TrapCommands.TrapCollectUntilNote;
 
 public class IntakeToTrap extends SequentialCommandGroup {
   /** Creates a new IntakeToTrap. */
   public IntakeToTrap() {
     addCommands(
-        new MoveIntakeArmToDegree(IntakeArmConstants.trapSetPoint)
-            .alongWith(new goInSwitchCommand()),
+        new MoveIntakeArmToDegree(IntakeArmConstants.trapSetPoint),
         new TrapCollectUntilNote()
             .alongWith(new IntakeSetSpeed(IntakeConstants.getNoteSpeed))
     );

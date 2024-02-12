@@ -295,7 +295,8 @@ public final class Constants {
 
     public static class ShooterConstants {
         // m_shooterMotor ID
-        public static final int kMotorShooterID = 20;
+        public static final int kUpMotorShooterID = 20;
+        public static final int kDownMotorShooterID = 20;
 
         // Motion Magic Values
         public static final int MotionMagicCruiseVelocity = 5;
@@ -310,10 +311,15 @@ public final class Constants {
         public static final int MaxError = 13;
 
         // PID values
-        public static final int kP = 24;
-        public static final double kD = 0.1;
-        public static final double kS = 0.12;
-        public static final double kV = 0.25;
+        public static final int upKP = 24;
+        public static final double upKD = 0.1;
+        public static final double upKS = 0.12;
+        public static final double upKV = 0.25;
+
+        public static final int downKP = 24;
+        public static final double downKD = 0.1;
+        public static final double downKS = 0.12;
+        public static final double downKV = 0.25;
 
         // Interpolation Map
         public static final InterpolationMap ShooterInterpolation = new InterpolationMap()

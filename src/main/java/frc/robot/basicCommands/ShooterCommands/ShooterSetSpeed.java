@@ -20,6 +20,6 @@ public class ShooterSetSpeed extends InstantCommand {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    this.shooterSubsystem.setSpeedShooterd(speed);
+    this.shooterSubsystem.setShooterSpeed(speed);
   }
 }

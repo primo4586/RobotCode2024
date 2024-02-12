@@ -41,9 +41,13 @@ public class AutoContainer {
                 shooterArm::runCharacterizationVolts,
                 shooterArm::getCharacterizationVelocity));
                 
-        this.autoPaths.put("Shooter FF Characterization", new FeedForwardCharacterization(shooter,
-                shooter::runCharacterizationVolts,
-                shooter::getCharacterizationVelocity));
+        this.autoPaths.put("Upper Shooter FF Characterization", new FeedForwardCharacterization(shooter,
+                shooter::UPRunCharacterizationVolts,
+                shooter::getUPCharacterizationVelocity));
+                
+        this.autoPaths.put("Lower Shooter FF Characterization", new FeedForwardCharacterization(shooter,
+                shooter::DownRunCharacterizationVolts,
+                shooter::getDownCharacterizationVelocity));
 
         this.autoSelector = new CommandSelector(autoPaths, PrimoShuffleboard.getInstance().getCompTabTitle());
     }

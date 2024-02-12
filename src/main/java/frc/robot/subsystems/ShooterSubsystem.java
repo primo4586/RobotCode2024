@@ -112,7 +112,11 @@ public class ShooterSubsystem extends SubsystemBase {
   public void setShooterSpeed(double upSpeed,double downSpeed) {
     this.m_upShooterMotor.setControl(motionMagic.withVelocity(upSpeed));
     this.m_downShooterMotor.setControl(motionMagic.withVelocity(downSpeed));
+  }
 
+    // set (active) Shooter motors speed
+  public void setShooterSpeed(double Speed) {
+    setShooterSpeed(Speed, Speed);
   }
 
   public double getUpShooterSpeed() {
@@ -136,9 +140,12 @@ public class ShooterSubsystem extends SubsystemBase {
     m_downShooterMotor.setControl(neutralOut);
   }
 
-  public void runCharacterizationVolts(Double upVoltage,double downVoltage) {
-    m_upShooterMotor.setVoltage(upVoltage);
-    m_downShooterMotor.setVoltage(downVoltage);
+  public void UPRunCharacterizationVolts(Double voltage) {
+    m_upShooterMotor.setVoltage(voltage);
+  }
+
+  public void DownRunCharacterizationVolts(Double voltage) {
+    m_downShooterMotor.setVoltage(voltage);
   }
 
   public double getUPCharacterizationVelocity() {

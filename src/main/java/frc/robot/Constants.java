@@ -36,7 +36,7 @@ public final class Constants {
 
     public static final class IntakeArmConstants { // TODO: This must be tuned to specific robot
         // mm
-        public static final int IntakeArmMotorID = 0;
+        public static final int IntakeArmMotorID = 8;
         public static final double mmVelocity = 5.0;
         public static final double mmAcceleration = 10.0;
         public static final double mmJerk = 50;
@@ -59,7 +59,7 @@ public final class Constants {
         public static final double zeroEncoderValue = 0;
         public static final double intakeArmZeroSpeed = 0.1;
         // switch
-        public static final int intakeArmSwitchID = 0;
+        public static final int intakeArmSwitchID = 2;//todo
 
         // set points
         public static final double AmpSetPoint = 0;
@@ -73,7 +73,7 @@ public final class Constants {
         public static final double minimumErrorAligning = 0; // TODO: This must be tuned to specific robot
         public static final PIDController aligningPID = new PIDController(0, 0, 0);
 
-        public static final int pigeonID = 10;
+        public static final int pigeonID = 11;
         public static final boolean invertGyro = false; // Always ensure Gyro is CCW+ CW-
 
         public static final COTSFalconSwerveConstants chosenModule = COTSFalconSwerveConstants
@@ -158,9 +158,9 @@ public final class Constants {
         /* Module Specific Constants */
         /* Front Left Module - Module 0 */
         public static final class Mod0 {
-            public static final int driveMotorID = 6;
-            public static final int angleMotorID = 2;
-            public static final int canCoderID = 2;
+            public static final int driveMotorID = 1;
+            public static final int angleMotorID = 1;
+            public static final int canCoderID = 1;
             public static final Rotation2d angleOffset = Rotation2d.fromRotations(0.113770);
             public static final SwerveModuleConstants constants = new SwerveModuleConstants(driveMotorID, angleMotorID,
                     canCoderID, angleOffset);
@@ -168,9 +168,9 @@ public final class Constants {
 
         /* Front Right Module - Module 1 */
         public static final class Mod1 {
-            public static final int driveMotorID = 5;
-            public static final int angleMotorID = 1;
-            public static final int canCoderID = 1;
+            public static final int driveMotorID = 2;
+            public static final int angleMotorID = 2;
+            public static final int canCoderID = 2;
             public static final Rotation2d angleOffset = Rotation2d.fromRotations(0.474121);
             public static final SwerveModuleConstants constants = new SwerveModuleConstants(driveMotorID, angleMotorID,
                     canCoderID, angleOffset);
@@ -178,7 +178,7 @@ public final class Constants {
 
         /* Back Left Module - Module 2 */
         public static final class Mod2 {
-            public static final int driveMotorID = 7;
+            public static final int driveMotorID = 3;
             public static final int angleMotorID = 3;
             public static final int canCoderID = 3;
             public static final Rotation2d angleOffset = Rotation2d.fromRotations(0.403320);
@@ -188,7 +188,7 @@ public final class Constants {
 
         /* Back Right Module - Module 3 */
         public static final class Mod3 {
-            public static final int driveMotorID = 8;
+            public static final int driveMotorID = 4;
             public static final int angleMotorID = 4;
             public static final int canCoderID = 4;
             public static final Rotation2d angleOffset = Rotation2d.fromRotations(0.387695);
@@ -249,8 +249,8 @@ public final class Constants {
     public static class ShooterArmConstants {
 
         // technical Constants
-        public static final int ShooterArmID = 0;
-        public static final int SwitchID = 1;
+        public static final int ShooterArmID = 5;
+        public static final int SwitchID = 6;//todo
         public static final int encoderCountsPerRevolution = 1;
         public static final double gearRatio = 100;
         public static final double TICKS_PER_DEGREE = encoderCountsPerRevolution * gearRatio / 360.0;
@@ -334,8 +334,8 @@ public final class Constants {
     }
 
     public static class IntakeConstants {
-        public static final int intakeNoteSensorID = 1;
-        public static final int IntakeMotorID = 10;
+        public static final int intakeNoteSensorID = 1;//todo
+        public static final int IntakeMotorID = 7;
         public static final double getNoteSpeed = 0.0;
         public static final double GroundIntakePose = 0.0;
     }
@@ -343,8 +343,8 @@ public final class Constants {
     public static class FeederConstants {
 
         public static final int FeederShootSpeed = 20;
-        public static final int FeederMotorId = 3;
-        public static final int feederNoteSensorID = 0;
+        public static final int FeederMotorId = 9;
+        public static final int feederNoteSensorID = 0;//todo
         public static final double FeederMotorSpeed = 0.8;
         public static final double getNoteSpeed = 0;
         public static final double TimeToFeed = 0.7;
@@ -353,21 +353,20 @@ public final class Constants {
 
     public static class TrapArmConstants {
         public static final int ArmMotorID = 10;
-        public static final int InnerSwitchID = 0;
-        public static final int OuterSwitchID = 10;
+        public static final int OuterSwitchID = 9;//todo
         public static final double GoInSpeed = -0.1;
         public static final double GoOutSpeed = 0.1;
 
     }
 
     public static class trapConstants {
-        public static final int TRAP_MOTOR_ID = 0;
-        public static final int TrapNoteSensorID = 0;
+        public static final int TRAP_MOTOR_ID = 11;
+        public static final int TrapNoteSensorID = 0;//todo
         public static final double TrapCollectSpeed = 0.1;
     }
 
     public static class climbingConstants {
-        public static final int M_CLIMBINGRIGHT_MOTOR_ID = 1;
-        public static final int M_CLIMBINGLEFT_MOTOR_ID = 2;
+        public static final int M_CLIMBINGRIGHT_MOTOR_ID = 6;
+        public static final int M_CLIMBINGLEFT_MOTOR_ID = 5;
     }
 }

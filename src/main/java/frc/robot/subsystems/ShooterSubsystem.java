@@ -79,6 +79,17 @@ public class ShooterSubsystem extends SubsystemBase {
 
     upConfigs.Feedback.SensorToMechanismRatio = SensorToMechanismRatio;
     downConfigs.Feedback.SensorToMechanismRatio = SensorToMechanismRatio;
+
+    upConfigs.CurrentLimits.SupplyCurrentLimit = 40;
+    upConfigs.CurrentLimits.SupplyCurrentThreshold = 50;
+    upConfigs.CurrentLimits.SupplyTimeThreshold = 0.1;
+    upConfigs.CurrentLimits.SupplyCurrentLimitEnable = true;
+
+    
+    downConfigs.CurrentLimits.SupplyCurrentLimit = 40;
+    downConfigs.CurrentLimits.SupplyCurrentThreshold = 50;
+    downConfigs.CurrentLimits.SupplyTimeThreshold = 0.1;
+    downConfigs.CurrentLimits.SupplyCurrentLimitEnable = true;
     
     m_upShooterMotor.setNeutralMode(NeutralModeValue.Coast);
     m_downShooterMotor.setNeutralMode(NeutralModeValue.Coast);

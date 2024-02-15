@@ -11,14 +11,27 @@ import com.ctre.phoenix6.controls.MotionMagicVoltage;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.InvertedValue;
 
+import edu.wpi.first.units.Angle;
+import edu.wpi.first.units.Measure;
+import edu.wpi.first.units.MutableMeasure;
+import edu.wpi.first.units.Velocity;
+import edu.wpi.first.units.Voltage;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.Constants;
 
 import static frc.robot.Constants.IntakeArmConstants.*;
 
 import java.util.function.DoubleSupplier;
+
+import static edu.wpi.first.units.MutableMeasure.mutable;
+import static edu.wpi.first.units.Units.Rotations;
+import static edu.wpi.first.units.Units.RotationsPerSecond;
+import static edu.wpi.first.units.Units.Seconds;
+import static edu.wpi.first.units.Units.Volts;
 
 public class IntakeArmSubsystem extends SubsystemBase {
   private TalonFX m_IntakeArmMotor;
@@ -119,5 +132,58 @@ public class IntakeArmSubsystem extends SubsystemBase {
 
     SmartDashboard.putBoolean("intkeArmSwitch", getSwitch());
     SmartDashboard.putNumber("intakeArm pose", m_IntakeArmMotor.getPosition().getValueAsDouble());
+  }
+
+
+  
+    // Mutable holder for unit-safe voltage values, persisted to avoid reallocation.
+    private final MutableMeasure<Voltage> m_appliedVoltage = mutable(Volts.of(0));
+  // Mutable holder for unit-safe linear distance values, persisted to avoid reallocation.
+  private final MutableMeasure<Angle> m_angle = mutable(Rotations.of(0));
+  // Mutable holder for unit-safe linear velocity values, persisted to avoid reallocation.
+  private final MutableMeasure<Velocity<Angle>> m_velocity = mutable(RotationsPerSecond.of(0));
+
+    // Create a new SysId routine for characterizing the shooter.
+  private final SysIdRoutine m_sysIdRoutine =
+      new SysIdRoutine(
+          // Empty config defaults to 1 volt/second ramp rate and 7 volt step voltage.
+          new SysIdRoutine.Config(Volts.of(1).per(Seconds.of(1)), Volts.of(10), Seconds.of(10)),
+          new SysIdRoutine.Mechanism(
+              // Tell SysId how to plumb the driving voltage to the motor(s).
+              (Measure<Voltage> volts) -> {
+                m_IntakeArmMotor.setVoltage(volts.in(Volts));
+              },
+              // Tell SysId how to record a frame of data for each motor on the mechanism being
+              // characterized.
+              log -> {
+                // Record a frame for the shooter motor.
+                log.motor("shooter-wheel")
+                    .voltage(
+                        m_appliedVoltage.mut_replace(
+                            m_IntakeArmMotor.getSupplyVoltage().getValueAsDouble(), Volts))
+                    .angularPosition(m_angle.mut_replace(m_IntakeArmMotor.getPosition().getValueAsDouble(), Rotations))
+                    .angularVelocity(
+                        m_velocity.mut_replace(m_IntakeArmMotor.getVelocity().getValueAsDouble(), RotationsPerSecond));
+              },
+              // Tell SysId to make generated commands require this subsystem, suffix test state in
+              // WPILog with this subsystem's name ("shooter")
+              this));
+
+                /**
+   * Returns a command that will execute a quasistatic test in the given direction.
+   *
+   * @param direction The direction (forward or reverse) to run the test in
+   */
+  public Command sysIdQuasistatic() {
+    return m_sysIdRoutine.quasistatic(SysIdRoutine.Direction.kForward);
+  }
+
+  /**
+   * Returns a command that will execute a dynamic test in the given direction.
+   *
+   * @param direction The direction (forward or reverse) to run the test in
+   */
+  public Command sysIdDynamic() {
+    return m_sysIdRoutine.dynamic(SysIdRoutine.Direction.kForward);
   }
 }

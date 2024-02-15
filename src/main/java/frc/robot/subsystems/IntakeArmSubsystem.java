@@ -9,7 +9,10 @@ import com.ctre.phoenix6.configs.MotionMagicConfigs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.MotionMagicVoltage;
 import com.ctre.phoenix6.hardware.TalonFX;
+import com.ctre.phoenix6.signals.InvertedValue;
+
 import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
@@ -52,10 +55,15 @@ public class IntakeArmSubsystem extends SubsystemBase {
     configs.Voltage.PeakReverseVoltage = PeakReverseVoltage;
     configs.Feedback.SensorToMechanismRatio = TICKS_PER_DEGREE;
 
-    configs.SoftwareLimitSwitch.ForwardSoftLimitEnable = ForwardSoftLimitEnable;
+    configs.SoftwareLimitSwitch.ForwardSoftLimitEnable = false;
+    configs.SoftwareLimitSwitch.ReverseSoftLimitEnable = false;
+
+    // configs.SoftwareLimitSwitch.ForwardSoftLimitEnable = ForwardSoftLimitEnable;
+    // configs.SoftwareLimitSwitch.ReverseSoftLimitEnable = ReverseSoftLimitEnable;
     configs.SoftwareLimitSwitch.ForwardSoftLimitThreshold = ForwardSoftLimitThreshold;
-    configs.SoftwareLimitSwitch.ReverseSoftLimitEnable = ReverseSoftLimitEnable;
     configs.SoftwareLimitSwitch.ReverseSoftLimitThreshold = RevesrseSoftLimitThreshold;
+
+    configs.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
 
     // gives code to TalonFX
     StatusCode status = StatusCode.StatusCodeNotInitialized;
@@ -89,7 +97,7 @@ public class IntakeArmSubsystem extends SubsystemBase {
 
   // get if a switch is press
   public boolean getSwitch() {
-    return intakeArmSwitch.get();
+    return !intakeArmSwitch.get();
   }
 
   // check if intake arm is in place
@@ -108,5 +116,8 @@ public class IntakeArmSubsystem extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
+
+    SmartDashboard.putBoolean("intkeArmSwitch", getSwitch());
+    SmartDashboard.putNumber("intakeArm pose", m_IntakeArmMotor.getPosition().getValueAsDouble());
   }
 }

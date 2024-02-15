@@ -56,10 +56,10 @@ public final class Constants {
         // not mm
         public static final double minimumError = 0;
         public static final double intakeArmStartingValue = 0;
-        public static final double zeroEncoderValue = 0;
-        public static final double intakeArmZeroSpeed = 0.1;
+        public static final double zeroEncoderValue = 90;
+        public static final double intakeArmZeroSpeed = 0.3;
         // switch
-        public static final int intakeArmSwitchID = 2;//todo
+        public static final int intakeArmSwitchID = 0;
 
         // set points
         public static final double AmpSetPoint = 0;
@@ -250,7 +250,7 @@ public final class Constants {
 
         // technical Constants
         public static final int ShooterArmID = 5;
-        public static final int SwitchID = 6;//todo
+        public static final int SwitchID = 2;
         public static final int encoderCountsPerRevolution = 1;
         public static final double gearRatio = 100;
         public static final double TICKS_PER_DEGREE = encoderCountsPerRevolution * gearRatio / 360.0;
@@ -295,31 +295,43 @@ public final class Constants {
 
     public static class ShooterConstants {
         // m_shooterMotor ID
-        public static final int kUpMotorShooterID = 20;
-        public static final int kDownMotorShooterID = 20;
+        public static final int kUpMotorShooterID = 6;
+        public static final int kDownMotorShooterID = 7;
 
         // Motion Magic Values
-        public static final int MotionMagicCruiseVelocity = 5;
-        public static final int MotionMagicAcceleration = 10;
+        public static final int MotionMagicCruiseVelocity = 80;
+        public static final int MotionMagicAcceleration = 160;
         public static final int MotionMagicJerk = 50;
 
         public static final double PeakForwardVoltage = 11.5;
         public static final double PeakReverseVoltage = -11.5;
 
-        public static final double SensorToMechanismRatio = 0.5;
+        public static final double GearRatio = 0.5;
 
         public static final int MaxError = 13;
 
         // PID values
-        public static final int upKP = 24;
+        public static final double upKP = 24;
         public static final double upKD = 0.1;
-        public static final double upKS = 0.12;
-        public static final double upKV = 0.25;
+        public static final double upKS = 0.51242;
+        public static final double upKV = 0.06024;
 
-        public static final int downKP = 24;
-        public static final double downKD = 0.1;
-        public static final double downKS = 0.12;
-        public static final double downKV = 0.25;
+//      FF Characterization Results:
+//      Count=737
+//      R2=0.99965
+//      kS=0.51242
+//      kV=0.06024
+
+        public static final double downKP = 0.11;
+        public static final double downKD = 0.0;
+        public static final double downKS = 0.95501;
+        public static final double downKV = 0.05750;
+
+        // FF Characterization Results:
+        // Count=888
+        // R2=0.99830
+        // kS=0.95501
+        // kV=0.05750
 
         // Interpolation Map
         public static final InterpolationMap ShooterInterpolation = new InterpolationMap()
@@ -334,19 +346,19 @@ public final class Constants {
     }
 
     public static class IntakeConstants {
-        public static final int intakeNoteSensorID = 1;//todo
+        public static final int intakeNoteSensorID = 5;//todo
         public static final int IntakeMotorID = 7;
-        public static final double getNoteSpeed = 0.0;
+        public static final double getNoteSpeed = 0.9;
         public static final double GroundIntakePose = 0.0;
     }
 
     public static class FeederConstants {
 
-        public static final int FeederShootSpeed = 20;
+        public static final int FeederShootSpeed = 1;
         public static final int FeederMotorId = 9;
-        public static final int feederNoteSensorID = 0;//todo
+        public static final int feederNoteSensorID = 4;//todo
         public static final double FeederMotorSpeed = 0.8;
-        public static final double getNoteSpeed = 0;
+        public static final double getNoteSpeed = 0.9;
         public static final double TimeToFeed = 0.7;
 
     }

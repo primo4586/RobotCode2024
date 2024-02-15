@@ -4,16 +4,18 @@
 
 package frc.robot.basicCommands.feederCommands;
 
+import java.util.function.DoubleSupplier;
+
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import frc.robot.subsystems.FeederSubsystem;
 
 public class FeederSetSpeed extends InstantCommand {
   // variables
   private FeederSubsystem feeder = FeederSubsystem.getInstance();// feeder subsystem
-  double speed;
+  DoubleSupplier speed;
 
   // constructor
-  public FeederSetSpeed(double speed) {
+  public FeederSetSpeed(DoubleSupplier speed) {
     addRequirements(feeder);
     this.speed = speed;
   }
@@ -22,6 +24,6 @@ public class FeederSetSpeed extends InstantCommand {
   @Override
   public void initialize() {
     // set speed to motor
-    feeder.setSpeed(speed);
+    feeder.setSpeed(speed.getAsDouble());
   }
 }

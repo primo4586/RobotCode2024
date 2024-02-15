@@ -14,7 +14,11 @@ import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 
 import static frc.robot.Constants.ShooterConstants.*;
+
+import java.util.function.DoubleSupplier;
+
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.Utils.interpolation.InterpolateUtil;
 import frc.Utils.vision.Vision;
@@ -26,7 +30,7 @@ public class ShooterSubsystem extends SubsystemBase {
 
   private final Vision vision = Vision.getInstance();
 
-  private final MotionMagicVelocityVoltage motionMagic = new MotionMagicVelocityVoltage(0);
+  private final MotionMagicVelocityVoltage motionMagic = new MotionMagicVelocityVoltage(0, MotionMagicAcceleration, false, 0.0, 0, false, false, false);
 
   private static ShooterSubsystem instance;
 
@@ -77,8 +81,8 @@ public class ShooterSubsystem extends SubsystemBase {
     downConfigs.Voltage.PeakForwardVoltage = PeakForwardVoltage;
     downConfigs.Voltage.PeakReverseVoltage = PeakReverseVoltage;
 
-    upConfigs.Feedback.SensorToMechanismRatio = SensorToMechanismRatio;
-    downConfigs.Feedback.SensorToMechanismRatio = SensorToMechanismRatio;
+    upConfigs.Feedback.SensorToMechanismRatio = GearRatio;
+    downConfigs.Feedback.SensorToMechanismRatio = GearRatio;
 
     upConfigs.CurrentLimits.SupplyCurrentLimit = 40;
     upConfigs.CurrentLimits.SupplyCurrentThreshold = 50;
@@ -94,8 +98,8 @@ public class ShooterSubsystem extends SubsystemBase {
     m_upShooterMotor.setNeutralMode(NeutralModeValue.Coast);
     m_downShooterMotor.setNeutralMode(NeutralModeValue.Coast);
 
-    upConfigs.MotorOutput.Inverted = InvertedValue.CounterClockwise_Positive;
-    downConfigs.MotorOutput.Inverted = InvertedValue.CounterClockwise_Positive;
+    upConfigs.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
+    downConfigs.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
 
     // Checking if m_upShooterMotor apply configs
     StatusCode status = StatusCode.StatusCodeNotInitialized;
@@ -128,6 +132,11 @@ public class ShooterSubsystem extends SubsystemBase {
     // set (active) Shooter motors speed
   public void setShooterSpeed(double Speed) {
     setShooterSpeed(Speed, Speed);
+  }
+
+  public void manualSetShooterSpeed(DoubleSupplier speed) {
+    this.m_upShooterMotor.set(speed.getAsDouble());
+    this.m_downShooterMotor.set(speed.getAsDouble());
   }
 
   public double getUpShooterSpeed() {
@@ -170,5 +179,6 @@ public class ShooterSubsystem extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
+    SmartDashboard.putNumber("lower shooter Speed", getDownShooterSpeed());
   }
 }

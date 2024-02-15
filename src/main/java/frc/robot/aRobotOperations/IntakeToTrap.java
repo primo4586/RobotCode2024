@@ -17,7 +17,7 @@ public class IntakeToTrap extends SequentialCommandGroup {
     addCommands(
         new MoveIntakeArmToDegree(IntakeArmConstants.trapSetPoint),
         new TrapCollectUntilNote()
-            .alongWith(new IntakeSetSpeed(IntakeConstants.getNoteSpeed))
+            .alongWith(new IntakeSetSpeed(()->IntakeConstants.getNoteSpeed))
     );
   }
 }

@@ -6,6 +6,7 @@ package frc.robot;
 
 import com.ctre.phoenix6.CANBus;
 
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -57,7 +58,6 @@ public class Robot extends TimedRobot {
     // and running subsystem periodic() methods.  This must be called from the robot's periodic
     // block in order for anything in the Command-based framework to work.
     CommandScheduler.getInstance().run();
-    SmartDashboard.putNumber("canivor utilization", CANBus.getStatus(Constants.canBus_name).BusUtilization);
   }
 
   /** This function is called once each time the robot enters Disabled mode. */

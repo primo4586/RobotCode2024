@@ -14,7 +14,7 @@ public class CollectToIntake extends ParallelCommandGroup {
   /** Creates a new CollectToIntake. */
   public CollectToIntake() {
     addCommands(
-      new MoveIntakeArmToDegree(intakeSetPoint),
+      //new MoveIntakeArmToDegree(intakeSetPoint),
       new InatkeUntilNote()
     );
   }

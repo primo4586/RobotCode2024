@@ -4,14 +4,16 @@
 
 package frc.robot.basicCommands.IntakeArmCommands;
 
+import java.util.function.DoubleSupplier;
+
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import frc.robot.subsystems.IntakeArmSubsystem;
 
 public class IntakeArmSetSpeed extends InstantCommand {
   private final IntakeArmSubsystem intakeArm = IntakeArmSubsystem.getInstance();
-  private double speed;
+  private DoubleSupplier speed;
 
-  public IntakeArmSetSpeed(double speed) {
+  public IntakeArmSetSpeed(DoubleSupplier speed) {
     addRequirements(intakeArm);
     this.speed = speed;
   }
@@ -19,6 +21,6 @@ public class IntakeArmSetSpeed extends InstantCommand {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    intakeArm.setSpeed(() -> speed);
+    intakeArm.setSpeed( speed);
   }
 }

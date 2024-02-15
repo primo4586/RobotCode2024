@@ -27,6 +27,7 @@ public class ZeroShooterArm extends Command {
   @Override
   public void end(boolean interrupted) {
     shooterArmSubsystem.setPosition(shooterArmStartPose);
+    shooterArmSubsystem.setSpeedArm(() -> 0);
   }
 
   // Returns true when the command should end.

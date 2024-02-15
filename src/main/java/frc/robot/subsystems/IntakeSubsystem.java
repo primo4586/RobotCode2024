@@ -4,15 +4,15 @@
 
 package frc.robot.subsystems;
 
-import com.ctre.phoenix.motorcontrol.ControlMode;
-import com.ctre.phoenix.motorcontrol.can.TalonSRX;
+import com.revrobotics.CANSparkMax;
+import com.revrobotics.CANSparkLowLevel.MotorType;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 import static frc.robot.Constants.IntakeConstants.*;
 
 public class IntakeSubsystem extends SubsystemBase {
-  private TalonSRX m_Intake;
+  private CANSparkMax m_Intake;
   DigitalInput m_intakeNoteSensor;
 
   private static IntakeSubsystem instance;
@@ -26,16 +26,18 @@ public class IntakeSubsystem extends SubsystemBase {
 
   /** Creates a new IntakeSubsystem. */
   private IntakeSubsystem() {
-    this.m_Intake = new TalonSRX(IntakeMotorID);
+    this.m_Intake = new CANSparkMax(IntakeMotorID, MotorType.kBrushless);
     this.m_intakeNoteSensor = new DigitalInput(intakeNoteSensorID);
+
+
   }
 
   public void setSpeed(double speed) {
-    m_Intake.set(ControlMode.PercentOutput, speed);
+    m_Intake.set(speed);
   }
 
   public boolean getSwitch() {
-    return m_intakeNoteSensor.get();
+    return !m_intakeNoteSensor.get();
   }
 
   @Override

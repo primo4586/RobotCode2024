@@ -15,8 +15,8 @@ public class CollectToFeeder extends ParallelCommandGroup {
   public CollectToFeeder() {
 
     addCommands(
-        new MoveIntakeArmToDegree(IntakeConstants.GroundIntakePose),
-        new IntakeSetSpeed(IntakeConstants.getNoteSpeed),
-        new FeedUntilNote().andThen(new IntakeSetSpeed(0)));
+        //new MoveIntakeArmToDegree(IntakeConstants.GroundIntakePose),
+        new IntakeSetSpeed(()->IntakeConstants.getNoteSpeed),
+        new FeedUntilNote().andThen(new IntakeSetSpeed(()->0).asProxy()));
   }
 }

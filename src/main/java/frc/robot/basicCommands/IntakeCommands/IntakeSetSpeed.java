@@ -4,22 +4,24 @@
 
 package frc.robot.basicCommands.IntakeCommands;
 
+import java.util.function.DoubleSupplier;
+
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import frc.robot.subsystems.IntakeSubsystem;
 
 public class IntakeSetSpeed extends InstantCommand {
-  private final IntakeSubsystem collectingSubsystem = IntakeSubsystem.getInstance();
-  double speed;
+  private final IntakeSubsystem intakeSubsystem = IntakeSubsystem.getInstance();
+  DoubleSupplier speed;
 
   /** Creates a new setSpeedCommand. */
-  public IntakeSetSpeed(double speed) {
-    addRequirements(collectingSubsystem);
+  public IntakeSetSpeed(DoubleSupplier speed) {
+    addRequirements(intakeSubsystem);
     this.speed = speed;
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    collectingSubsystem.setSpeed(speed);
+    intakeSubsystem.setSpeed(speed.getAsDouble());
   }
 }

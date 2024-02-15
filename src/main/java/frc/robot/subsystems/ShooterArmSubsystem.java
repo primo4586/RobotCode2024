@@ -9,9 +9,11 @@ import com.ctre.phoenix6.configs.MotionMagicConfigs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.MotionMagicVoltage;
 import com.ctre.phoenix6.hardware.TalonFX;
+import com.ctre.phoenix6.signals.InvertedValue;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.Utils.interpolation.InterpolateUtil;
 import frc.Utils.vision.Vision;
@@ -62,12 +64,14 @@ public class ShooterArmSubsystem extends SubsystemBase {
     configuration.Voltage.PeakReverseVoltage = peekReverseVoltage;
 
     // forward and backword limits
-    configuration.SoftwareLimitSwitch.ForwardSoftLimitEnable = true;
+    configuration.SoftwareLimitSwitch.ForwardSoftLimitEnable = false;//TODO: change to true
+    configuration.SoftwareLimitSwitch.ReverseSoftLimitEnable = false;
     configuration.SoftwareLimitSwitch.ForwardSoftLimitThreshold = forwardLimit;
-    configuration.SoftwareLimitSwitch.ReverseSoftLimitEnable = true;
     configuration.SoftwareLimitSwitch.ReverseSoftLimitThreshold = backwordLimit;
 
     configuration.Feedback.SensorToMechanismRatio = TICKS_PER_DEGREE;
+    
+    configuration.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
 
     StatusCode statusCode = StatusCode.StatusCodeNotInitialized;
 
@@ -105,7 +109,7 @@ public class ShooterArmSubsystem extends SubsystemBase {
 
   // geting if the switch is open
   public boolean getSwitch() {
-    return this.limitSwitch.get();
+    return !this.limitSwitch.get();
   }
 
   public void setSpeedArm(DoubleSupplier speed) {
@@ -126,6 +130,8 @@ public class ShooterArmSubsystem extends SubsystemBase {
 
   @Override
   public void periodic() {
-    // This method will be called once per scheduler run
+    
+    SmartDashboard.putBoolean("ShooterArmSwitch", getSwitch());
+    SmartDashboard.putNumber("ShooterArm pose", getArmPose());
   }
 }

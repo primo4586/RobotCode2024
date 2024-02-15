@@ -8,7 +8,17 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.Utils.PathPlanner.PathPlannerHelper;
+import frc.robot.aRobotOperations.CollectToFeeder;
+import frc.robot.aRobotOperations.CollectToIntake;
+import frc.robot.aRobotOperations.IntakeToFeeder;
+import frc.robot.basicCommands.IntakeArmCommands.IntakeArmSetSpeed;
+import frc.robot.basicCommands.IntakeArmCommands.ZeroIntakeArm;
+import frc.robot.basicCommands.IntakeCommands.IntakeSetSpeed;
+import frc.robot.basicCommands.ShooterArmCommands.ZeroShooterArm;
+import frc.robot.basicCommands.ShooterCommands.ShooterSetSpeed;
 import frc.robot.basicCommands.SwerveCommands.*;
+import frc.robot.basicCommands.feederCommands.FeedToShooter;
+import frc.robot.basicCommands.feederCommands.FeederSetSpeed;
 import frc.robot.subsystems.*;
 
 /**
@@ -20,6 +30,8 @@ import frc.robot.subsystems.*;
 public class RobotContainer {
     /* Controllers */
     private final CommandXboxController driver = new CommandXboxController(0);
+    
+    private final CommandXboxController test = new CommandXboxController(2);
 
     /* Drive Controls */
     private final int translationAxis = XboxController.Axis.kLeftY.value;
@@ -44,6 +56,26 @@ public class RobotContainer {
             )
         );
 
+        IntakeArmSubsystem.getInstance().setDefaultCommand(new IntakeArmSetSpeed(()-> -test.getRightX()));
+        // test.a().onTrue(new ZeroIntakeArm());
+
+        
+        ShooterArmSubsystem.getInstance().setDefaultCommand(new InstantCommand(()->{
+            ShooterArmSubsystem.getInstance().setSpeedArm(()-> test.getLeftX());
+        }, ShooterArmSubsystem.getInstance()));
+        test.b().onTrue(new ZeroShooterArm());
+
+        ShooterSubsystem.getInstance().setDefaultCommand(new InstantCommand(()->{
+            ShooterSubsystem.getInstance().manualSetShooterSpeed(()-> test.getRightY());
+        }, ShooterSubsystem.getInstance()));
+
+        FeederSubsystem.getInstance().setDefaultCommand(new FeederSetSpeed(()-> -test.getLeftY()));
+        IntakeSubsystem.getInstance().setDefaultCommand(new IntakeSetSpeed(()-> -test.getLeftY()));
+
+        test.a().onTrue(new CollectToFeeder());
+        
+        test.b().onTrue(new CollectToIntake());
+
         // Configure the button bindings
         configureButtonBindings();
     }
@@ -61,6 +93,7 @@ public class RobotContainer {
 
         driver.a().onTrue(pathPlannerHelper.generateAndFollowPath(new Translation2d(2, 2),
                 new GoalEndState(0, new Rotation2d(0))));
+
 
         // driver.b().onTrue(pathPlannerHelper.generateAndFollowPath(PathPlannerPath.bezierFromPoses(
         //     new Pose2d(swerve.getPose().getTranslation(),new Rotation2d()),

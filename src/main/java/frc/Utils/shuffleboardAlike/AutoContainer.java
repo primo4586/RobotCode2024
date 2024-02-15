@@ -33,7 +33,7 @@ public class AutoContainer {
                 swerve::runCharacterizationVolts,
                 swerve::getCharacterizationVelocity));
 
-        this.autoPaths.put("Shooter Arm FF Characterization", new FeedForwardCharacterization(intakeArm,
+        this.autoPaths.put("intake Arm FF Characterization", new FeedForwardCharacterization(intakeArm,
                 intakeArm::runCharacterizationVolts,
                 intakeArm::getCharacterizationVelocity));
                 

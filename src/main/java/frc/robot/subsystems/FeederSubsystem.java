@@ -4,6 +4,10 @@
 
 package frc.robot.subsystems;
 
+import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.TalonSRXControlMode;
+import com.ctre.phoenix.motorcontrol.can.TalonSRX;
+import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 
@@ -16,7 +20,7 @@ public class FeederSubsystem extends SubsystemBase {
   /** Creates a new FeederSubsystem. */
 
   // the feeder's motor
-  CANSparkMax m_Feeder;
+  WPI_TalonSRX m_Feeder;
   DigitalInput m_feederNoteSensor;
 
   // singelton
@@ -31,13 +35,19 @@ public class FeederSubsystem extends SubsystemBase {
 
   // constructor
   private FeederSubsystem() {
-    m_Feeder = new CANSparkMax(FeederMotorId, MotorType.kBrushless);
+    m_Feeder = new WPI_TalonSRX(FeederMotorId);
     this.m_feederNoteSensor = new DigitalInput(feederNoteSensorID);
+
+    m_Feeder.setInverted(true);
+    m_Feeder.configPeakCurrentLimit(30);
+    m_Feeder.configPeakCurrentDuration(10);
+    m_Feeder.configContinuousCurrentLimit(25);
+    m_Feeder.enableCurrentLimit(true);
   }
 
   // set speed function
-  public void setSpeed(double motorSpeed) {
-    m_Feeder.set(motorSpeed);
+  public void setSpeed(double speed) {
+    m_Feeder.set(speed);
   }
 
   public boolean getSwitch() {

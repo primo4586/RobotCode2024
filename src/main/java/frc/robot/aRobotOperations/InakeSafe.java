@@ -13,7 +13,7 @@ public class InakeSafe extends ParallelCommandGroup {
   /** Creates a new InakeSafe. */
   public InakeSafe() {
     addCommands(
-      new IntakeSetSpeed(0),
+      new IntakeSetSpeed(()->0),
       new MoveIntakeArmToDegree(IntakeArmConstants.SafeSetPoint)
     );
   }

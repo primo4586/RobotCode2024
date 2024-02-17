@@ -65,11 +65,15 @@ public class Vision {
         rightPhotonEstimator =
                 new PhotonPoseEstimator(
                         kTagLayout, PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR, rightCamera, kRightRobotToCam);
+
+        rightPhotonEstimator.setMultiTagFallbackStrategy(PoseStrategy.LOWEST_AMBIGUITY);
         
         leftCamera = new PhotonCamera(kLeftCameraName);
         leftPhotonEstimator =
                 new PhotonPoseEstimator(
                     kTagLayout, PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR, leftCamera, kLeftRobotToCam);
+                    
+        leftPhotonEstimator.setMultiTagFallbackStrategy(PoseStrategy.LOWEST_AMBIGUITY);
     }
 
 

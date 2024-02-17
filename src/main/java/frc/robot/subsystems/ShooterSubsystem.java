@@ -4,6 +4,7 @@
 
 package frc.robot.subsystems;
 
+import com.ctre.phoenix6.BaseStatusSignal;
 import com.ctre.phoenix6.StatusCode;
 import com.ctre.phoenix6.configs.MotionMagicConfigs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
@@ -43,7 +44,8 @@ public class ShooterSubsystem extends SubsystemBase {
 
   private final Vision vision = Vision.getInstance();
 
-  private final MotionMagicVelocityVoltage motionMagic = new MotionMagicVelocityVoltage(0, MotionMagicAcceleration, false, 0.0, 0, false, false, false);
+  private final MotionMagicVelocityVoltage motionMagic = new MotionMagicVelocityVoltage(0, MotionMagicAcceleration,
+      false, 0.0, 0, false, false, false);
 
   private static ShooterSubsystem instance;
 
@@ -62,7 +64,6 @@ public class ShooterSubsystem extends SubsystemBase {
     this.m_upShooterMotor = new TalonFX(kUpMotorShooterID, Constants.canBus_name);
     this.m_downShooterMotor = new TalonFX(kDownMotorShooterID, Constants.canBus_name);
 
-
     // declaring Configs
     TalonFXConfiguration upConfigs = new TalonFXConfiguration();
     TalonFXConfiguration downConfigs = new TalonFXConfiguration();
@@ -75,17 +76,18 @@ public class ShooterSubsystem extends SubsystemBase {
     upConfigs.MotionMagic = shooterMM;
     downConfigs.MotionMagic = shooterMM;
 
-
     // giving PID values
     upConfigs.Slot0.kP = upKP;
     upConfigs.Slot0.kD = upKD;
     upConfigs.Slot0.kS = upKS;
     upConfigs.Slot0.kV = upKV;
+    upConfigs.Slot0.kA = upKA;
 
     downConfigs.Slot0.kP = downKP;
     downConfigs.Slot0.kD = downKD;
     downConfigs.Slot0.kS = downKS;
     downConfigs.Slot0.kV = downKV;
+    downConfigs.Slot0.kA = downKA;
 
     // max voltage for m_shooterMotor
     upConfigs.Voltage.PeakForwardVoltage = PeakForwardVoltage;
@@ -102,17 +104,26 @@ public class ShooterSubsystem extends SubsystemBase {
     upConfigs.CurrentLimits.SupplyTimeThreshold = 0.1;
     upConfigs.CurrentLimits.SupplyCurrentLimitEnable = true;
 
-    
     downConfigs.CurrentLimits.SupplyCurrentLimit = 40;
     downConfigs.CurrentLimits.SupplyCurrentThreshold = 50;
     downConfigs.CurrentLimits.SupplyTimeThreshold = 0.1;
     downConfigs.CurrentLimits.SupplyCurrentLimitEnable = true;
-    
+
     m_upShooterMotor.setNeutralMode(NeutralModeValue.Coast);
     m_downShooterMotor.setNeutralMode(NeutralModeValue.Coast);
 
     upConfigs.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
     downConfigs.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
+
+    /* Speed up signals for better charaterization data */
+    BaseStatusSignal.setUpdateFrequencyForAll(1000,
+        m_upShooterMotor.getVelocity());
+
+    BaseStatusSignal.setUpdateFrequencyForAll(1000,
+        m_downShooterMotor.getVelocity());
+
+    m_upShooterMotor.optimizeBusUtilization();
+    m_downShooterMotor.optimizeBusUtilization();
 
     // Checking if m_upShooterMotor apply configs
     StatusCode status = StatusCode.StatusCodeNotInitialized;
@@ -137,12 +148,12 @@ public class ShooterSubsystem extends SubsystemBase {
   }
 
   // set (active) Shooter motors speed
-  public void setShooterSpeed(double upSpeed,double downSpeed) {
+  public void setShooterSpeed(double upSpeed, double downSpeed) {
     this.m_upShooterMotor.setControl(motionMagic.withVelocity(upSpeed));
     this.m_downShooterMotor.setControl(motionMagic.withVelocity(downSpeed));
   }
 
-    // set (active) Shooter motors speed
+  // set (active) Shooter motors speed
   public void setShooterSpeed(double Speed) {
     setShooterSpeed(Speed, Speed);
   }
@@ -156,12 +167,13 @@ public class ShooterSubsystem extends SubsystemBase {
     return m_upShooterMotor.getVelocity().getValue();
   }
 
-    public double getDownShooterSpeed() {
+  public double getDownShooterSpeed() {
     return m_downShooterMotor.getVelocity().getValue();
   }
 
   public boolean checkIfShooterAtSpeed() {
-    return ((Math.abs(m_upShooterMotor.getClosedLoopError().getValue()) < MaxError) && ((Math.abs(m_downShooterMotor.getClosedLoopError().getValue()) < MaxError)));
+    return ((Math.abs(m_upShooterMotor.getClosedLoopError().getValue()) < MaxError)
+        && ((Math.abs(m_downShooterMotor.getClosedLoopError().getValue()) < MaxError)));
   }
 
   public double speakerInterpolate(Pose2d pose2d) {
@@ -193,57 +205,6 @@ public class ShooterSubsystem extends SubsystemBase {
   public void periodic() {
     // This method will be called once per scheduler run
     SmartDashboard.putNumber("lower shooter Speed", getDownShooterSpeed());
-  }
-
-
-    // Mutable holder for unit-safe voltage values, persisted to avoid reallocation.
-    private final MutableMeasure<Voltage> m_appliedVoltage = mutable(Volts.of(0));
-  // Mutable holder for unit-safe linear distance values, persisted to avoid reallocation.
-  private final MutableMeasure<Angle> m_angle = mutable(Rotations.of(0));
-  // Mutable holder for unit-safe linear velocity values, persisted to avoid reallocation.
-  private final MutableMeasure<Velocity<Angle>> m_velocity = mutable(RotationsPerSecond.of(0));
-
-    // Create a new SysId routine for characterizing the shooter.
-  private final SysIdRoutine m_sysIdRoutine =
-      new SysIdRoutine(
-          // Empty config defaults to 1 volt/second ramp rate and 7 volt step voltage.
-          new SysIdRoutine.Config(Volts.of(0.5).per(Seconds.of(1)), Volts.of(10), Seconds.of(15)),
-          new SysIdRoutine.Mechanism(
-              // Tell SysId how to plumb the driving voltage to the motor(s).
-              (Measure<Voltage> volts) -> {
-                m_upShooterMotor.setVoltage(volts.in(Volts));
-              },
-              // Tell SysId how to record a frame of data for each motor on the mechanism being
-              // characterized.
-              log -> {
-                // Record a frame for the shooter motor.
-                log.motor("shooter-wheel")
-                    .voltage(
-                        m_appliedVoltage.mut_replace(
-                            m_upShooterMotor.getSupplyVoltage().getValueAsDouble(), Volts))
-                    .angularPosition(m_angle.mut_replace(m_upShooterMotor.getPosition().getValueAsDouble(), Rotations))
-                    .angularVelocity(
-                        m_velocity.mut_replace(m_downShooterMotor.getVelocity().getValueAsDouble(), RotationsPerSecond));
-              },
-              // Tell SysId to make generated commands require this subsystem, suffix test state in
-              // WPILog with this subsystem's name ("shooter")
-              this));
-
-                /**
-   * Returns a command that will execute a quasistatic test in the given direction.
-   *
-   * @param direction The direction (forward or reverse) to run the test in
-   */
-  public Command sysIdQuasistatic() {
-    return m_sysIdRoutine.quasistatic(SysIdRoutine.Direction.kForward);
-  }
-
-  /**
-   * Returns a command that will execute a dynamic test in the given direction.
-   *
-   * @param direction The direction (forward or reverse) to run the test in
-   */
-  public Command sysIdDynamic() {
-    return m_sysIdRoutine.dynamic(SysIdRoutine.Direction.kForward);
+    SmartDashboard.putNumber("upper shooter Speed", getUpShooterSpeed());
   }
 }

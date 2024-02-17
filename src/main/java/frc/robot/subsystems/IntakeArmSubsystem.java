@@ -10,6 +10,7 @@ import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.MotionMagicVoltage;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.InvertedValue;
+import com.ctre.phoenix6.signals.NeutralModeValue;
 
 import edu.wpi.first.units.Angle;
 import edu.wpi.first.units.Measure;
@@ -35,8 +36,15 @@ import static edu.wpi.first.units.Units.Volts;
 
 public class IntakeArmSubsystem extends SubsystemBase {
   private TalonFX m_IntakeArmMotor;
-  private final MotionMagicVoltage motionMagic = new MotionMagicVoltage(intakeArmStartingValue);
-  private final DigitalInput intakeArmSwitch = new DigitalInput(intakeArmSwitchID);
+  private final DigitalInput upIntakeArmSwitch = new DigitalInput(upIntakeArmSwitchID);
+  private final DigitalInput lowIntakeArmSwitch = new DigitalInput(downIntakeArmSwitchID);
+  private final MotionMagicVoltage motionMagic = new MotionMagicVoltage(0,
+   false,
+   0.0, 
+   0, 
+   true, 
+   getSwitch(), 
+   lowIntakeArmSwitch.get());
 
   // singleton
   private static IntakeArmSubsystem instance;
@@ -63,6 +71,7 @@ public class IntakeArmSubsystem extends SubsystemBase {
     configs.Slot0.kD = KD;
     configs.Slot0.kV = KV;
     configs.Slot0.kS = KS;
+    configs.Slot0.kA = KA;
 
     configs.Voltage.PeakForwardVoltage = PeakForwardVoltage;
     configs.Voltage.PeakReverseVoltage = PeakReverseVoltage;
@@ -71,12 +80,14 @@ public class IntakeArmSubsystem extends SubsystemBase {
     configs.SoftwareLimitSwitch.ForwardSoftLimitEnable = false;
     configs.SoftwareLimitSwitch.ReverseSoftLimitEnable = false;
 
+    m_IntakeArmMotor.setNeutralMode(NeutralModeValue.Brake);
+
     // configs.SoftwareLimitSwitch.ForwardSoftLimitEnable = ForwardSoftLimitEnable;
     // configs.SoftwareLimitSwitch.ReverseSoftLimitEnable = ReverseSoftLimitEnable;
     configs.SoftwareLimitSwitch.ForwardSoftLimitThreshold = ForwardSoftLimitThreshold;
     configs.SoftwareLimitSwitch.ReverseSoftLimitThreshold = RevesrseSoftLimitThreshold;
 
-    configs.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
+    configs.MotorOutput.Inverted = InvertedValue.CounterClockwise_Positive;
 
     // gives code to TalonFX
     StatusCode status = StatusCode.StatusCodeNotInitialized;
@@ -110,7 +121,7 @@ public class IntakeArmSubsystem extends SubsystemBase {
 
   // get if a switch is press
   public boolean getSwitch() {
-    return !intakeArmSwitch.get();
+    return !upIntakeArmSwitch.get();
   }
 
   // check if intake arm is in place
@@ -132,58 +143,5 @@ public class IntakeArmSubsystem extends SubsystemBase {
 
     SmartDashboard.putBoolean("intkeArmSwitch", getSwitch());
     SmartDashboard.putNumber("intakeArm pose", m_IntakeArmMotor.getPosition().getValueAsDouble());
-  }
-
-
-  
-    // Mutable holder for unit-safe voltage values, persisted to avoid reallocation.
-    private final MutableMeasure<Voltage> m_appliedVoltage = mutable(Volts.of(0));
-  // Mutable holder for unit-safe linear distance values, persisted to avoid reallocation.
-  private final MutableMeasure<Angle> m_angle = mutable(Rotations.of(0));
-  // Mutable holder for unit-safe linear velocity values, persisted to avoid reallocation.
-  private final MutableMeasure<Velocity<Angle>> m_velocity = mutable(RotationsPerSecond.of(0));
-
-    // Create a new SysId routine for characterizing the shooter.
-  private final SysIdRoutine m_sysIdRoutine =
-      new SysIdRoutine(
-          // Empty config defaults to 1 volt/second ramp rate and 7 volt step voltage.
-          new SysIdRoutine.Config(Volts.of(1).per(Seconds.of(1)), Volts.of(10), Seconds.of(10)),
-          new SysIdRoutine.Mechanism(
-              // Tell SysId how to plumb the driving voltage to the motor(s).
-              (Measure<Voltage> volts) -> {
-                m_IntakeArmMotor.setVoltage(volts.in(Volts));
-              },
-              // Tell SysId how to record a frame of data for each motor on the mechanism being
-              // characterized.
-              log -> {
-                // Record a frame for the shooter motor.
-                log.motor("shooter-wheel")
-                    .voltage(
-                        m_appliedVoltage.mut_replace(
-                            m_IntakeArmMotor.getSupplyVoltage().getValueAsDouble(), Volts))
-                    .angularPosition(m_angle.mut_replace(m_IntakeArmMotor.getPosition().getValueAsDouble(), Rotations))
-                    .angularVelocity(
-                        m_velocity.mut_replace(m_IntakeArmMotor.getVelocity().getValueAsDouble(), RotationsPerSecond));
-              },
-              // Tell SysId to make generated commands require this subsystem, suffix test state in
-              // WPILog with this subsystem's name ("shooter")
-              this));
-
-                /**
-   * Returns a command that will execute a quasistatic test in the given direction.
-   *
-   * @param direction The direction (forward or reverse) to run the test in
-   */
-  public Command sysIdQuasistatic() {
-    return m_sysIdRoutine.quasistatic(SysIdRoutine.Direction.kForward);
-  }
-
-  /**
-   * Returns a command that will execute a dynamic test in the given direction.
-   *
-   * @param direction The direction (forward or reverse) to run the test in
-   */
-  public Command sysIdDynamic() {
-    return m_sysIdRoutine.dynamic(SysIdRoutine.Direction.kForward);
   }
 }

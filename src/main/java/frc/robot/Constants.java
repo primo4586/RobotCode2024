@@ -40,10 +40,13 @@ public final class Constants {
         public static final double mmVelocity = 5.0;
         public static final double mmAcceleration = 10.0;
         public static final double mmJerk = 50;
-        public static final double KP = 24.0;
-        public static final double KD = 0.1;
-        public static final double KV = 0.12;
-        public static final double KS = 0.25;
+        public static final double KP = 0.0;
+        public static final double KD = 0.0;
+        public static final double KV = 4.4216;
+        public static final double KS = 0.073624;
+        public static final double KA = 0.072407;
+
+
         public static final double PeakForwardVoltage = 11.5;
         public static final double PeakReverseVoltage = -11.5;
         public static final int encoderCountsPerRevolution = 1;
@@ -56,10 +59,11 @@ public final class Constants {
         // not mm
         public static final double minimumError = 0;
         public static final double intakeArmStartingValue = 0;
-        public static final double zeroEncoderValue = 90;
-        public static final double intakeArmZeroSpeed = 0.3;
+        public static final double zeroEncoderValue = 0;
+        public static final double intakeArmZeroSpeed = -0.3;
         // switch
-        public static final int intakeArmSwitchID = 0;
+        public static final int upIntakeArmSwitchID = 0;
+        public static final int downIntakeArmSwitchID = 3;
 
         // set points
         public static final double AmpSetPoint = 0;
@@ -161,7 +165,7 @@ public final class Constants {
             public static final int driveMotorID = 1;
             public static final int angleMotorID = 1;
             public static final int canCoderID = 1;
-            public static final Rotation2d angleOffset = Rotation2d.fromRotations(0.113770);
+            public static final Rotation2d angleOffset = Rotation2d.fromRotations(0.116455);
             public static final SwerveModuleConstants constants = new SwerveModuleConstants(driveMotorID, angleMotorID,
                     canCoderID, angleOffset);
         }
@@ -181,7 +185,7 @@ public final class Constants {
             public static final int driveMotorID = 3;
             public static final int angleMotorID = 3;
             public static final int canCoderID = 3;
-            public static final Rotation2d angleOffset = Rotation2d.fromRotations(0.403320);
+            public static final Rotation2d angleOffset = Rotation2d.fromRotations(0.404541);
             public static final SwerveModuleConstants constants = new SwerveModuleConstants(driveMotorID, angleMotorID,
                     canCoderID, angleOffset);
         }
@@ -191,7 +195,7 @@ public final class Constants {
             public static final int driveMotorID = 4;
             public static final int angleMotorID = 4;
             public static final int canCoderID = 4;
-            public static final Rotation2d angleOffset = Rotation2d.fromRotations(0.387695);
+            public static final Rotation2d angleOffset = Rotation2d.fromRotations(0.389404);
             public static final SwerveModuleConstants constants = new SwerveModuleConstants(driveMotorID, angleMotorID,
                     canCoderID, angleOffset);
         }
@@ -252,7 +256,7 @@ public final class Constants {
         public static final int ShooterArmID = 5;
         public static final int SwitchID = 2;
         public static final int encoderCountsPerRevolution = 1;
-        public static final double gearRatio = 100;
+        public static final double gearRatio = 100.0/22.0 * 100.0;
         public static final double TICKS_PER_DEGREE = encoderCountsPerRevolution * gearRatio / 360.0;
 
         // condition Costants
@@ -263,11 +267,11 @@ public final class Constants {
         public static final double mmAcceleration = 10;
         public static final double mmJerk = 50;
 
-        public static final double kp = 24;
-        public static final double kd = 0.1;
-        public static final double ks = 24;
-        public static final double ka = 24;
-        public static final double kv = 24;
+        public static final double kp = 0.1;
+        public static final double kd = 0.0;
+        public static final double ks = 0.032658;
+        public static final double ka = 0.001121;
+        public static final double kv = 0.13707;
 
         // MaxVol Constant
         public static final double peekReverseVoltage = -11.5;
@@ -281,7 +285,7 @@ public final class Constants {
         public static final double resetPose = 0.0;
         public static final double resetSpeed = -0.1;
 
-        public static final double shooterArmStartPose = 0.0;
+        public static final double shooterArmStartPose = 00;
 
         public static final InterpolationMap SHOOTER_ANGLE_INTERPOLATION_MAP = new InterpolationMap()
                 .put(1, 14100)
@@ -301,7 +305,7 @@ public final class Constants {
         // Motion Magic Values
         public static final int MotionMagicCruiseVelocity = 80;
         public static final int MotionMagicAcceleration = 160;
-        public static final int MotionMagicJerk = 50;
+        public static final int MotionMagicJerk = 1600;
 
         public static final double PeakForwardVoltage = 11.5;
         public static final double PeakReverseVoltage = -11.5;
@@ -311,27 +315,19 @@ public final class Constants {
         public static final int MaxError = 13;
 
         // PID values
-        public static final double upKP = 24;
-        public static final double upKD = 0.1;
-        public static final double upKS = 0.51242;
-        public static final double upKV = 0.06024;
+        public static final double upKP = 0.06;//2
+        public static final double upKD = 0.0;
+        public static final double upKS = 0.16 ;
+        public static final double upKV = 0.057;
+        public static final double upKA = 0.0;
 
-//      FF Characterization Results:
-//      Count=737
-//      R2=0.99965
-//      kS=0.51242
-//      kV=0.06024
 
-        public static final double downKP = 0.11;
+        public static final double downKP = 0.02;
         public static final double downKD = 0.0;
-        public static final double downKS = 0.95501;
-        public static final double downKV = 0.05750;
+        public static final double downKS = 0.2998046875;
+        public static final double downKV = 0.058;
+        public static final double downKA = 0.079175;
 
-        // FF Characterization Results:
-        // Count=888
-        // R2=0.99830
-        // kS=0.95501
-        // kV=0.05750
 
         // Interpolation Map
         public static final InterpolationMap ShooterInterpolation = new InterpolationMap()

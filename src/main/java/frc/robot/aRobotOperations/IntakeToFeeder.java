@@ -5,8 +5,8 @@
 package frc.robot.aRobotOperations;
 
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import frc.robot.basicCommands.IntakeArmCommands.MoveIntakeArmToDegree;
-import static frc.robot.Constants.IntakeArmConstants.*;
+import frc.robot.basicCommands.IntakeArmCommands.IntakeArmDown;
+import frc.robot.basicCommands.IntakeArmCommands.IntakeArmUP;
 
 public class IntakeToFeeder extends SequentialCommandGroup {
 
@@ -15,8 +15,8 @@ public class IntakeToFeeder extends SequentialCommandGroup {
   public IntakeToFeeder() {
 
     addCommands(
-        new MoveIntakeArmToDegree(intakeSetPoint),
+        new IntakeArmDown(),
         new CollectToFeeder(),
-        new MoveIntakeArmToDegree(trapSetPoint));
+        new IntakeArmUP());
   }
 }

@@ -4,36 +4,39 @@
 
 package frc.robot.basicCommands.IntakeArmCommands;
 
+import static frc.robot.Constants.IntakeArmConstants.intakeArmDownSpeed;
+
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.IntakeArmSubsystem;
 
-public class MoveIntakeArmToDegree extends Command {
-  /** Creates a new MoveIntakeArmTo. */
-  private final IntakeArmSubsystem intakeArm = IntakeArmSubsystem.getInstance();
-  private double degree;
+public class IntakeArmDown extends Command {
+  /** Creates a new IntakeArmDown. */
+private final IntakeArmSubsystem intakeArm = IntakeArmSubsystem.getInstance();
 
-  public MoveIntakeArmToDegree(double degree) {
-    this.degree = degree;
-    // Use addRequirements() here to declare subsystem dependencies.
+  public IntakeArmDown() {
+    addRequirements(intakeArm);
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    intakeArm.moveArmTo(degree);
+    intakeArm.setSpeed(() -> intakeArmDownSpeed);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
-  public void execute() {}
+  public void execute() {
+  }
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {}
+  public void end(boolean interrupted) {
+    intakeArm.setSpeed(() -> 0);
+  }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return intakeArm.checkIntakeArmPosion();
+    return intakeArm.getUpSwitch();
   }
 }

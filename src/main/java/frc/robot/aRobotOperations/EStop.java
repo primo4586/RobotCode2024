@@ -8,8 +8,10 @@ import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import frc.robot.basicCommands.ClimbingCommands.ClimbingSetSpeed;
 import frc.robot.basicCommands.IntakeArmCommands.IntakeArmSetSpeed;
 import frc.robot.basicCommands.IntakeCommands.IntakeSetSpeed;
+import frc.robot.basicCommands.ShooterArmCommands.ShooterArmSetSpeed;
 import frc.robot.basicCommands.ShooterCommands.ShooterSetSpeed;
 import frc.robot.basicCommands.TrapArmCommands.TrapArmSetSpeed;
+import frc.robot.basicCommands.TrapCommands.TrapSetSpeed;
 import frc.robot.basicCommands.feederCommands.FeederSetSpeed;
 
 public class EStop extends ParallelCommandGroup {
@@ -20,9 +22,10 @@ public class EStop extends ParallelCommandGroup {
       new FeederSetSpeed(()->0),
       new IntakeArmSetSpeed(()->0),
       new IntakeSetSpeed(()->0),
+      new ShooterArmSetSpeed(()-> 0),
       new ShooterSetSpeed(0),
       new TrapArmSetSpeed(0),
-      new TrapArmSetSpeed(0)
+      new TrapSetSpeed(0)
     );
   }
 }

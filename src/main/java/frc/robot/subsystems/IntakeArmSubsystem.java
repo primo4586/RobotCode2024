@@ -12,39 +12,27 @@ import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 
-import edu.wpi.first.units.Angle;
-import edu.wpi.first.units.Measure;
-import edu.wpi.first.units.MutableMeasure;
-import edu.wpi.first.units.Velocity;
-import edu.wpi.first.units.Voltage;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.Constants;
 
 import static frc.robot.Constants.IntakeArmConstants.*;
 
 import java.util.function.DoubleSupplier;
 
-import static edu.wpi.first.units.MutableMeasure.mutable;
-import static edu.wpi.first.units.Units.Rotations;
-import static edu.wpi.first.units.Units.RotationsPerSecond;
-import static edu.wpi.first.units.Units.Seconds;
-import static edu.wpi.first.units.Units.Volts;
-
 public class IntakeArmSubsystem extends SubsystemBase {
   private TalonFX m_IntakeArmMotor;
-  private final DigitalInput upIntakeArmSwitch = new DigitalInput(upIntakeArmSwitchID);
-  private final DigitalInput lowIntakeArmSwitch = new DigitalInput(downIntakeArmSwitchID);
+  private final DigitalInput upIntakeArmSwitch = new DigitalInput(intakeArmUpSwitchID);
+  private final DigitalInput downIntakeArmSwitch = new DigitalInput(intakeArmDownSwitchID);
+
   private final MotionMagicVoltage motionMagic = new MotionMagicVoltage(0,
    false,
    0.0, 
    0, 
    true, 
-   getSwitch(), 
-   lowIntakeArmSwitch.get());
+   getUpSwitch(), 
+   getDownSwitch());
 
   // singleton
   private static IntakeArmSubsystem instance;
@@ -120,8 +108,13 @@ public class IntakeArmSubsystem extends SubsystemBase {
   }
 
   // get if a switch is press
-  public boolean getSwitch() {
+  public boolean getUpSwitch() {
     return !upIntakeArmSwitch.get();
+  }
+
+  // get if a switch is press
+  public boolean getDownSwitch() {
+    return !downIntakeArmSwitch.get();
   }
 
   // check if intake arm is in place
@@ -141,7 +134,7 @@ public class IntakeArmSubsystem extends SubsystemBase {
   public void periodic() {
     // This method will be called once per scheduler run
 
-    SmartDashboard.putBoolean("intkeArmSwitch", getSwitch());
+    SmartDashboard.putBoolean("intkeArmSwitch", getUpSwitch());
     SmartDashboard.putNumber("intakeArm pose", m_IntakeArmMotor.getPosition().getValueAsDouble());
   }
 }

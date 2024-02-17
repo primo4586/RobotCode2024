@@ -6,7 +6,8 @@ package frc.robot.aRobotOperations;
 
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import frc.robot.Constants.IntakeConstants;
-import frc.robot.basicCommands.IntakeArmCommands.MoveIntakeArmToDegree;
+import frc.robot.basicCommands.IntakeArmCommands.IntakeArmDown;
+import frc.robot.basicCommands.IntakeArmCommands.IntakeArmUP;
 import frc.robot.basicCommands.IntakeCommands.IntakeSetSpeed;
 import frc.robot.basicCommands.feederCommands.FeedUntilNote;
 
@@ -15,8 +16,8 @@ public class CollectToFeeder extends ParallelCommandGroup {
   public CollectToFeeder() {
 
     addCommands(
-        //new MoveIntakeArmToDegree(IntakeConstants.GroundIntakePose),
+        new IntakeArmDown(),
         new IntakeSetSpeed(()->IntakeConstants.getNoteSpeed),
-        new FeedUntilNote().andThen(new IntakeSetSpeed(()->0).asProxy()));
+        new FeedUntilNote().andThen(new IntakeSetSpeed(()->0).asProxy().alongWith(new IntakeArmUP().asProxy())));
   }
 }

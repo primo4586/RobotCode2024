@@ -4,18 +4,15 @@
 
 package frc.robot.aRobotOperations;
 
-import static frc.robot.Constants.IntakeArmConstants.*;
-
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
-import frc.robot.basicCommands.IntakeArmCommands.MoveIntakeArmToDegree;
+import frc.robot.basicCommands.IntakeArmCommands.IntakeArmDown;
 import frc.robot.basicCommands.IntakeCommands.InatkeUntilNote;
 
 public class CollectToIntake extends ParallelCommandGroup {
   /** Creates a new CollectToIntake. */
   public CollectToIntake() {
     addCommands(
-      //new MoveIntakeArmToDegree(intakeSetPoint),
-      new InatkeUntilNote()
-    );
+        new IntakeArmDown(),
+        new InatkeUntilNote());
   }
 }

@@ -59,11 +59,13 @@ public final class Constants {
         // not mm
         public static final double minimumError = 0;
         public static final double intakeArmStartingValue = 0;
-        public static final double zeroEncoderValue = 0;
-        public static final double intakeArmZeroSpeed = -0.3;
+        public static final double zeroEncoderValue = 90;
+        public static final double intakeArmZeroSpeed = 0.3;
+        public static final double intakeArmUpSpeed = 0.7;
+        public static final double intakeArmDownSpeed = -0.7;
         // switch
-        public static final int upIntakeArmSwitchID = 0;
-        public static final int downIntakeArmSwitchID = 3;
+        public static final int intakeArmUpSwitchID = 0;
+        public static final int intakeArmDownSwitchID = 0;
 
         // set points
         public static final double AmpSetPoint = 0;
@@ -345,7 +347,7 @@ public final class Constants {
         public static final int intakeNoteSensorID = 5;//todo
         public static final int IntakeMotorID = 7;
         public static final double getNoteSpeed = 0.9;
-        public static final double GroundIntakePose = 0.0;
+        public static final double feedToTrapSpeed = 0.4;
     }
 
     public static class FeederConstants {

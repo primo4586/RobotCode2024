@@ -57,6 +57,8 @@ public class RobotContainer {
              )
         );
 
+        test.a().toggleOnTrue(null );
+
         // IntakeArmSubsystem.getInstance().setDefaultCommand(new IntakeArmSetSpeed(()-> -test.getRightX()));
         // // test.a().onTrue(new ZeroIntakeArm());
 

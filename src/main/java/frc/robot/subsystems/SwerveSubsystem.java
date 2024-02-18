@@ -15,6 +15,9 @@ import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.ctre.phoenix.sensors.PigeonIMU;
 
+import java.util.function.Supplier;
+
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -23,6 +26,7 @@ import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class SwerveSubsystem extends SubsystemBase {
@@ -33,6 +37,8 @@ public class SwerveSubsystem extends SubsystemBase {
     public Vision vision;
     Field2d field2d = new Field2d();
     Rotation2d simYaw = new Rotation2d();
+    public Supplier<Rotation2d> headingSupplier = null;
+    PIDController headingPid = aligningPID;
 
     private static SwerveSubsystem instance;
 
@@ -62,6 +68,8 @@ public class SwerveSubsystem extends SubsystemBase {
         };
         poseEstimation = new SwerveDrivePoseEstimator(swerveKinematics, getYaw(), getModulePositions(),
                 new Pose2d(2, 2, new Rotation2d(0)));
+                
+        headingPid.enableContinuousInput(0, 360);
     }
 
     public void drive(Translation2d translation, double rotation, boolean fieldRelative, boolean isOpenLoop,
@@ -70,7 +78,9 @@ public class SwerveSubsystem extends SubsystemBase {
                 fieldRelative ? ChassisSpeeds.fromFieldRelativeSpeeds(
                         translation.getX(),
                         translation.getY(),
-                        rotation,
+                        headingSupplier == null ? rotation
+                                : headingPid.calculate(getPose().getRotation().getDegrees(),
+                                        headingSupplier.get().getDegrees()),
                         getYaw())
                         : new ChassisSpeeds(
                                 translation.getX(),
@@ -178,17 +188,15 @@ public class SwerveSubsystem extends SubsystemBase {
                             est.estimatedPose.toPose2d(), est.timestampSeconds, estStdDevs);
                 });
 
-        /*
-         * vision.getLeftEstimatedGlobalPose().ifPresent(
-         * est -> {
-         * var estPose = est.estimatedPose.toPose2d();
-         * // Change our trust in the measurement based on the tags we can see
-         * var estStdDevs = vision.getEstimationStdDevsLeft(estPose);
-         * 
-         * poseEstimation.addVisionMeasurement(
-         * est.estimatedPose.toPose2d(), est.timestampSeconds, estStdDevs);
-         * });
-         */
+        vision.getLeftEstimatedGlobalPose().ifPresent(
+                est -> {
+                    var estPose = est.estimatedPose.toPose2d();
+                    // Change our trust in the measurement based on the tags we can see
+                    var estStdDevs = vision.getEstimationStdDevsLeft(estPose);
+
+                    poseEstimation.addVisionMeasurement(
+                            est.estimatedPose.toPose2d(), est.timestampSeconds, estStdDevs);
+                });
 
         for (SwerveModule mod : mSwerveMods) {
             SmartDashboard.putNumber("Mod " + mod.moduleNumber + " CANcoder", mod.getCANcoder().getDegrees());
@@ -270,5 +278,21 @@ public class SwerveSubsystem extends SubsystemBase {
         poseEstimation.update(simYaw, poses);
 
         field2d.setRobotPose(getPose());
+    }
+
+    public void setHeading(Supplier<Rotation2d> heading) {
+        headingSupplier = heading;
+    }
+
+    public void disableHeading() {
+        headingSupplier = null;
+    }
+
+    public Command setHeadingCommand(Supplier<Rotation2d> heading) {
+        return Commands.runOnce(() -> headingSupplier = heading);
+    }
+
+    public Command disableHeadingCommand() {
+        return Commands.runOnce(() -> headingSupplier = null);
     }
 }

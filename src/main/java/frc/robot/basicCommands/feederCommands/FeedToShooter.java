@@ -4,8 +4,10 @@
 
 package frc.robot.basicCommands.feederCommands;
 
+import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.Robot;
 import frc.robot.Constants.FeederConstants;
 import frc.robot.subsystems.FeederSubsystem;
 import frc.robot.subsystems.ShooterArmSubsystem;
@@ -44,6 +46,7 @@ public class FeedToShooter extends Command {
   @Override
   public void end(boolean interrupted) {
     feederSubsystem.setSpeed(0);
+    Robot.lastShootTimeSeconds = RobotController.getFPGATime() / 1000000.0;
   }
 
   // Returns true when the command should end.

@@ -28,7 +28,7 @@ public class ShooterArmSubsystem extends SubsystemBase {
 
   // created the motor and MotionMagic
   private TalonFX m_shooterArmMotor;
-  DigitalInput limitSwitch;
+  DigitalInput limitSwitch = new DigitalInput(SwitchID);
   private final MotionMagicVoltage motionMagic = new MotionMagicVoltage(0,
   false,
   0.0, 
@@ -50,7 +50,6 @@ public class ShooterArmSubsystem extends SubsystemBase {
 
   private ShooterArmSubsystem() {
     this.m_shooterArmMotor = new TalonFX(ShooterArmID, Constants.canBus_name);
-    this.limitSwitch = new DigitalInput(SwitchID);
 
     // create the full MotionMagic
     TalonFXConfiguration configuration = new TalonFXConfiguration();

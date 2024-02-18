@@ -11,7 +11,10 @@ import frc.Utils.PathPlanner.PathPlannerHelper;
 import frc.robot.aRobotOperations.CollectToFeeder;
 import frc.robot.aRobotOperations.CollectToIntake;
 import frc.robot.aRobotOperations.IntakeToFeeder;
+import frc.robot.aRobotOperations.ShootTouchingBase;
+import frc.robot.basicCommands.IntakeArmCommands.IntakeArmDown;
 import frc.robot.basicCommands.IntakeArmCommands.IntakeArmSetSpeed;
+import frc.robot.basicCommands.IntakeArmCommands.IntakeArmUP;
 import frc.robot.basicCommands.IntakeArmCommands.ZeroIntakeArm;
 import frc.robot.basicCommands.IntakeCommands.IntakeSetSpeed;
 import frc.robot.basicCommands.ShooterArmCommands.MoveShooterArmTo;
@@ -57,7 +60,6 @@ public class RobotContainer {
              )
         );
 
-        test.a().toggleOnTrue(null );
 
         // IntakeArmSubsystem.getInstance().setDefaultCommand(new IntakeArmSetSpeed(()-> -test.getRightX()));
         // // test.a().onTrue(new ZeroIntakeArm());
@@ -72,20 +74,22 @@ public class RobotContainer {
         //     ShooterSubsystem.getInstance().manualSetShooterSpeed(()-> test.getRightY());
         // }, ShooterSubsystem.getInstance()));
 
-        // FeederSubsystem.getInstance().setDefaultCommand(new FeederSetSpeed(()-> -test.getLeftY()));
+        FeederSubsystem.getInstance().setDefaultCommand(new FeederSetSpeed(()-> -test.getLeftY()));
         // IntakeSubsystem.getInstance().setDefaultCommand(new IntakeSetSpeed(()-> -test.getLeftY()));
 
-        // test.b().onTrue(new CollectToFeeder());
+        test.b().onTrue(new CollectToFeeder());
         
         // test.b().onTrue(new CollectToIntake());
 
         // Configure the button bindings
-        // test.a().onTrue(new ZeroShooterArm());
+        test.y().onTrue(new ZeroShooterArm());
         // test.x().onTrue(new MoveShooterArmTo(10));
 
-        // test.a().whileTrue(new InstantCommand(()-> ShooterSubsystem.getInstance().setShooterSpeed(120, 120), ShooterSubsystem.getInstance()));
-        // test.x().whileTrue(new InstantCommand(()-> ShooterSubsystem.getInstance().setShooterSpeed(0, 0), ShooterSubsystem.getInstance()));
-        test.a().onTrue(new ZeroIntakeArm());
+        test.a().whileTrue(new InstantCommand(()-> ShooterSubsystem.getInstance().setShooterSpeed(120, 120), ShooterSubsystem.getInstance()));
+        test.x().whileTrue(new InstantCommand(()-> ShooterSubsystem.getInstance().setShooterSpeed(0, 0), ShooterSubsystem.getInstance()));
+        // test.leftBumper().onTrue(new IntakeArmUP());
+        test.leftBumper().onTrue(new ShootTouchingBase());
+        // test.rightBumper().onTrue(new IntakeArmDown());
 
 
         configureButtonBindings();
@@ -101,7 +105,7 @@ public class RobotContainer {
     private void configureButtonBindings() {
         /* Driver Buttons */
         //TODO: add back
-        // driver.y().onTrue(new InstantCommand(() -> swerve.zeroGyro()));
+        driver.y().onTrue(new InstantCommand(() -> swerve.zeroGyro()));
 
         // driver.a().onTrue(pathPlannerHelper.generateAndFollowPath(new Translation2d(2, 2),
         //         new GoalEndState(0, new Rotation2d(0))));

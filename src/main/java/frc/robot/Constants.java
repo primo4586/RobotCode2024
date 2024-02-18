@@ -66,7 +66,7 @@ public final class Constants {
         public static final double intakeArmDownSpeed = -0.7;
         // switch
         public static final int intakeArmUpSwitchID = 0;
-        public static final int intakeArmDownSwitchID = 0;
+        public static final int intakeArmDownSwitchID = 3;
 
         // set points
         public static final double AmpSetPoint = 0;
@@ -229,11 +229,11 @@ public final class Constants {
     }
 
     public static class Vision {
-        public static final String kRightCameraName = "Arducam_OV9281_USB_Camera";
+        public static final String kRightCameraName = "right_Camera";
         public static final String kLeftCameraName = "YOUR CAMERA NAME";
         // Cam mounted facing forward, half a meter forward of center, half a meter up
         // from center.
-        public static final Transform3d kRightRobotToCam = new Transform3d(new Translation3d(0.5, 0.0, 0.5),
+        public static final Transform3d kRightRobotToCam = new Transform3d(new Translation3d(-0.339, 0.14, 0.5),
                 new Rotation3d(0, 0, 0));
         public static final Transform3d kLeftRobotToCam = new Transform3d(new Translation3d(0.5, 0.0, 0.5),
                 new Rotation3d(0, 0, 0));
@@ -266,9 +266,9 @@ public final class Constants {
         public static final double minimumError = 2.0;
 
         // motionMagic Constants
-        public static final double mmCruise = 5;
-        public static final double mmAcceleration = 10;
-        public static final double mmJerk = 50;
+        public static final double mmCruise = 80;
+        public static final double mmAcceleration = 300;
+        public static final double mmJerk = 1600;
 
         public static final double kp = 0.1;
         public static final double kd = 0.0;
@@ -299,7 +299,7 @@ public final class Constants {
                 .put(2, 13200)
                 .put(2.1, 13300);
 
-        public static final double ShootBaseAngle = 3;
+        public static final double ShootBaseAngle = -13;
         public static final double ShootStageAngle = 3;
     }
 
@@ -318,7 +318,7 @@ public final class Constants {
 
         public static final double GearRatio = 0.5;
 
-        public static final int MaxError = 13;
+        public static final int MaxError = 10;
 
         // PID values
         public static final double upKP = 0.06;//2
@@ -345,7 +345,7 @@ public final class Constants {
                 .put(2, 10)
                 .put(2.1, 10.2);
 
-        public static final double ShootBaseSpeed = 3;
+        public static final double ShootBaseSpeed = 120;
         public static final double ShootStageSpeed = 3;
     }
 

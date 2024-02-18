@@ -24,6 +24,7 @@ import edu.wpi.first.math.util.Units;
 import frc.Utils.interpolation.InterpolationMap;
 import frc.Utils.swerve.COTSFalconSwerveConstants;
 import frc.Utils.swerve.SwerveModuleConstants;
+import frc.Utils.swerve.COTSFalconSwerveConstants.driveGearRatios;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
@@ -297,6 +298,9 @@ public final class Constants {
                 .put(1.8, 12900)
                 .put(2, 13200)
                 .put(2.1, 13300);
+
+        public static final double ShootBaseAngle = 3;
+        public static final double ShootStageAngle = 3;
     }
 
     public static class ShooterConstants {
@@ -341,6 +345,8 @@ public final class Constants {
                 .put(2, 10)
                 .put(2.1, 10.2);
 
+        public static final double ShootBaseSpeed = 3;
+        public static final double ShootStageSpeed = 3;
     }
 
     public static class IntakeConstants {

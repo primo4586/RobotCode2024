@@ -12,7 +12,7 @@ public class ShootSpeaker extends ParallelRaceGroup {
   public ShootSpeaker() {
     addCommands(
       new PrepareForShoot(),
-      new FeedToShooter()
+      new FeedToShooter() 
     );
   }
 }

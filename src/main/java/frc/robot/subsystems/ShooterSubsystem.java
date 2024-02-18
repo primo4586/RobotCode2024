@@ -28,6 +28,7 @@ import frc.robot.Constants;
 public class ShooterSubsystem extends SubsystemBase {
   private TalonFX m_upShooterMotor;
   private TalonFX m_downShooterMotor;
+  public double upSpeed;
 
   private final Vision vision = Vision.getInstance();
 
@@ -136,6 +137,7 @@ public class ShooterSubsystem extends SubsystemBase {
 
   // set (active) Shooter motors speed
   public void setShooterSpeed(double upSpeed, double downSpeed) {
+    this.upSpeed = upSpeed;
     this.m_upShooterMotor.setControl(motionMagic.withVelocity(upSpeed));
     this.m_downShooterMotor.setControl(motionMagic.withVelocity(downSpeed));
   }

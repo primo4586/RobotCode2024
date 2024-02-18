@@ -35,7 +35,7 @@ public class FeedToShooter extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    if (!startedShooting && shooterSubsystem.checkIfShooterAtSpeed() && shooterArmSubsystem.isArmReady()) {
+    if (!startedShooting && shooterSubsystem.checkIfShooterAtSpeed() && shooterArmSubsystem.isArmReady() && shooterSubsystem.upSpeed != 0) {
       feederSubsystem.setSpeed(FeederShootSpeed);
       startedShooting = true;
       timer.restart();

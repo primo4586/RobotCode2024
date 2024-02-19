@@ -1,9 +1,13 @@
 package frc.Utils.swerve;
 
+import static frc.robot.Constants.Swerve.driveGearRatio;
+
 import com.ctre.phoenix6.configs.CANcoderConfiguration;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.signals.AbsoluteSensorRangeValue;
 
+import edu.wpi.first.math.util.Units;
+import frc.Utils.motors.FalconConversions;
 import frc.robot.Constants;
 
 public final class CTREConfigs {
@@ -18,6 +22,11 @@ public final class CTREConfigs {
         driveMotorOutput.Inverted = Constants.Swerve.driveMotorInvert;
         driveMotorOutput.NeutralMode = Constants.Swerve.driveNeutralMode;
 
+        var driveMotionMagic = swerveDriveFXConfig.MotionMagic;
+        driveMotionMagic.MotionMagicAcceleration = FalconConversions.MPSToTalon(7, Units.inchesToMeters(4), Constants.Swerve.driveGearRatio);
+        driveMotionMagic.MotionMagicCruiseVelocity = FalconConversions.MPSToTalon(3.5, Units.inchesToMeters(4), Constants.Swerve.driveGearRatio);
+        driveMotionMagic.MotionMagicJerk = driveMotionMagic.MotionMagicAcceleration * 10;
+
         /* Current Limiting */
         var driveCurrentLimits = swerveDriveFXConfig.CurrentLimits;
         driveCurrentLimits.SupplyCurrentLimitEnable = Constants.Swerve.driveEnableCurrentLimit;
@@ -30,6 +39,10 @@ public final class CTREConfigs {
         driveSlot0.kP = Constants.Swerve.driveKP;
         driveSlot0.kI = Constants.Swerve.driveKI;
         driveSlot0.kD = Constants.Swerve.driveKD;
+        driveSlot0.kS = 0;
+        driveSlot0.kA = 0;
+        driveSlot0.kV = 0;
+
 
         /* Open and Closed Loop Ramping */
         swerveDriveFXConfig.OpenLoopRamps.DutyCycleOpenLoopRampPeriod = Constants.Swerve.openLoopRamp;

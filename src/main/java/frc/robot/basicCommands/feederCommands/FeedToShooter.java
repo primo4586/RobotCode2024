@@ -30,12 +30,16 @@ public class FeedToShooter extends Command {
   @Override
   public void initialize() {
     feederSubsystem.setSpeed(0);
+    startedShooting = false;
+    timer.reset();
+    timer.stop();
+    timer.reset();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    if (!startedShooting && shooterSubsystem.checkIfShooterAtSpeed() && shooterArmSubsystem.isArmReady() && shooterSubsystem.upSpeed != 0) {
+    if (!startedShooting && shooterSubsystem.checkIfShooterAtSpeed() && shooterArmSubsystem.isArmReady() && shooterSubsystem.upSpeed < 50) {
       feederSubsystem.setSpeed(FeederShootSpeed);
       startedShooting = true;
       timer.restart();
@@ -47,6 +51,7 @@ public class FeedToShooter extends Command {
   public void end(boolean interrupted) {
     feederSubsystem.setSpeed(0);
     Robot.lastShootTimeSeconds = RobotController.getFPGATime() / 1000000.0;
+    startedShooting = false;
   }
 
   // Returns true when the command should end.

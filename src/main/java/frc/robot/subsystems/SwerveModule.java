@@ -2,6 +2,7 @@ package frc.robot.subsystems;
 
 import com.ctre.phoenix6.configs.OpenLoopRampsConfigs;
 import com.ctre.phoenix6.controls.DutyCycleOut;
+import com.ctre.phoenix6.controls.MotionMagicVelocityVoltage;
 import com.ctre.phoenix6.controls.VelocityVoltage;
 import com.ctre.phoenix6.hardware.CANcoder;
 import com.ctre.phoenix6.hardware.TalonFX;
@@ -40,7 +41,7 @@ public class SwerveModule {
 
     /* drive motor control requests */
     private final DutyCycleOut driveDutyCycle = new DutyCycleOut(0);
-    private final VelocityVoltage driveVelocity = new VelocityVoltage(0);
+    private final MotionMagicVelocityVoltage driveVelocityMM = new MotionMagicVelocityVoltage(0, 0, false, 0, 0, true, false, false);
 
     /* angle motor control requests */
     private SparkPIDController anglePosition;
@@ -90,15 +91,9 @@ public class SwerveModule {
     }
 
     private void setSpeed(SwerveModuleState desiredState, boolean isOpenLoop) {
-        if (isOpenLoop) {
-            driveDutyCycle.Output = desiredState.speedMetersPerSecond / Constants.Swerve.maxSpeed;
-            mDriveMotor.setControl(driveDutyCycle);
-        } else {
-            driveVelocity.Velocity = FalconConversions.MPSToTalon(desiredState.speedMetersPerSecond,
+            driveVelocityMM.Velocity = FalconConversions.MPSToTalon(desiredState.speedMetersPerSecond,
                     Constants.Swerve.wheelCircumference, Constants.Swerve.driveGearRatio);
-            driveVelocity.FeedForward = driveFeedForward.calculate(desiredState.speedMetersPerSecond);
-            mDriveMotor.setControl(driveVelocity);
-        }
+            mDriveMotor.setControl(driveVelocityMM);
         this.desiredState = desiredState;
     }
 

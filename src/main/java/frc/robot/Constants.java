@@ -62,8 +62,8 @@ public final class Constants {
         public static final double intakeArmStartingValue = 0;
         public static final double zeroEncoderValue = 90;
         public static final double intakeArmZeroSpeed = 0.3;
-        public static final double intakeArmUpSpeed = 0.7;
-        public static final double intakeArmDownSpeed = -0.7;
+        public static final double intakeArmUpSpeed = 1;
+        public static final double intakeArmDownSpeed = -1;
         // switch
         public static final int intakeArmUpSwitchID = 0;
         public static final int intakeArmDownSwitchID = 3;
@@ -230,13 +230,13 @@ public final class Constants {
 
     public static class Vision {
         public static final String kRightCameraName = "right_Camera";
-        public static final String kLeftCameraName = "YOUR CAMERA NAME";
+        public static final String kLeftCameraName = "left_Camera";
         // Cam mounted facing forward, half a meter forward of center, half a meter up
         // from center.
         public static final Transform3d kRightRobotToCam = new Transform3d(new Translation3d(-0.339, 0.14, 0.5),
-                new Rotation3d(0, 0, 0));
+                new Rotation3d(Math.asin(15/69), 0, Units.degreesToRadians(180+13)));
         public static final Transform3d kLeftRobotToCam = new Transform3d(new Translation3d(0.5, 0.0, 0.5),
-                new Rotation3d(0, 0, 0));
+                new Rotation3d(Math.asin(15/69), 0, -Units.degreesToRadians(80)));
 
         // The layout of the AprilTags on the field
         public static final AprilTagFieldLayout kTagLayout = AprilTagFields.kDefaultField.loadAprilTagLayoutField();

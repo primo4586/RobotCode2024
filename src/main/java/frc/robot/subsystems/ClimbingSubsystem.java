@@ -31,9 +31,9 @@ public class ClimbingSubsystem extends SubsystemBase {
     m_climbingLeft = new CANSparkMax(M_CLIMBINGLEFT_MOTOR_ID, MotorType.kBrushless);
   }
 
-  public void setSpeedClimbing(DoubleSupplier speed) {
-    m_climbingRight.set(speed.getAsDouble());
-    m_climbingLeft.set(speed.getAsDouble());
+  public void setSpeedClimbing(Double speed) {
+    m_climbingRight.set(speed);
+    m_climbingLeft.set(speed);
   }
 
   public void setRightSpeed(DoubleSupplier speed) {

@@ -66,6 +66,6 @@ public class AlignToSpeaker extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return Robot.lastShootTimeSeconds - (RobotController.getFPGATime()/1000000) < 0.1;
+    return false;
   }
 }

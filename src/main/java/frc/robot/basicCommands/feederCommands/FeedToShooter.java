@@ -46,7 +46,7 @@ public class FeedToShooter extends Command {
   @Override
   public void end(boolean interrupted) {
     feederSubsystem.setSpeed(0);
-    Robot.lastShootTimeSeconds = RobotController.getFPGATime() / 1000000.0;
+    startedShooting = false;
   }
 
   // Returns true when the command should end.

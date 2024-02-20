@@ -27,7 +27,6 @@ public class Robot extends TimedRobot {
   private RobotContainer m_robotContainer;
   
   private AutoContainer autoContainer;
-  public static double lastShootTimeSeconds = RobotController.getFPGATime() / 1000.0;
 
   /**
    * This function is run when the robot is first started up and should be used for any

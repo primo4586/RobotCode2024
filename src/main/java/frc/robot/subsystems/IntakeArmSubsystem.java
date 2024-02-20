@@ -135,6 +135,7 @@ public class IntakeArmSubsystem extends SubsystemBase {
     // This method will be called once per scheduler run
 
     SmartDashboard.putBoolean("intkeArmSwitch", getUpSwitch());
+    SmartDashboard.putBoolean("intkeArmDownSwitch", getDownSwitch());
     SmartDashboard.putNumber("intakeArm pose", m_IntakeArmMotor.getPosition().getValueAsDouble());
   }
 }

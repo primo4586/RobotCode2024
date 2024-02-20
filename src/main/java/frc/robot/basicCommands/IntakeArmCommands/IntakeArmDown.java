@@ -37,6 +37,6 @@ private final IntakeArmSubsystem intakeArm = IntakeArmSubsystem.getInstance();
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return intakeArm.getUpSwitch();
+    return intakeArm.getDownSwitch();
   }
 }

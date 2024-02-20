@@ -18,7 +18,7 @@ public class EStop extends ParallelCommandGroup {
 
   public EStop() {
     addCommands(
-      new ClimbingSetSpeed(0),
+      //new ClimbingSetSpeed(0),
       new FeederSetSpeed(()->0),
       new IntakeArmSetSpeed(()->0),
       new IntakeSetSpeed(()->0),

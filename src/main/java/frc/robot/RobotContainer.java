@@ -12,6 +12,7 @@ import frc.robot.aRobotOperations.CollectToFeeder;
 import frc.robot.aRobotOperations.CollectToIntake;
 import frc.robot.aRobotOperations.IntakeToFeeder;
 import frc.robot.aRobotOperations.ShootTouchingBase;
+import frc.robot.basicCommands.ClimbingCommands.ClimbingSetSpeed;
 import frc.robot.basicCommands.IntakeArmCommands.IntakeArmDown;
 import frc.robot.basicCommands.IntakeArmCommands.IntakeArmSetSpeed;
 import frc.robot.basicCommands.IntakeArmCommands.IntakeArmUP;
@@ -74,22 +75,25 @@ public class RobotContainer {
         //     ShooterSubsystem.getInstance().manualSetShooterSpeed(()-> test.getRightY());
         // }, ShooterSubsystem.getInstance()));
 
-        FeederSubsystem.getInstance().setDefaultCommand(new FeederSetSpeed(()-> -test.getLeftY()));
-        // IntakeSubsystem.getInstance().setDefaultCommand(new IntakeSetSpeed(()-> -test.getLeftY()));
+        // FeederSubsystem.getInstance().setDefaultCommand(new FeederSetSpeed(()-> -test.getLeftY()));
+        IntakeSubsystem.getInstance().setDefaultCommand(new IntakeSetSpeed(()-> -test.getLeftY()));
 
-        test.b().onTrue(new CollectToFeeder());
+        // test.start().onTrue(new FeederSetSpeed(()->1));
+        // test.b().onTrue(new CollectToFeeder());
         
-        // test.b().onTrue(new CollectToIntake());
+        test.a().onTrue(new CollectToIntake());
 
         // Configure the button bindings
-        test.y().onTrue(new ZeroShooterArm());
+        // test.y().onTrue(new ZeroShooterArm());
         // test.x().onTrue(new MoveShooterArmTo(10));
+        // ClimbingSubsystem.getInstance().setDefaultCommand(new ClimbingSetSpeed(()->test.getRightY()));
 
-        test.a().whileTrue(new InstantCommand(()-> ShooterSubsystem.getInstance().setShooterSpeed(120, 120), ShooterSubsystem.getInstance()));
-        test.x().whileTrue(new InstantCommand(()-> ShooterSubsystem.getInstance().setShooterSpeed(0, 0), ShooterSubsystem.getInstance()));
-        // test.leftBumper().onTrue(new IntakeArmUP());
-        test.leftBumper().onTrue(new ShootTouchingBase());
-        // test.rightBumper().onTrue(new IntakeArmDown());
+        // test.a().whileTrue(new InstantCommand(()-> ShooterSubsystem.getInstance().setShooterSpeed(120,120), ShooterSubsystem.getInstance()));
+        // test.x().whileTrue(new InstantCommand(()-> ShooterSubsystem.getInstance().setShooterSpeed(0, 0), ShooterSubsystem.getInstance()));
+        // test.rightBumper().whileTrue(new InstantCommand(()-> ShooterSubsystem.getInstance().setShooterSpeed(40, 40), ShooterSubsystem.getInstance()));
+        test.b().onTrue(new IntakeArmUP());
+        // test.leftBumper().onTrue(new ShootTouchingBase());
+        test.x().onTrue(new IntakeArmDown());
 
 
         configureButtonBindings();

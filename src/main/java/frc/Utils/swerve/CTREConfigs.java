@@ -30,6 +30,10 @@ public final class CTREConfigs {
         driveSlot0.kP = Constants.Swerve.driveKP;
         driveSlot0.kI = Constants.Swerve.driveKI;
         driveSlot0.kD = Constants.Swerve.driveKD;
+        driveSlot0.kS = 0.69031;
+        driveSlot0.kA = 2.7034;
+        driveSlot0.kV = 0;
+
 
         /* Open and Closed Loop Ramping */
         swerveDriveFXConfig.OpenLoopRamps.DutyCycleOpenLoopRampPeriod = Constants.Swerve.openLoopRamp;

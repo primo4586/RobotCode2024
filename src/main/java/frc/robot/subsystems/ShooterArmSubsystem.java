@@ -18,6 +18,8 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.Utils.interpolation.InterpolateUtil;
 import frc.Utils.vision.Vision;
 import frc.robot.Constants;
+import frc.robot.basicCommands.SwerveCommands.AllianceFlipUtil;
+import frc.robot.basicCommands.SwerveCommands.FieldConstants;
 
 import static frc.robot.Constants.ShooterArmConstants.*;
 
@@ -34,8 +36,8 @@ public class ShooterArmSubsystem extends SubsystemBase {
   0.0, 
   0, 
   true, 
-  getSwitch(), 
-  false);
+  false, 
+  getSwitch());
   private final Vision vision = Vision.getInstance();
 
   // the instance
@@ -88,7 +90,9 @@ public class ShooterArmSubsystem extends SubsystemBase {
     if (!statusCode.isOK())
       System.out.println("shooter Arm could not apply config, error code:" + statusCode.toString());
 
-    m_shooterArmMotor.setPosition(shooterArmStartPose);
+    m_shooterArmMotor.setPosition(shooterArmStartPose); 
+
+    
 
   }
 
@@ -121,8 +125,8 @@ public class ShooterArmSubsystem extends SubsystemBase {
     m_shooterArmMotor.set(speed.getAsDouble());
   }
 
-  public double angleFromDistance(Pose2d pose) {
-    return InterpolateUtil.interpolate(SHOOTER_ANGLE_INTERPOLATION_MAP, vision.DistanceFromTarget(pose));
+  public double angleFromDistance(Double distance) {
+    return InterpolateUtil.interpolate(SHOOTER_ANGLE_INTERPOLATION_MAP, distance);
   }
 
   public void runCharacterizationVolts(Double voltage) {
@@ -135,7 +139,6 @@ public class ShooterArmSubsystem extends SubsystemBase {
 
   @Override
   public void periodic() {
-
     SmartDashboard.putBoolean("ShooterArmSwitch", getSwitch());
     SmartDashboard.putNumber("ShooterArm pose", getArmPose());
   }

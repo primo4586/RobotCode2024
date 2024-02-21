@@ -19,6 +19,7 @@ import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.geometry.Translation3d;
+import edu.wpi.first.math.interpolation.InterpolatingDoubleTreeMap;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.util.Units;
 import frc.Utils.interpolation.InterpolationMap;
@@ -153,8 +154,8 @@ public final class Constants {
         /* Swerve Profiling Values */
         /** Meters per Second */
         public static final double maxSpeed = 4.5; // TODO: This must be tuned to specific robot
-        public static final double XYSlowRatio = 0.25; // TODO: make it more accrute
-        public static final double rotationSlowRatio = 0.25; // TODO: make it more accrute
+        public static final double XYSlowRatio = 0.1; // TODO: make it more accrute
+        public static final double rotationSlowRatio = 0.1; // TODO: make it more accrute
         /** Radians per Second */
         public static final double maxAngularVelocity = 10.0; // TODO: This must be tuned to specific robot
 
@@ -234,7 +235,7 @@ public final class Constants {
         // Cam mounted facing forward, half a meter forward of center, half a meter up
         // from center.
         public static final Transform3d kRightRobotToCam = new Transform3d(new Translation3d(-0.339, 0.14, 0.5),
-                new Rotation3d(Math.asin(15/69), 0, Units.degreesToRadians(180+13)));
+                new Rotation3d(Math.asin(15/69), 0, Units.degreesToRadians(180+18)));
         public static final Transform3d kLeftRobotToCam = new Transform3d(new Translation3d(0.5, 0.0, 0.5),
                 new Rotation3d(Math.asin(15/69), 0, -Units.degreesToRadians(80)));
 
@@ -291,15 +292,30 @@ public final class Constants {
         public static final double shooterArmStartPose = 00;
 
         public static final InterpolationMap SHOOTER_ANGLE_INTERPOLATION_MAP = new InterpolationMap()
-                .put(1, 14100)
-                .put(1.2, 13800)
-                .put(1.4, 12800)
-                .put(1.6, 12800)
-                .put(1.8, 12900)
-                .put(2, 13200)
-                .put(2.1, 13300);
+                .put(2, 5.7)        
+                .put(2.124, 12)
+                .put(2.3, 10.55)
+                .put(2.577, 15)
+                .put(2.6, 15.4)
+                .put(2.647, 16.125)
+                .put(2.9, 20.2)
+                .put(3, 21.79)
+                .put(3.1, 23.4)
+                .put(3.2, 25)
+                .put(3.4, 28.2)
+                .put(3.45, 29)
+                .put(3.7, 33.02)
+                .put(3.915, 36.474)
+                .put(4, 37.84)
+                .put(4.2, 4.1)
+                .put(4.3, 42.7)
+                .put(4.4, 44.3)
+                .put(4.6, 47.5)
+                .put(4.8, 50.7)
+                .put(4.9, 52.3)
+                .put(5, 56.9);
 
-        public static final double ShootBaseAngle = -13;
+        public static final double ShootBaseAngle = 6.5; //6.1064453125
         public static final double ShootStageAngle = 3;
     }
 
@@ -318,7 +334,7 @@ public final class Constants {
 
         public static final double GearRatio = 0.5;
 
-        public static final int MaxError = 10;
+        public static final int MaxError = 5;
 
         // PID values
         public static final double upKP = 0.06;//2
@@ -337,13 +353,9 @@ public final class Constants {
 
         // Interpolation Map
         public static final InterpolationMap ShooterInterpolation = new InterpolationMap()
-                .put(1, 9)
-                .put(1.2, 9.2)
-                .put(1.4, 9.4)
-                .put(1.6, 9.6)
-                .put(1.8, 9.8)
-                .put(2, 10)
-                .put(2.1, 10.2);
+                .put(2.577, 100)
+                .put(2.124, 100)
+                .put(3.2, 100);
 
         public static final double ShootBaseSpeed = 120;
         public static final double ShootStageSpeed = 3;

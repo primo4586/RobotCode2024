@@ -5,6 +5,7 @@ import frc.robot.Constants.Swerve.Mod0;
 import frc.robot.Constants.Swerve.Mod1;
 import frc.robot.Constants.Swerve.Mod2;
 import frc.robot.Constants.Swerve.Mod3;
+import frc.robot.basicCommands.SwerveCommands.FieldConstants;
 
 import static frc.robot.Constants.Swerve.*;
 
@@ -209,6 +210,8 @@ public class SwerveSubsystem extends SubsystemBase {
         SmartDashboard.putNumberArray("DesiredModuleStates", getAdvantageDesiredModuleStates());
 
         field2d.setRobotPose(poseEstimation.getEstimatedPosition());
+        SmartDashboard.putNumber("dis", getPose().getTranslation().getDistance(FieldConstants.Speaker.centerSpeakerOpening.getTranslation()));
+
     }
 
     public void refreshClosedLoopRamp(double openLoopRampTime) {

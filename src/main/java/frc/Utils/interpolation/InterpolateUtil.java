@@ -16,25 +16,40 @@ public class InterpolateUtil {
 
         if (data.get(x) > -Double.MAX_VALUE)
             return data.get(x);
-
+    
         InterpolationPoint closestBefore = new InterpolationPoint(-1, -1);
         InterpolationPoint closestAfter = new InterpolationPoint(-1, -1);
-
+        boolean foundAfter = false;
+    
         for (Map.Entry<Double, Double> point : data.getDataPoints().entrySet()) {
             if (point.getKey() < x)
                 closestBefore = new InterpolationPoint(point.getKey(), point.getValue());
             if (point.getKey() > x) {
                 closestAfter = new InterpolationPoint(point.getKey(), point.getValue());
-
+                foundAfter = true;
                 break;
             }
         }
+    
+        if (!foundAfter) {
+            double largestX = Double.NEGATIVE_INFINITY;
+            double largestValue = -Double.MAX_VALUE;
+            for (Map.Entry<Double, Double> point : data.getDataPoints().entrySet()) {
+                if (point.getKey() > largestX) {
+                    largestX = point.getKey();
+                    largestValue = point.getValue();
+                }
+            }
+            closestAfter = new InterpolationPoint(largestX, largestValue);
+        }
+    
         if (closestAfter.getX() == -1)
             closestAfter = new InterpolationPoint(closestBefore.getX(), closestBefore.getValue());
-
+    
         return linearInterpolation(closestBefore.getX(), closestBefore.getValue(), closestAfter.getX(),
                 closestAfter.getValue(), x);
     }
+    
 
     /**
      * Linear interpolation between two 2D points. Finds the Y value between the two

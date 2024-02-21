@@ -32,6 +32,7 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
+import edu.wpi.first.math.util.Units;
 import frc.robot.subsystems.SwerveSubsystem;
 
 import java.util.Optional;
@@ -172,7 +173,7 @@ public class Vision {
     }
 
     public double DistanceFromTarget(Pose2d targetPose) {
-        return PhotonUtils.getDistanceToPose(SwerveSubsystem.getInstance().getPose(), targetPose);
+        return PhotonUtils.getDistanceToPose(new Pose2d(13, 5.540, new Rotation2d(Units.degreesToRadians(180))), targetPose);
     }
 
     public Rotation2d GetAngleFromTarget() {

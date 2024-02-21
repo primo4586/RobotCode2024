@@ -37,7 +37,7 @@ public class SwerveSubsystem extends SubsystemBase {
     public Vision vision;
     Field2d field2d = new Field2d();
     Rotation2d simYaw = new Rotation2d();
-    public Supplier<Rotation2d> headingSupplier = null;
+    public Rotation2d headingSupplier = null;
     PIDController headingPid = aligningPID;
 
     private static SwerveSubsystem instance;
@@ -69,7 +69,7 @@ public class SwerveSubsystem extends SubsystemBase {
         poseEstimation = new SwerveDrivePoseEstimator(swerveKinematics, getYaw(), getModulePositions(),
                 new Pose2d(2, 2, new Rotation2d(0)));
                 
-        headingPid.enableContinuousInput(0, 360);
+        headingPid.enableContinuousInput(-180, 180);
     }
 
     public void drive(Translation2d translation, double rotation, boolean fieldRelative, boolean isOpenLoop,
@@ -80,7 +80,7 @@ public class SwerveSubsystem extends SubsystemBase {
                         translation.getY(),
                         headingSupplier == null ? rotation
                                 : headingPid.calculate(getPose().getRotation().getDegrees(),
-                                        headingSupplier.get().getDegrees()),
+                                        headingSupplier.getDegrees()),
                         getYaw())
                         : new ChassisSpeeds(
                                 translation.getX(),
@@ -266,7 +266,7 @@ public class SwerveSubsystem extends SubsystemBase {
 
         ChassisSpeeds chassisSpeed = swerveKinematics.toChassisSpeeds(getSimStates());
 
-        simYaw = Rotation2d.fromRadians(chassisSpeed.omegaRadiansPerSecond * 0.02);
+        simYaw = getYaw();
 
         simModPose.angle = getSimStates()[0].angle;
         simModPose.distanceMeters += getSimStates()[0].speedMetersPerSecond * 0.02;
@@ -280,7 +280,7 @@ public class SwerveSubsystem extends SubsystemBase {
         field2d.setRobotPose(getPose());
     }
 
-    public void setHeading(Supplier<Rotation2d> heading) {
+    public void setHeading(Rotation2d heading) {
         headingSupplier = heading;
     }
 
@@ -288,7 +288,7 @@ public class SwerveSubsystem extends SubsystemBase {
         headingSupplier = null;
     }
 
-    public Command setHeadingCommand(Supplier<Rotation2d> heading) {
+    public Command setHeadingCommand(Rotation2d heading) {
         return Commands.runOnce(() -> headingSupplier = heading);
     }
 

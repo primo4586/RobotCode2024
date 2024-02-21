@@ -78,7 +78,7 @@ public final class Constants {
 
     public static final class Swerve {
         public static final double minimumErrorAligning = 0; // TODO: This must be tuned to specific robot
-        public static final PIDController aligningPID = new PIDController(0, 0, 0);
+        public static final PIDController aligningPID = new PIDController(2, 0, 0);
 
         public static final int pigeonID = 11;
         public static final boolean invertGyro = false; // Always ensure Gyro is CCW+ CW-

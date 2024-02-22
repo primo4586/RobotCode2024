@@ -9,15 +9,19 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Robot;
 import frc.robot.Constants.FeederConstants;
+import frc.robot.Constants.Swerve;
 import frc.robot.subsystems.FeederSubsystem;
 import frc.robot.subsystems.ShooterArmSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
+import frc.robot.subsystems.SwerveSubsystem;
+
 import static frc.robot.Constants.FeederConstants.*;
 
 public class FeedToShooter extends Command {
   private final ShooterSubsystem shooterSubsystem = ShooterSubsystem.getInstance();
   private final ShooterArmSubsystem shooterArmSubsystem = ShooterArmSubsystem.getInstance();
   private final FeederSubsystem feederSubsystem = FeederSubsystem.getInstance();
+  private final SwerveSubsystem swerve = SwerveSubsystem.getInstance();
   Timer timer = new Timer();
   boolean startedShooting = false;
 
@@ -36,7 +40,7 @@ public class FeedToShooter extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    if ( shooterSubsystem.getUpShooterSpeed() >97&& shooterSubsystem.checkIfShooterAtSpeed() && shooterArmSubsystem.isArmReady() && shooterSubsystem.upSpeed != 0) {
+    if (swerve.headingPid.getPositionError()<1 && shooterSubsystem.getUpShooterSpeed() >97&& shooterSubsystem.checkIfShooterAtSpeed() && shooterArmSubsystem.isArmReady() && shooterSubsystem.upSpeed != 0) {
       feederSubsystem.setSpeed(FeederShootSpeed);
       timer.start();
     }

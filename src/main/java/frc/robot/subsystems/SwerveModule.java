@@ -1,7 +1,9 @@
 package frc.robot.subsystems;
 
+import com.ctre.phoenix6.BaseStatusSignal;
 import com.ctre.phoenix6.configs.OpenLoopRampsConfigs;
 import com.ctre.phoenix6.controls.DutyCycleOut;
+import com.ctre.phoenix6.controls.MotionMagicVelocityVoltage;
 import com.ctre.phoenix6.controls.VelocityVoltage;
 import com.ctre.phoenix6.hardware.CANcoder;
 import com.ctre.phoenix6.hardware.TalonFX;
@@ -35,12 +37,10 @@ public class SwerveModule {
 
     private SwerveModuleState desiredState = new SwerveModuleState(0, Rotation2d.fromDegrees(0));
 
-    private final SimpleMotorFeedforward driveFeedForward = new SimpleMotorFeedforward(Constants.Swerve.driveKS,
-            Constants.Swerve.driveKV, Constants.Swerve.driveKA);
-
     /* drive motor control requests */
     private final DutyCycleOut driveDutyCycle = new DutyCycleOut(0);
-    private final VelocityVoltage driveVelocity = new VelocityVoltage(0);
+    private final MotionMagicVelocityVoltage driveVelocity = new MotionMagicVelocityVoltage(0, 0, false, 0,
+            0, true, false, false);
 
     /* angle motor control requests */
     private SparkPIDController anglePosition;
@@ -96,7 +96,6 @@ public class SwerveModule {
         } else {
             driveVelocity.Velocity = FalconConversions.MPSToTalon(desiredState.speedMetersPerSecond,
                     Constants.Swerve.wheelCircumference, Constants.Swerve.driveGearRatio);
-            driveVelocity.FeedForward = driveFeedForward.calculate(desiredState.speedMetersPerSecond);
             mDriveMotor.setControl(driveVelocity);
         }
         this.desiredState = desiredState;

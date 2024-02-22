@@ -39,6 +39,7 @@ public class Robot extends TimedRobot {
     m_robotContainer = new RobotContainer();
     autoContainer = new AutoContainer();
     PrimoShuffleboard.getInstance().initDashboard();
+   enableLiveWindowInTest(true);
  
   }
 

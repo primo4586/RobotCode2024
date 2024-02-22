@@ -13,7 +13,9 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.RobotController;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.Utils.vision.Vision;
@@ -48,10 +50,14 @@ public class AlignToSpeaker extends Command {
     Pose2d robot = swerve.getPose();
     
     double deltaX = Math.abs(robot.getX() - Speaker.centerSpeakerOpening.getX());
-    double deltaY = robot.getY() - Speaker.centerSpeakerOpening.getY();
+    double deltaY = Speaker.centerSpeakerOpening.getY() - robot.getY();
     double tempHeading = Units.radiansToDegrees(Math.atan2(deltaY, deltaX));
-    
-    heading = new Rotation2d(Units.degreesToRadians(tempHeading));
+    if(DriverStation.getAlliance().get() == Alliance.Red)
+      heading = new Rotation2d(Units.degreesToRadians(tempHeading + 180));
+    else
+      heading = new Rotation2d(Units.degreesToRadians(tempHeading));
+
+    SmartDashboard.putNumber("heading", heading.getDegrees());
     swerve.setHeading(heading);
   }
 

@@ -7,6 +7,7 @@ package frc.robot.aRobotOperations;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import frc.robot.basicCommands.ShooterArmCommands.ShooterArmSpeakerAngle;
 import frc.robot.basicCommands.ShooterCommands.ShooterSpeaker;
+import frc.robot.basicCommands.SwerveCommands.AlignToSpeaker;
 
 public class PrepareForShoot extends ParallelCommandGroup {
   /** Creates a new PrepareForShoot. */
@@ -14,7 +15,8 @@ public class PrepareForShoot extends ParallelCommandGroup {
     
     addCommands(
       new ShooterArmSpeakerAngle(),
-      new ShooterSpeaker()
+      new ShooterSpeaker(),
+      new AlignToSpeaker()
     );
   }
 }

@@ -39,29 +39,29 @@ public final class Constants {
     public static final class IntakeArmConstants { // TODO: This must be tuned to specific robot
         // mm
         public static final int IntakeArmMotorID = 8;
-        public static final double mmVelocity = 5.0;
-        public static final double mmAcceleration = 10.0;
-        public static final double mmJerk = 50;
+        public static final double mmVelocity = 100;
+        public static final double mmAcceleration = 800;
+        public static final double mmJerk = 6000;
         public static final double KP = 0.0;
         public static final double KD = 0.0;
-        public static final double KV = 4.4216;
-        public static final double KS = 0.073624;
-        public static final double KA = 0.072407;
+        public static final double KS = 0.051238;
+        public static final double KV = 0.11136;
+        public static final double KA = 0.0026838;
 
 
-        public static final double PeakForwardVoltage = 11.5;
-        public static final double PeakReverseVoltage = -11.5;
+        public static final double PeakForwardVoltage = 12;
+        public static final double PeakReverseVoltage = -12;
         public static final int encoderCountsPerRevolution = 1;
-        public static final double gearRatio = 70;
+        public static final double gearRatio = 1;
         public static final double TICKS_PER_DEGREE = encoderCountsPerRevolution * gearRatio / 360.0;
         public static final boolean ForwardSoftLimitEnable = true;
-        public static final double ForwardSoftLimitThreshold = 300;
+        public static final double ForwardSoftLimitThreshold = 10;
         public static final boolean ReverseSoftLimitEnable = true;
-        public static final double RevesrseSoftLimitThreshold = 0;
+        public static final double RevesrseSoftLimitThreshold = -170;
         // not mm
         public static final double minimumError = 0;
         public static final double intakeArmStartingValue = 0;
-        public static final double zeroEncoderValue = 90;
+        public static final double zeroEncoderValue = 0;
         public static final double intakeArmZeroSpeed = 0.3;
         public static final double intakeArmUpSpeed = 1;
         public static final double intakeArmDownSpeed = -1;
@@ -79,7 +79,7 @@ public final class Constants {
 
     public static final class Swerve {
         public static final double minimumErrorAligning = 0; // TODO: This must be tuned to specific robot
-        public static final PIDController aligningPID = new PIDController(2, 0, 0);
+        public static final PIDController aligningPID = new PIDController(0.1, 0, 0.0);
 
         public static final int pigeonID = 11;
         public static final boolean invertGyro = false; // Always ensure Gyro is CCW+ CW-
@@ -104,7 +104,7 @@ public final class Constants {
                 new Translation2d(-wheelBase / 2.0, -trackWidth / 2.0));
 
         /* Module Gear Ratios */
-        public static final double driveGearRatio = chosenModule.driveGearRatio;
+        public static final double driveGearRatio = 8.14;
         public static final double angleGearRatio = 360 / ((150 / 7.0) / 1.0);
 
         /* Motor Inverts */
@@ -135,21 +135,10 @@ public final class Constants {
         public static final double voltageComp = 12;
 
         /* Angle Motor PID Values */
-        public static final double angleKP = 0.08;// chosenModule.angleKP;
+        public static final double angleKP = 0.07;// chosenModule.angleKP;
         public static final double angleKI = 0.0;
         public static final double angleKD = 0.0;
         public static final double angleKFF = 0.0;
-
-        /* Drive Motor PID Values */
-        public static final double driveKP = 0.2; // TODO: This must be tuned to specific robot
-        public static final double driveKI = 0.0;
-        public static final double driveKD = 0.0;
-        public static final double driveKF = 0.0;
-
-        /* Drive Motor Characterization Values From SYSID */
-        public static final double driveKS = 0.15; // TODO: This must be tuned to specific robot
-        public static final double driveKV = 2.7;
-        public static final double driveKA = 0;
 
         /* Swerve Profiling Values */
         /** Meters per Second */
@@ -235,9 +224,9 @@ public final class Constants {
         // Cam mounted facing forward, half a meter forward of center, half a meter up
         // from center.
         public static final Transform3d kRightRobotToCam = new Transform3d(new Translation3d(-0.339, 0.14, 0.5),
-                new Rotation3d(Math.asin(15/69), 0, Units.degreesToRadians(180+18)));
-        public static final Transform3d kLeftRobotToCam = new Transform3d(new Translation3d(0.5, 0.0, 0.5),
-                new Rotation3d(Math.asin(15/69), 0, -Units.degreesToRadians(80)));
+                new Rotation3d(Math.asin(30.6/55.3), 0, Units.degreesToRadians(180+16)));
+        public static final Transform3d kLeftRobotToCam = new Transform3d(new Translation3d(-0.339, 0.14, 0.5),
+                new Rotation3d(Math.asin(30.6/55.3), 0, -Units.degreesToRadians(180+14.24)));
 
         // The layout of the AprilTags on the field
         public static final AprilTagFieldLayout kTagLayout = AprilTagFields.kDefaultField.loadAprilTagLayoutField();

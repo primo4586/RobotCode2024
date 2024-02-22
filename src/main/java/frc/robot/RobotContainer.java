@@ -5,6 +5,8 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.Utils.PathPlanner.PathPlannerHelper;
@@ -59,13 +61,15 @@ public class RobotContainer {
                  () -> -driver.getRawAxis(strafeAxis), 
                  () -> -driver.getRawAxis(rotationAxis), 
                  true,
-                 () -> driver.rightBumper().getAsBoolean()
+                 () -> driver.rightTrigger().getAsBoolean()
              )
         );
 
+        driver.leftTrigger().onTrue(PathPlannerHelper.getInstace().followPath("testSpin"));
+
 
         // IntakeArmSubsystem.getInstance().setDefaultCommand(new IntakeArmSetSpeed(()-> -test.getRightX()));
-        // // test.a().onTrue(new ZeroIntakeArm());
+
 
         
         // ShooterArmSubsystem.getInstance().setDefaultCommand(new InstantCommand(()->{
@@ -77,30 +81,30 @@ public class RobotContainer {
         //     ShooterSubsystem.getInstance().manualSetShooterSpeed(()-> test.getRightY());
         // }, ShooterSubsystem.getInstance()));
 
-        IntakeSubsystem.getInstance().setDefaultCommand(new IntakeSetSpeed(()-> -test.getLeftY()));
+        // IntakeSubsystem.getInstance().setDefaultCommand(new IntakeSetSpeed(()-> -test.getLeftY()));
 
-        // test.start().onTrue(new FeederSetSpeed(()->1));
         
         // test.a().onTrue(new CollectToIntake());
 
         // Configure the button bindings
         // test.x().onTrue(new MoveShooterArmTo(29));
 
-        driver.leftBumper().onTrue(new FeederSetSpeed(()->1));
+        // driver.leftBumper().onTrue(new FeederSetSpeed(()->1));
         // test.rightBumper().onTrue(new FeederSetSpeed(()->0));
+        // driver.start().onTrue(new ZeroShooterArm());
         // driver.x().whileTrue(new InstantCommand(()-> ShooterSubsystem.getInstance().setShooterSpeed(100,100), ShooterSubsystem.getInstance()));
-        // test.a().whileTrue(new InstantCommand(()-> ShooterSubsystem.getInstance().setShooterSpeed(120,120), ShooterSubsystem.getInstance()));
         // test.start().whileTrue(new InstantCommand(()-> ShooterSubsystem.getInstance().setShooterSpeed(0, 0), ShooterSubsystem.getInstance()));
         
-driver.x().onTrue(new AlignToSpeaker());
-        // driver.start().onTrue(new ZeroShooterArm());
-        // //driver.x().onTrue(new ShooterArmSpeakerAngle());
-        // //driver.b().onTrue(new CollectToFeeder());
+        // driver.leftTrigger().whileTrue(new AlignToSpeaker());
+        //driver.x().onTrue(new ShooterArmSpeakerAngle());
+        // driver.b().onTrue(new CollectToFeeder());
         // driver.a().onTrue(new ShootSpeaker());
+
         // // test.rightBumper().whileTrue(new InstantCommand(()-> ShooterSubsystem.getInstance().setShooterSpeed(40, 40), ShooterSubsystem.getInstance()));
-        // test.b().onTrue(new IntakeArmUP());
+        test.b().onTrue(new IntakeArmUP());
+        test.x().onTrue(new IntakeArmDown());
+        test.a().onTrue(new ZeroIntakeArm());
         // // test.leftBumper().onTrue(new ShootTouchingBase());
-        // test.x().onTrue(new IntakeArmDown());
 
 
         configureButtonBindings();

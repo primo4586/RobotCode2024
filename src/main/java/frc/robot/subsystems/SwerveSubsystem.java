@@ -39,7 +39,7 @@ public class SwerveSubsystem extends SubsystemBase {
     Field2d field2d = new Field2d();
     Rotation2d simYaw = new Rotation2d();
     public Rotation2d headingSupplier = null;
-    PIDController headingPid = aligningPID;
+    public PIDController headingPid = aligningPID;
 
     private static SwerveSubsystem instance;
 
@@ -67,10 +67,17 @@ public class SwerveSubsystem extends SubsystemBase {
                 new SwerveModule(2, Mod2.constants),
                 new SwerveModule(3, Mod3.constants)
         };
-        poseEstimation = new SwerveDrivePoseEstimator(swerveKinematics, getYaw(), getModulePositions(),
-                new Pose2d(2, 2, new Rotation2d(0)));
+        if(vision.getLeftEstimatedGlobalPose().isPresent()){
+            poseEstimation = new SwerveDrivePoseEstimator(swerveKinematics, getYaw(), getModulePositions(),
+                vision.getLeftEstimatedGlobalPose().get().estimatedPose.toPose2d());
+        }
+        else{
+            poseEstimation = new SwerveDrivePoseEstimator(swerveKinematics, getYaw(), getModulePositions(),
+                new Pose2d(0, 0, new Rotation2d(0)));
+        }
                 
         headingPid.enableContinuousInput(-180, 180);
+        headingPid.setTolerance(1);
     }
 
     public void drive(Translation2d translation, double rotation, boolean fieldRelative, boolean isOpenLoop,
@@ -89,7 +96,7 @@ public class SwerveSubsystem extends SubsystemBase {
                                 rotation));
         SwerveDriveKinematics.desaturateWheelSpeeds(swerveModuleStates, maxSpeed);
 
-        if (scaled) {
+        if (!scaled) {
             for (SwerveModule mod : mSwerveMods) {
                 mod.setDesiredState(swerveModuleStates[mod.moduleNumber], isOpenLoop);
             }
@@ -177,6 +184,11 @@ public class SwerveSubsystem extends SubsystemBase {
 
     @Override
     public void periodic() {
+
+        SmartDashboard.putNumber("vel", getRobotVelocity().vxMetersPerSecond);
+        
+        SmartDashboard.putNumber("error", headingPid.getPositionError());
+
         poseEstimation.update(getYaw(), getModulePositions());
 
         vision.getRightEstimatedGlobalPose().ifPresent(
@@ -187,6 +199,8 @@ public class SwerveSubsystem extends SubsystemBase {
 
                     poseEstimation.addVisionMeasurement(
                             est.estimatedPose.toPose2d(), est.timestampSeconds, estStdDevs);
+
+                    gyro.setYaw(est.estimatedPose.getRotation().getAngle());
                 });
 
         vision.getLeftEstimatedGlobalPose().ifPresent(
@@ -197,17 +211,12 @@ public class SwerveSubsystem extends SubsystemBase {
 
                     poseEstimation.addVisionMeasurement(
                             est.estimatedPose.toPose2d(), est.timestampSeconds, estStdDevs);
-                });
+                    
+                    gyro.setYaw(est.estimatedPose.getRotation().getAngle());
 
-        for (SwerveModule mod : mSwerveMods) {
-            SmartDashboard.putNumber("Mod " + mod.moduleNumber + " CANcoder", mod.getCANcoder().getDegrees());
-            SmartDashboard.putNumber("Mod " + mod.moduleNumber + " Integrated", mod.getPosition().angle.getDegrees());
-            SmartDashboard.putNumber("Mod " + mod.moduleNumber + " Desired angle",
-                    mod.getDesierdState().angle.getDegrees());
-            SmartDashboard.putNumber("Mod " + mod.moduleNumber + " Velocity", mod.getState().speedMetersPerSecond);
-        }
-        SmartDashboard.putNumberArray("ModuleStates", getAdvantageModuleStates());
-        SmartDashboard.putNumberArray("DesiredModuleStates", getAdvantageDesiredModuleStates());
+                });
+            
+        SmartDashboard.putNumber("yaw", getYaw().getDegrees());
 
         field2d.setRobotPose(poseEstimation.getEstimatedPosition());
         SmartDashboard.putNumber("dis", getPose().getTranslation().getDistance(FieldConstants.Speaker.centerSpeakerOpening.getTranslation()));

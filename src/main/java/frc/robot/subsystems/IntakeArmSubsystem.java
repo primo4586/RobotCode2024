@@ -6,7 +6,9 @@ package frc.robot.subsystems;
 
 import com.ctre.phoenix6.StatusCode;
 import com.ctre.phoenix6.configs.MotionMagicConfigs;
+import com.ctre.phoenix6.configs.SoftwareLimitSwitchConfigs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
+import com.ctre.phoenix6.controls.DutyCycleOut;
 import com.ctre.phoenix6.controls.MotionMagicVoltage;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.InvertedValue;
@@ -22,20 +24,22 @@ import static frc.robot.Constants.IntakeArmConstants.*;
 import java.util.function.DoubleSupplier;
 
 public class IntakeArmSubsystem extends SubsystemBase {
-  private TalonFX m_IntakeArmMotor;
+  public TalonFX m_IntakeArmMotor;
   private final DigitalInput upIntakeArmSwitch = new DigitalInput(intakeArmUpSwitchID);
   private final DigitalInput downIntakeArmSwitch = new DigitalInput(intakeArmDownSwitchID);
 
   private final MotionMagicVoltage motionMagic = new MotionMagicVoltage(0,
-   false,
-   0.0, 
-   0, 
-   true, 
-   getUpSwitch(), 
-   getDownSwitch());
+      false,
+      0.0,
+      0,
+      true,
+      getUpSwitch(),
+      false);
 
   // singleton
   private static IntakeArmSubsystem instance;
+
+  SoftwareLimitSwitchConfigs limitConfig = new SoftwareLimitSwitchConfigs();
 
   public static IntakeArmSubsystem getInstance() {
     if (instance == null) {
@@ -63,19 +67,27 @@ public class IntakeArmSubsystem extends SubsystemBase {
 
     configs.Voltage.PeakForwardVoltage = PeakForwardVoltage;
     configs.Voltage.PeakReverseVoltage = PeakReverseVoltage;
-    configs.Feedback.SensorToMechanismRatio = TICKS_PER_DEGREE;
+    configs.Feedback.SensorToMechanismRatio = 1;
 
-    configs.SoftwareLimitSwitch.ForwardSoftLimitEnable = false;
-    configs.SoftwareLimitSwitch.ReverseSoftLimitEnable = false;
+    var driveCurrentLimits = configs.CurrentLimits;
+    driveCurrentLimits.SupplyCurrentLimitEnable = true;
+    driveCurrentLimits.SupplyCurrentLimit = 10;
+    driveCurrentLimits.SupplyCurrentThreshold = 30;
+    driveCurrentLimits.SupplyTimeThreshold = 0.05;
 
     m_IntakeArmMotor.setNeutralMode(NeutralModeValue.Brake);
 
-    // configs.SoftwareLimitSwitch.ForwardSoftLimitEnable = ForwardSoftLimitEnable;
-    // configs.SoftwareLimitSwitch.ReverseSoftLimitEnable = ReverseSoftLimitEnable;
+    configs.SoftwareLimitSwitch.ForwardSoftLimitEnable = false;
+    configs.SoftwareLimitSwitch.ReverseSoftLimitEnable = false;
     configs.SoftwareLimitSwitch.ForwardSoftLimitThreshold = ForwardSoftLimitThreshold;
     configs.SoftwareLimitSwitch.ReverseSoftLimitThreshold = RevesrseSoftLimitThreshold;
 
-    configs.MotorOutput.Inverted = InvertedValue.CounterClockwise_Positive;
+    limitConfig.ForwardSoftLimitEnable = ForwardSoftLimitEnable;
+    limitConfig.ReverseSoftLimitEnable = ReverseSoftLimitEnable;
+    limitConfig.ForwardSoftLimitThreshold = ForwardSoftLimitThreshold;
+    limitConfig.ReverseSoftLimitThreshold = RevesrseSoftLimitThreshold;
+
+    configs.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
 
     // gives code to TalonFX
     StatusCode status = StatusCode.StatusCodeNotInitialized;
@@ -100,6 +112,16 @@ public class IntakeArmSubsystem extends SubsystemBase {
   // set speed
   public void setSpeed(DoubleSupplier speed) {
     m_IntakeArmMotor.set(speed.getAsDouble());
+  }
+
+  // set speed
+  public void setSpeedZero(DoubleSupplier speed) {
+    m_IntakeArmMotor.getConfigurator().refresh(new SoftwareLimitSwitchConfigs().withForwardSoftLimitEnable(false));
+    m_IntakeArmMotor.set(speed.getAsDouble());
+  }
+
+  public void refreshLimits() {
+    m_IntakeArmMotor.getConfigurator().apply(limitConfig);
   }
 
   // set encoder

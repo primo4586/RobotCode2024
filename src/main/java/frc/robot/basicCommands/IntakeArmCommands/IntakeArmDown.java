@@ -20,7 +20,7 @@ private final IntakeArmSubsystem intakeArm = IntakeArmSubsystem.getInstance();
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    intakeArm.setSpeed(() -> intakeArmDownSpeed);
+    intakeArm.moveArmTo(-160);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -31,12 +31,11 @@ private final IntakeArmSubsystem intakeArm = IntakeArmSubsystem.getInstance();
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    intakeArm.setSpeed(() -> 0);
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return intakeArm.getDownSwitch();
+    return intakeArm.checkIntakeArmPosion();
   }
 }

@@ -5,12 +5,17 @@
 package frc.robot.basicCommands.IntakeArmCommands;
 
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.Constants.IntakeArmConstants;
 import frc.robot.subsystems.IntakeArmSubsystem;
 import static frc.robot.Constants.IntakeArmConstants.*;
+
+import com.ctre.phoenix6.configs.SoftwareLimitSwitchConfigs;
 
 public class ZeroIntakeArm extends Command {
   /** Creates a new SetSpeed. */
   private final IntakeArmSubsystem intakeArm = IntakeArmSubsystem.getInstance();
+  SoftwareLimitSwitchConfigs limit = new SoftwareLimitSwitchConfigs();
+
 
   public ZeroIntakeArm() {
     addRequirements(intakeArm);
@@ -32,6 +37,7 @@ public class ZeroIntakeArm extends Command {
   public void end(boolean interrupted) {
     intakeArm.setSpeed(() -> 0);
     intakeArm.setEncoder(zeroEncoderValue);
+    intakeArm.refreshLimits();
   }
 
   // Returns true when the command should end.

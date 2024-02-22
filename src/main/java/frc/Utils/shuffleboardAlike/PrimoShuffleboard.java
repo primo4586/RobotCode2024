@@ -46,12 +46,14 @@ public class PrimoShuffleboard {
         PrimoTab tab = getCompetitonBoard();
 
         try {
-            //  if (camera != null) {
-            //      tab.getTab().add("POV: You are Itzik", camera).withPosition(2, 0).withSize(7, 4);
-            //  }
+            // if (camera != null) {
+            // tab.getTab().add("POV: You are Itzik", camera).withPosition(2, 0).withSize(7,
+            // 4);
+            // }
             tab.getTab().addDouble("Time left", () -> Timer.getMatchTime()).withPosition(0, 0).withSize(2, 1);
 
-        } catch (IllegalArgumentException alreadyExists) {} // We ignore.
+        } catch (IllegalArgumentException alreadyExists) {
+        } // We ignore.
     }
 
     public String getCompTabTitle() {

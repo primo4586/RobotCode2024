@@ -9,7 +9,7 @@ import java.util.Map;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.Utils.PathPlanner.PathPlannerHelper;
-import frc.Utils.feedForward.FeedForwardCharacterization;
+import frc.robot.aRobotOperations.ShootSpeaker;
 import frc.robot.subsystems.IntakeArmSubsystem;
 import frc.robot.subsystems.ShooterArmSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
@@ -19,36 +19,20 @@ import frc.robot.subsystems.SwerveSubsystem;
 public class AutoContainer {
     private CommandSelector autoSelector;
     private Map<String, Command> autoPaths;
-    private PathPlannerHelper pathPlanner;
+    private PathPlannerHelper pathPlanner = PathPlannerHelper.getInstace();
     SwerveSubsystem swerve = SwerveSubsystem.getInstance();
     IntakeArmSubsystem intakeArm = IntakeArmSubsystem.getInstance();
     ShooterArmSubsystem shooterArm = ShooterArmSubsystem.getInstance();
     ShooterSubsystem shooter = ShooterSubsystem.getInstance();
 
     public AutoContainer() {
-        this.pathPlanner = PathPlannerHelper.getInstace();
         this.autoPaths = new HashMap<String, Command>();
-
-        this.autoPaths.put("Drive FF Characterization", new FeedForwardCharacterization(swerve,
-                swerve::runCharacterizationVolts,
-                swerve::getCharacterizationVelocity));
-
-        this.autoPaths.put("intake Arm FF Characterization", new FeedForwardCharacterization(intakeArm,
-                intakeArm::runCharacterizationVolts,
-                intakeArm::getCharacterizationVelocity));
-                
-        this.autoPaths.put("Shooter Arm FF Characterization", new FeedForwardCharacterization(shooterArm,
-                shooterArm::runCharacterizationVolts,
-                shooterArm::getCharacterizationVelocity));
-                
-        this.autoPaths.put("Upper Shooter FF Characterization", new FeedForwardCharacterization(shooter,
-                shooter::UPRunCharacterizationVolts,
-                shooter::getUPCharacterizationVelocity));
-                
-        this.autoPaths.put("Lower Shooter FF Characterization", new FeedForwardCharacterization(shooter,
-                shooter::DownRunCharacterizationVolts,
-                shooter::getDownCharacterizationVelocity));
-
+        this.autoPaths.put("base,2,3", new ShootSpeaker()
+            .andThen(pathPlanner.followChoreoPath("base to 2")
+            .andThen(new ShootSpeaker())
+            .andThen(pathPlanner.followChoreoPath("2 to 3"))));
+            
+            
         this.autoSelector = new CommandSelector(autoPaths, PrimoShuffleboard.getInstance().getCompTabTitle());
     }
 

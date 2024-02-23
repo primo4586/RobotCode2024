@@ -70,10 +70,10 @@ public final class Constants {
         public static final int intakeArmDownSwitchID = 3;
 
         // set points
-        public static final double AmpSetPoint = 0;
+        public static final double AmpSetPoint = 10;
         public static final double SafeSetPoint = 0;
-        public static final double intakeSetPoint = 0;
-        public static final double trapSetPoint = 0;
+        public static final double intakeSetPoint = -160;
+        
 
     }
 

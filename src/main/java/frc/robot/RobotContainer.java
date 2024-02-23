@@ -10,9 +10,11 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.Utils.PathPlanner.PathPlannerHelper;
+import frc.robot.Constants.IntakeArmConstants;
 import frc.robot.aRobotOperations.CollectToFeeder;
 import frc.robot.aRobotOperations.CollectToIntake;
 import frc.robot.aRobotOperations.IntakeToFeeder;
+import frc.robot.aRobotOperations.PrepareForShoot;
 import frc.robot.aRobotOperations.ShootSpeaker;
 import frc.robot.aRobotOperations.ShootTouchingBase;
 import frc.robot.basicCommands.ClimbingCommands.ClimbingSetSpeed;
@@ -39,8 +41,8 @@ import frc.robot.subsystems.*;
 public class RobotContainer {
     /* Controllers */
     private final CommandXboxController driver = new CommandXboxController(0);
-    
-    // private final CommandXboxController test = new CommandXboxController(2);
+    private final CommandXboxController operator = new CommandXboxController(1);
+    private final CommandXboxController test = new CommandXboxController(2);
 
     /* Drive Controls */
     private final int translationAxis = XboxController.Axis.kLeftY.value;
@@ -50,6 +52,8 @@ public class RobotContainer {
 
     /* Subsystems */
     private final SwerveSubsystem swerve = SwerveSubsystem.getInstance();
+    private final IntakeSubsystem intake = IntakeSubsystem.getInstance();
+    private final IntakeArmSubsystem intakeArm = IntakeArmSubsystem.getInstance();
 
 
     /** The container for the robot. Contains subsystems, OI devices, and commands. */
@@ -68,7 +72,7 @@ public class RobotContainer {
         driver.leftTrigger().onTrue(PathPlannerHelper.getInstace().followPath("testSpin"));
 
 
-        // IntakeArmSubsystem.getInstance().setDefaultCommand(new IntakeArmSetSpeed(()-> -test.getRightX()));
+        //IntakeArmSubsystem.getInstance().setDefaultCommand(new IntakeArmSetSpeed(()-> -test.getRightX()));
 
 
         
@@ -119,17 +123,20 @@ public class RobotContainer {
      */
     private void configureButtonBindings() {
         /* Driver Buttons */
-        //TODO: add back
         driver.y().onTrue(new InstantCommand(() -> swerve.zeroGyro()));
+        driver.x().onTrue(new ShootTouchingBase());
+        driver.rightTrigger().onTrue(new ShootSpeaker());
+        driver.leftTrigger().toggleOnTrue(new AlignToSpeaker());
 
-        // driver.a().onTrue(pathPlannerHelper.generateAndFollowPath(new Translation2d(2, 2),
-        //         new GoalEndState(0, new Rotation2d(0))));
 
-
-        // driver.b().onTrue(pathPlannerHelper.generateAndFollowPath(PathPlannerPath.bezierFromPoses(
-        //     new Pose2d(swerve.getPose().getTranslation(),new Rotation2d()),
-        //     new Pose2d(swerve.getPose().getTranslation().plus(new Translation2d(2.0, 0.0)), new Rotation2d())),
-        //         new GoalEndState(0, new Rotation2d(0))));
-
+        /* Operator Buttons */
+        operator.x().onTrue(new CollectToFeeder());
+        operator.y().toggleOnTrue(new PrepareForShoot());
+        operator.a().onTrue(Commands.runOnce(()-> intakeArm.moveArmTo(IntakeArmConstants.SafeSetPoint), intakeArm));
+        operator.rightBumper().onTrue(new IntakeArmDown());
+        operator.leftBumper().onTrue(new IntakeArmUP());
+        
+        IntakeSubsystem.getInstance().setDefaultCommand(new IntakeSetSpeed(()-> -test.getLeftY()));
+        FeederSubsystem.getInstance().setDefaultCommand(new FeederSetSpeed(()-> -test.getLeftY()));
     }
 }

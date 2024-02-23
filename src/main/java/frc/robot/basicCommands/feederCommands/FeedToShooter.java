@@ -44,7 +44,11 @@ public class FeedToShooter extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    if (!startedShooting && shooterSubsystem.getUpShooterSpeed() >50 && swerve.headingPid.getPositionError()<1 && shooterSubsystem.checkIfShooterAtSpeed() && shooterArmSubsystem.isArmReady() && shooterSubsystem.upSpeed != 0) {
+    if (!startedShooting &&
+        swerve.headingPid.getPositionError() < 1 &&
+        shooterSubsystem.checkIfShooterAtSpeed() &&
+        shooterArmSubsystem.isArmReady()) {
+
       feederSubsystem.setSpeed(FeederShootSpeed);
       startedShooting = true;
       timer.start();
@@ -61,6 +65,6 @@ public class FeedToShooter extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return startedShooting && timer.hasElapsed(0.5);
+    return startedShooting && timer.hasElapsed(0.2);
   }
 }

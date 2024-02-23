@@ -38,7 +38,7 @@ public class ShooterArmSubsystem extends SubsystemBase {
   true, 
   false, 
   getSwitch());
-  private final Vision vision = Vision.getInstance();
+  double targetPose = 0;
 
   // the instance
   private static ShooterArmSubsystem instance;
@@ -103,6 +103,7 @@ public class ShooterArmSubsystem extends SubsystemBase {
 
   // moving function for the Arm
   public void moveArmTo(double degrees) {
+    targetPose = degrees;
     m_shooterArmMotor.setControl(motionMagic.withPosition(degrees));
   }
 
@@ -113,7 +114,7 @@ public class ShooterArmSubsystem extends SubsystemBase {
 
   // Checking the degree difference conditions
   public boolean isArmReady() {
-    return (Math.abs(m_shooterArmMotor.getClosedLoopError().getValue()) < minimumError);
+    return (Math.abs(getArmPose() - targetPose) < minimumError);
   }
 
   // geting if the switch is open

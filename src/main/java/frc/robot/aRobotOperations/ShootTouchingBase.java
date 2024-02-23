@@ -8,7 +8,6 @@ import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import frc.robot.Constants.ShooterArmConstants;
 import frc.robot.Constants.ShooterConstants;
 import frc.robot.basicCommands.ShooterArmCommands.MoveShooterArmTo;
-import frc.robot.basicCommands.ShooterArmCommands.ShooterArmSetSpeed;
 import frc.robot.basicCommands.ShooterCommands.ShooterSetSpeed;
 import frc.robot.basicCommands.feederCommands.FeedToShooter;
 

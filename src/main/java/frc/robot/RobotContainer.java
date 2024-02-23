@@ -69,8 +69,6 @@ public class RobotContainer {
              )
         );
 
-        driver.leftTrigger().onTrue(PathPlannerHelper.getInstace().followPath("testSpin"));
-
 
         //IntakeArmSubsystem.getInstance().setDefaultCommand(new IntakeArmSetSpeed(()-> -test.getRightX()));
 

@@ -12,6 +12,7 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 
@@ -41,7 +42,7 @@ public class PathPlannerHelper {
 
         AutoBuilder.configureHolonomic(
                 swerve::getPose,
-                swerve::resetPose,
+                swerve::resetOdometry,
                 swerve::getRobotVelocity,
                 swerve::setChassisSpeeds,
                 new HolonomicPathFollowerConfig(
@@ -80,8 +81,9 @@ public class PathPlannerHelper {
 
             // Create a path following command using AutoBuilder. This will also trigger
             // event markers.
-            return swerve.resetPose(AllianceFlipUtil.apply(path.getPreviewStartingHolonomicPose())).andThen(AutoBuilder.followPath(path));
+            return swerve.resetOdometry(AllianceFlipUtil.apply(path.getPreviewStartingHolonomicPose())).andThen(AutoBuilder.followPath(path));
         } catch (Exception e) {
+            SmartDashboard.putString("faild" + pathName, pathName);
             return Commands.none();
         }
     }
@@ -93,8 +95,9 @@ public class PathPlannerHelper {
 
             // Create a path following command using AutoBuilder. This will also trigger
             // event markers.
-            return swerve.resetPose(AllianceFlipUtil.apply(path.getPreviewStartingHolonomicPose())).andThen( AutoBuilder.followPath(path));
+            return swerve.resetOdometry(AllianceFlipUtil.apply(path.getPreviewStartingHolonomicPose())).andThen( AutoBuilder.followPath(path));
         } catch (Exception e) {
+            SmartDashboard.putString("faild" + ChoreoTrajectory, ChoreoTrajectory);
             return Commands.none();
         }
     }

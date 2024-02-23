@@ -28,7 +28,7 @@ import frc.robot.Constants;
 public class ShooterSubsystem extends SubsystemBase {
   private TalonFX m_upShooterMotor;
   private TalonFX m_downShooterMotor;
-  public double upSpeed;
+  public double speed;
 
   private final Vision vision = Vision.getInstance();
 
@@ -137,7 +137,7 @@ public class ShooterSubsystem extends SubsystemBase {
 
   // set (active) Shooter motors speed
   public void setShooterSpeed(double upSpeed, double downSpeed) {
-    this.upSpeed = upSpeed;
+    this.speed = upSpeed;
     this.m_upShooterMotor.setControl(motionMagic.withVelocity(upSpeed));
     this.m_downShooterMotor.setControl(motionMagic.withVelocity(downSpeed));
   }
@@ -161,8 +161,8 @@ public class ShooterSubsystem extends SubsystemBase {
   }
 
   public boolean checkIfShooterAtSpeed() {
-    return ((Math.abs(m_upShooterMotor.getClosedLoopError().getValue()) < MaxError)
-        && ((Math.abs(m_downShooterMotor.getClosedLoopError().getValue()) < MaxError)));
+    return ((Math.abs(getUpShooterSpeed() - speed) < MaxError)
+        && ((Math.abs(getDownShooterSpeed() - speed) < MaxError)));
   }
 
   public double speakerInterpolate(Pose2d pose2d) {

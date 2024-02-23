@@ -4,7 +4,7 @@
 
 package frc.robot.basicCommands.IntakeArmCommands;
 
-import static frc.robot.Constants.IntakeArmConstants.intakeArmUpSpeed;
+import static frc.robot.Constants.IntakeArmConstants.AmpSetPoint;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.IntakeArmSubsystem;
@@ -20,7 +20,7 @@ private final IntakeArmSubsystem intakeArm = IntakeArmSubsystem.getInstance();
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    intakeArm.moveArmTo(10);
+    intakeArm.moveArmTo(AmpSetPoint);
   }
 
   // Called every time the scheduler runs while the command is scheduled.

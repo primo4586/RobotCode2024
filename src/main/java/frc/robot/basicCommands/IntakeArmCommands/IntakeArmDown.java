@@ -7,6 +7,7 @@ package frc.robot.basicCommands.IntakeArmCommands;
 import static frc.robot.Constants.IntakeArmConstants.intakeArmDownSpeed;
 
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import frc.robot.subsystems.IntakeArmSubsystem;
 
 public class IntakeArmDown extends Command {
@@ -22,20 +23,15 @@ private final IntakeArmSubsystem intakeArm = IntakeArmSubsystem.getInstance();
   public void initialize() {
     intakeArm.moveArmTo(-160);
   }
-
-  // Called every time the scheduler runs while the command is scheduled.
-  @Override
-  public void execute() {
-  }
-
-  // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
+    intakeArm.setSpeed(()->0);
+    intakeArm.coast();
   }
 
-  // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return intakeArm.checkIntakeArmPosion();
+      return Math.abs(intakeArm.getPose() + 100)<10;
   }
+
 }

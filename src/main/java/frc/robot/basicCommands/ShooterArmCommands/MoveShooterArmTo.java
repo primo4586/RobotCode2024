@@ -5,9 +5,10 @@
 package frc.robot.basicCommands.ShooterArmCommands;
 
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import frc.robot.subsystems.ShooterArmSubsystem;
 
-public class MoveShooterArmTo extends Command {
+public class MoveShooterArmTo extends InstantCommand {
   /** Creates a new MoveShooterArmToCommand. */
   private final ShooterArmSubsystem shooterArmSubsystem = ShooterArmSubsystem.getInstance();
   double degree;

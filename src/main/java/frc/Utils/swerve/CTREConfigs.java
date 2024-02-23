@@ -40,7 +40,7 @@ public final class CTREConfigs {
 
         /* PID Config */
         var driveSlot0 = swerveDriveFXConfig.Slot0;
-        driveSlot0.kP = 0.1;
+        driveSlot0.kP = 0.2;
         driveSlot0.kI = 0;
         driveSlot0.kD = 0.0;
         driveSlot0.kS = 0.10502;

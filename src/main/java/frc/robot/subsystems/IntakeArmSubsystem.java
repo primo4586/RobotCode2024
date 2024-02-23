@@ -8,8 +8,11 @@ import com.ctre.phoenix6.StatusCode;
 import com.ctre.phoenix6.configs.MotionMagicConfigs;
 import com.ctre.phoenix6.configs.SoftwareLimitSwitchConfigs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
+import com.ctre.phoenix6.controls.CoastOut;
+import com.ctre.phoenix6.controls.ControlRequest;
 import com.ctre.phoenix6.controls.DutyCycleOut;
 import com.ctre.phoenix6.controls.MotionMagicVoltage;
+import com.ctre.phoenix6.controls.NeutralOut;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
@@ -150,6 +153,18 @@ public class IntakeArmSubsystem extends SubsystemBase {
 
   public double getCharacterizationVelocity() {
     return m_IntakeArmMotor.getVelocity().getValueAsDouble();
+  }
+
+  public double getPose(){
+    return m_IntakeArmMotor.getPosition().getValueAsDouble();
+  }
+
+  public void coast(){
+    m_IntakeArmMotor.setNeutralMode(NeutralModeValue.Coast);
+  }
+
+  public void breakMode(){
+    m_IntakeArmMotor.setNeutralMode(NeutralModeValue.Brake);
   }
 
   @Override

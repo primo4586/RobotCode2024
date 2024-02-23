@@ -22,26 +22,31 @@ public class FeedToShooter extends Command {
   private final ShooterArmSubsystem shooterArmSubsystem = ShooterArmSubsystem.getInstance();
   private final FeederSubsystem feederSubsystem = FeederSubsystem.getInstance();
   private final SwerveSubsystem swerve = SwerveSubsystem.getInstance();
-  Timer timer = new Timer();
-  boolean startedShooting = false;
+  boolean startedShooting;
+  Timer timer;
 
   /** Creates a new StartFeeder. */
   public FeedToShooter() {
     this.addRequirements(feederSubsystem);
+    timer = new Timer();
+    startedShooting = false;
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
     feederSubsystem.setSpeed(0);
+    startedShooting = false;
     timer.reset();
+    timer.stop();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    if (swerve.headingPid.getPositionError()<1 && shooterSubsystem.getUpShooterSpeed() >97&& shooterSubsystem.checkIfShooterAtSpeed() && shooterArmSubsystem.isArmReady() && shooterSubsystem.upSpeed != 0) {
+    if (!startedShooting && shooterSubsystem.getUpShooterSpeed() >50 && swerve.headingPid.getPositionError()<1 && shooterSubsystem.checkIfShooterAtSpeed() && shooterArmSubsystem.isArmReady() && shooterSubsystem.upSpeed != 0) {
       feederSubsystem.setSpeed(FeederShootSpeed);
+      startedShooting = true;
       timer.start();
     }
   }
@@ -56,6 +61,6 @@ public class FeedToShooter extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return false;
+    return startedShooting && timer.hasElapsed(0.5);
   }
 }

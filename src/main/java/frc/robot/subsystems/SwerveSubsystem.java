@@ -30,6 +30,10 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
+/**
+ * Represents the swerve driver subsystem
+ * @implNote This is a singleton
+ */
 public class SwerveSubsystem extends SubsystemBase {
     public SwerveDrivePoseEstimator poseEstimation;
     public SwerveModule[] mSwerveMods;
@@ -41,7 +45,7 @@ public class SwerveSubsystem extends SubsystemBase {
     public Rotation2d headingSupplier = null;
     public PIDController headingPid = aligningPID;
 
-    private static SwerveSubsystem instance;
+    private static SwerveSubsystem instance = new SwerveSubsystem();
 
     // singelton
     public static SwerveSubsystem getInstance() {

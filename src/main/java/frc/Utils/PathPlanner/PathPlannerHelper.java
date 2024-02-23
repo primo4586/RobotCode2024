@@ -19,6 +19,7 @@ import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
 
 import frc.robot.Constants;
 import frc.robot.Constants.AutoConstants;
+import frc.robot.basicCommands.SwerveCommands.AllianceFlipUtil;
 import frc.robot.subsystems.SwerveSubsystem;
 
 /** Add your docs here. */
@@ -26,7 +27,7 @@ public class PathPlannerHelper {
 
     private final SwerveSubsystem swerve;
 
-    private static PathPlannerHelper instance;
+    private static PathPlannerHelper instance = new PathPlannerHelper();
 
     public static PathPlannerHelper getInstace() {
         if (instance == null) {
@@ -40,7 +41,7 @@ public class PathPlannerHelper {
 
         AutoBuilder.configureHolonomic(
                 swerve::getPose,
-                swerve::resetOdometry,
+                swerve::resetPose,
                 swerve::getRobotVelocity,
                 swerve::setChassisSpeeds,
                 new HolonomicPathFollowerConfig(
@@ -79,7 +80,7 @@ public class PathPlannerHelper {
 
             // Create a path following command using AutoBuilder. This will also trigger
             // event markers.
-            return AutoBuilder.followPath(path);
+            return swerve.resetPose(AllianceFlipUtil.apply(path.getPreviewStartingHolonomicPose())).andThen(AutoBuilder.followPath(path));
         } catch (Exception e) {
             return Commands.none();
         }
@@ -92,7 +93,7 @@ public class PathPlannerHelper {
 
             // Create a path following command using AutoBuilder. This will also trigger
             // event markers.
-            return AutoBuilder.followPath(path);
+            return swerve.resetPose(AllianceFlipUtil.apply(path.getPreviewStartingHolonomicPose())).andThen( AutoBuilder.followPath(path));
         } catch (Exception e) {
             return Commands.none();
         }

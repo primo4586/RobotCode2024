@@ -40,7 +40,7 @@ public class RobotContainer {
     /* Controllers */
     private final CommandXboxController driver = new CommandXboxController(0);
     
-    private final CommandXboxController test = new CommandXboxController(2);
+    // private final CommandXboxController test = new CommandXboxController(2);
 
     /* Drive Controls */
     private final int translationAxis = XboxController.Axis.kLeftY.value;
@@ -91,7 +91,6 @@ public class RobotContainer {
 
         // driver.leftBumper().onTrue(new FeederSetSpeed(()->1));
         // test.rightBumper().onTrue(new FeederSetSpeed(()->0));
-        // driver.start().onTrue(new ZeroShooterArm());
         // driver.x().whileTrue(new InstantCommand(()-> ShooterSubsystem.getInstance().setShooterSpeed(100,100), ShooterSubsystem.getInstance()));
         // test.start().whileTrue(new InstantCommand(()-> ShooterSubsystem.getInstance().setShooterSpeed(0, 0), ShooterSubsystem.getInstance()));
         
@@ -101,9 +100,10 @@ public class RobotContainer {
         // driver.a().onTrue(new ShootSpeaker());
 
         // // test.rightBumper().whileTrue(new InstantCommand(()-> ShooterSubsystem.getInstance().setShooterSpeed(40, 40), ShooterSubsystem.getInstance()));
-        test.b().onTrue(new IntakeArmUP());
-        test.x().onTrue(new IntakeArmDown());
-        test.a().onTrue(new ZeroIntakeArm());
+        driver.b().onTrue(new IntakeArmUP());
+        driver.x().onTrue(new IntakeArmDown());
+        driver.a().onTrue(new ZeroIntakeArm());
+        driver.start().onTrue(new ZeroShooterArm());
         // // test.leftBumper().onTrue(new ShootTouchingBase());
 
 

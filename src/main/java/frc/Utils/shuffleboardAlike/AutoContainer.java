@@ -37,18 +37,18 @@ public class AutoContainer {
     ShooterArmSubsystem shooterArm = ShooterArmSubsystem.getInstance();
     ShooterSubsystem shooter = ShooterSubsystem.getInstance();
 
-    double waitForRot = 0.3;
+    double waitForRot = 1;
 
     public AutoContainer() {
         this.autoPaths = new HashMap<String, Command>();
-        this.autoPaths.put("base,2,3", new SequentialCommandGroup(
+        this.autoPaths.put("base,2,1", new SequentialCommandGroup(
             new ParallelCommandGroup(new ShootTouchingBase(),new IntakeArmDown()),
             new ParallelCommandGroup(pathPlanner.followPath("base to 2")
                 ,new FeedUntilNote()
                 ,new IntakeSetSpeed(()->getNoteSpeed)),
             new ShootSpeaker(),
             swerve.setHeadingCommand(new Rotation2d(Units.degreesToRadians(90))),
-            Commands.waitSeconds(waitForRot),
+            Commands.waitUntil(()->Math.abs(Math.abs(swerve.getYaw().getDegrees())-90)<3),
             new ParallelCommandGroup(pathPlanner.followPath("2 to 1")
                 ,new FeedUntilNote()
                 ,new IntakeSetSpeed(() -> getNoteSpeed)),

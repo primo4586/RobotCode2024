@@ -16,6 +16,7 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.Utils.PathPlanner.PathPlannerHelper;
+import frc.robot.aRobotOperations.CollectToFeeder;
 import frc.robot.aRobotOperations.ShootSpeaker;
 import frc.robot.aRobotOperations.ShootTouchingBase;
 import frc.robot.basicCommands.IntakeArmCommands.IntakeArmDown;
@@ -36,78 +37,67 @@ public class AutoContainer {
     ShooterArmSubsystem shooterArm = ShooterArmSubsystem.getInstance();
     ShooterSubsystem shooter = ShooterSubsystem.getInstance();
 
-    double waitForRot = 0.3;
+    double waitForRot = 1;
+    double headingAccuracy = 3;
 
     public AutoContainer() {
         this.autoPaths = new HashMap<String, Command>();
-        this.autoPaths.put("base,2,3", new SequentialCommandGroup(
-            new ParallelCommandGroup(new ShootTouchingBase(),new IntakeArmDown()),
-            new ParallelCommandGroup(pathPlanner.followPath("base to 2")
-                ,new FeedUntilNote()
-                ,new IntakeSetSpeed(()->getNoteSpeed)),
-            new ShootSpeaker(),
-            swerve.setHeadingCommand(new Rotation2d(Units.degreesToRadians(90))),
-            Commands.waitSeconds(waitForRot),
-            new ParallelCommandGroup(pathPlanner.followPath("2 to 1")
-                ,new FeedUntilNote()
-                ,new IntakeSetSpeed(() -> getNoteSpeed)),
-            new ShootSpeaker()
-        ));
-            
+
+        this.autoPaths.put("base,2", new SequentialCommandGroup(
+                new ParallelCommandGroup(new ShootTouchingBase(), new IntakeArmDown()),
+                swerve.setHeadingCommand(new Rotation2d(Units.degreesToRadians(0))),
+                Commands.waitUntil(() -> Math.abs(Math.abs(swerve.getYaw().getDegrees()) - 0) < headingAccuracy),
+                new ParallelCommandGroup(pathPlanner.followChoreoPath("base to 2"), new FeedUntilNote(),
+                        new IntakeSetSpeed(() -> getNoteSpeed)),
+                new ShootSpeaker()));
+
+        this.autoPaths.put("baseU,1", new SequentialCommandGroup(
+                new ParallelCommandGroup(new ShootSpeaker(), new IntakeArmDown()),
+                swerve.setHeadingCommand(new Rotation2d(Units.degreesToRadians(22.5))),
+                Commands.waitUntil(() -> Math.abs(Math.abs(swerve.getYaw().getDegrees()) - 22.5) < headingAccuracy),
+                new ParallelCommandGroup(pathPlanner.followChoreoPath("baseU to 1"),
+                        new FeedUntilNote(),
+                        new IntakeSetSpeed(() -> getNoteSpeed)),
+                new ShootSpeaker()));
+
         this.autoPaths.put("baseU,1,2", new SequentialCommandGroup(
-            new ParallelCommandGroup(new ShootTouchingBase(),new IntakeArmDown()),
-            pathPlanner.followChoreoPath("baseU out"),
-            swerve.setHeadingCommand(new Rotation2d(Units.degreesToRadians(0))),
-            Commands.waitSeconds(waitForRot),
-            new ParallelCommandGroup(pathPlanner.followChoreoPath("baseU to 1")
-                ,new FeedUntilNote()
-                ,new IntakeSetSpeed(()->getNoteSpeed)),
-            new ShootSpeaker(),
-            swerve.setHeadingCommand(new Rotation2d(Units.degreesToRadians(-90))),
-            Commands.waitSeconds(waitForRot),
-            new ParallelCommandGroup(pathPlanner.followChoreoPath("1 to 2")
-                ,new FeedUntilNote()
-                ,new IntakeSetSpeed(() -> getNoteSpeed)),
-            new ShootSpeaker()
-        ));
-            
+                new ParallelCommandGroup(new ShootSpeaker(), new IntakeArmDown()),
+                swerve.setHeadingCommand(new Rotation2d(Units.degreesToRadians(22.5))),
+                Commands.waitUntil(() -> Math.abs(Math.abs(swerve.getYaw().getDegrees()) - 22.5) < headingAccuracy),
+                new ParallelCommandGroup(pathPlanner.followChoreoPath("baseU to 1"),
+                        new FeedUntilNote(),
+                        new IntakeSetSpeed(() -> getNoteSpeed)),
+                new ShootSpeaker(),
+                swerve.setHeadingCommand(Rotation2d.fromDegrees(-90)),
+                Commands.waitUntil(() -> Math.abs(Math.abs(swerve.getYaw().getDegrees()) + 90) < headingAccuracy),
+                new ParallelCommandGroup(pathPlanner.followChoreoPath("1 to 2"), new FeedUntilNote(),
+                        new IntakeSetSpeed(() -> getNoteSpeed)),
+                swerve.setHeadingCommand(Rotation2d.fromDegrees(0)),
+                new ShootSpeaker()));
+
         this.autoPaths.put("baseU,1,1m", new SequentialCommandGroup(
-            new ParallelCommandGroup(new ShootTouchingBase(),new IntakeArmDown()),
-            pathPlanner.followChoreoPath("baseU out"),
-            swerve.setHeadingCommand(new Rotation2d(Units.degreesToRadians(0))),
-            Commands.waitSeconds(waitForRot),
-            new ParallelCommandGroup(pathPlanner.followChoreoPath("baseU to 1")
-                ,new FeedUntilNote()
-                ,new IntakeSetSpeed(()->getNoteSpeed)),
-            new ShootSpeaker(),
-            swerve.setHeadingCommand(new Rotation2d(Units.degreesToRadians(0))),
-            Commands.waitSeconds(waitForRot),
-            new ParallelCommandGroup(pathPlanner.followChoreoPath("1 to 1m")
-                ,new FeedUntilNote()
-                ,new IntakeSetSpeed(() -> getNoteSpeed)),
-            swerve.setHeadingCommand(new Rotation2d(Units.degreesToRadians(60))),
-            pathPlanner.followChoreoPath("1m shoot"),
-            new ShootSpeaker()
-        ));
-          
-        this.autoPaths.put("baseD,3,5m", new SequentialCommandGroup(
-            new ParallelCommandGroup(new ShootTouchingBase(),new IntakeArmDown()),
-            pathPlanner.followChoreoPath("baseD out"),
-            swerve.setHeadingCommand(new Rotation2d(Units.degreesToRadians(0))),
-            Commands.waitSeconds(waitForRot),
-            new ParallelCommandGroup(pathPlanner.followChoreoPath("baseD to 3")
-                ,new FeedUntilNote()
-                ,new IntakeSetSpeed(()->getNoteSpeed)),
-            new ShootSpeaker(),
-            swerve.setHeadingCommand(new Rotation2d(Units.degreesToRadians(0))),
-            Commands.waitSeconds(waitForRot),
-            new ParallelCommandGroup(pathPlanner.followChoreoPath("3 to 5m")
-                ,new FeedUntilNote()
-                ,new IntakeSetSpeed(() -> getNoteSpeed)),
-            swerve.setHeadingCommand(new Rotation2d(Units.degreesToRadians(-55))),
-            pathPlanner.followChoreoPath("5m shoot"),
-            new ShootSpeaker()
-        ));
+                new ParallelCommandGroup(new ShootSpeaker(), new IntakeArmDown()),
+                swerve.setHeadingCommand(new Rotation2d(Units.degreesToRadians(22.5))),
+                Commands.waitUntil(() -> Math.abs(Math.abs(swerve.getYaw().getDegrees()) - 22.5) < headingAccuracy),
+                new ParallelCommandGroup(pathPlanner.followChoreoPath("baseU to 1"),
+                        new FeedUntilNote(),
+                        new IntakeSetSpeed(() -> getNoteSpeed)),
+                new ShootSpeaker(),
+                swerve.setHeadingCommand(new Rotation2d(Units.degreesToRadians(0))),
+                Commands.waitUntil(() -> Math.abs(Math.abs(swerve.getYaw().getDegrees()) - 0) < headingAccuracy),
+                new ParallelCommandGroup(pathPlanner.followChoreoPath("1 to 1m"),
+                        new FeedUntilNote(),
+                        new IntakeSetSpeed(() -> getNoteSpeed)),
+                swerve.setHeadingCommand(Rotation2d.fromDegrees(22.5)),
+                pathPlanner.followChoreoPath("1 to 1m"),
+                new ShootSpeaker()));
+
+        this.autoPaths.put("baseD,3", new SequentialCommandGroup(
+                new ParallelCommandGroup(new ShootSpeaker(), new IntakeArmDown()),
+                swerve.setHeadingCommand(new Rotation2d(Units.degreesToRadians(-22.5))),
+                Commands.waitUntil(() -> Math.abs(Math.abs(swerve.getYaw().getDegrees()) + 22.5) < headingAccuracy),
+                new ParallelCommandGroup(pathPlanner.followChoreoPath("baseD to 3"), new CollectToFeeder()),
+                new ShootSpeaker()));
 
         this.autoSelector = new CommandSelector(autoPaths, PrimoShuffleboard.getInstance().getCompTabTitle());
     }

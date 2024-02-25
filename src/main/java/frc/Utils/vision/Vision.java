@@ -96,8 +96,10 @@ public class Vision {
         return rightVisionEst;
     }
 
-    public double getRightDisToTag(){
-        return rightCamera.getLatestResult().getBestTarget().getBestCameraToTarget().getX();
+    public double getRightDisToTag() {
+        double x = rightCamera.getLatestResult().getBestTarget().getBestCameraToTarget().getX();
+        double y = rightCamera.getLatestResult().getBestTarget().getBestCameraToTarget().getY();
+        return Math.sqrt(x * x + y * y);
     }
     
     /**

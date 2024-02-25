@@ -95,6 +95,10 @@ public class Vision {
         if (rightNewResult) rightLastEstTimestamp = rightLatestTimestamp;
         return rightVisionEst;
     }
+
+    public double getRightDisToTag(){
+        return rightCamera.getLatestResult().getBestTarget().getBestCameraToTarget().getX();
+    }
     
     /**
      * The latest estimated robot pose on the field from vision data. This may be empty. This should

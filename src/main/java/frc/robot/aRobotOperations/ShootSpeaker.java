@@ -4,15 +4,15 @@
 
 package frc.robot.aRobotOperations;
 
-import edu.wpi.first.wpilibj2.command.ParallelRaceGroup;
+import edu.wpi.first.wpilibj2.command.ParallelDeadlineGroup;
 import frc.robot.basicCommands.feederCommands.FeedToShooter;
-
-public class ShootSpeaker extends ParallelRaceGroup {
-  /** Creates a new ShootSpeaker. */
+public class ShootSpeaker extends ParallelDeadlineGroup {
+  /** Creates a new shootSpeker. */
   public ShootSpeaker() {
-    addCommands(
-      new PrepareForShoot(),
-      new FeedToShooter() 
-    );
+    // Add the deadline command in the super() call. Add other commands using
+    // addCommands().
+    super(new FeedToShooter());
+    addCommands(new PrepareForShoot());
+    // addCommands(new FooCommand(), new BarCommand());
   }
 }

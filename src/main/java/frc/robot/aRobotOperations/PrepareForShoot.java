@@ -15,8 +15,7 @@ public class PrepareForShoot extends ParallelCommandGroup {
     
     addCommands(
       new ShooterArmSpeakerAngle(),
-      new ShooterSpeaker(),
-      new AlignToSpeaker()
+      new ShooterSpeaker()
     );
   }
 }

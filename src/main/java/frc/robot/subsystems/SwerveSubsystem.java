@@ -20,9 +20,11 @@ import com.ctre.phoenix.sensors.PigeonIMU;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -71,14 +73,9 @@ public class SwerveSubsystem extends SubsystemBase {
                 new SwerveModule(2, Mod2.constants),
                 new SwerveModule(3, Mod3.constants)
         };
-        if(vision.getLeftEstimatedGlobalPose().isPresent()){
-            poseEstimation = new SwerveDrivePoseEstimator(swerveKinematics, getYaw(), getModulePositions(),
-                vision.getLeftEstimatedGlobalPose().get().estimatedPose.toPose2d());
-        }
-        else {
+
             poseEstimation = new SwerveDrivePoseEstimator(swerveKinematics, getYaw(), getModulePositions(),
                     new Pose2d(0, 0, new Rotation2d(0)));
-        }
         
         odometry = new SwerveDriveOdometry(swerveKinematics, getYaw(), getModulePositions());
                 
@@ -131,9 +128,6 @@ public class SwerveSubsystem extends SubsystemBase {
         return poseEstimation.getEstimatedPosition();
     }
 
-    public void resetPose(Pose2d pose) {
-        poseEstimation.resetPosition(getYaw(), getModulePositions(), pose);
-    }
     public Pose2d getOdometry() {
         return odometry.getPoseMeters();
     }
@@ -214,22 +208,11 @@ public class SwerveSubsystem extends SubsystemBase {
                     poseEstimation.addVisionMeasurement(
                             est.estimatedPose.toPose2d(), est.timestampSeconds, estStdDevs);
 
-                    gyro.setYaw(est.estimatedPose.getRotation().getAngle());
+                    if(vision.getRightDisToTag()<3.5)
+                        gyro.setYaw(Units.radiansToDegrees(est.estimatedPose.getRotation().getAngle()));
+                    SmartDashboard.putNumber("cam yaw", est.estimatedPose.getRotation().getAngle());
                 });
-
-        vision.getLeftEstimatedGlobalPose().ifPresent(
-                est -> {
-                    var estPose = est.estimatedPose.toPose2d();
-                    // Change our trust in the measurement based on the tags we can see
-                    var estStdDevs = vision.getEstimationStdDevsLeft(estPose);
-
-                    poseEstimation.addVisionMeasurement(
-                            est.estimatedPose.toPose2d(), est.timestampSeconds, estStdDevs);
-                    
-                    gyro.setYaw(est.estimatedPose.getRotation().getAngle());
-
-                });
-            
+        
         SmartDashboard.putNumber("yaw", getYaw().getDegrees());
 
         field2d.setRobotPose(poseEstimation.getEstimatedPosition());

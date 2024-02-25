@@ -103,8 +103,10 @@ public class IntakeArmSubsystem extends SubsystemBase {
     m_IntakeArmMotor.setPosition(intakeArmStartingValue);
   }
 
+  double targetPose = 0;
   // moving the arm
   public void moveArmTo(double degrees) {
+    targetPose = degrees;
     m_IntakeArmMotor.setControl(motionMagic.withPosition(degrees));
   }
 
@@ -140,7 +142,11 @@ public class IntakeArmSubsystem extends SubsystemBase {
 
   // check if intake arm is in place
   public boolean checkIntakeArmPosion() {
-    return Math.abs(m_IntakeArmMotor.getClosedLoopError().getValue()) < minimumError;
+    return Math.abs(getPose() - targetPose) < minimumError;
+  }
+
+  public double getPose(){
+    return m_IntakeArmMotor.getPosition().getValueAsDouble();
   }
 
   public void runCharacterizationVolts(Double voltage) {
@@ -150,11 +156,6 @@ public class IntakeArmSubsystem extends SubsystemBase {
   public double getCharacterizationVelocity() {
     return m_IntakeArmMotor.getVelocity().getValueAsDouble();
   }
-
-  public double getPose(){
-    return m_IntakeArmMotor.getPosition().getValueAsDouble();
-  }
-
   public void coast(){
     m_IntakeArmMotor.setNeutralMode(NeutralModeValue.Coast);
   }

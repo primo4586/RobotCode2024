@@ -11,6 +11,7 @@ import frc.robot.basicCommands.ShooterArmCommands.MoveShooterArmTo;
 import frc.robot.basicCommands.ShooterArmCommands.ShooterArmSetSpeed;
 import frc.robot.basicCommands.ShooterCommands.ShooterSetSpeed;
 import frc.robot.basicCommands.feederCommands.FeedToShooter;
+import frc.robot.basicCommands.feederCommands.FeedToShooterBase;
 
 public class ShootTouchingBase extends ParallelCommandGroup {
   /** Creates a new ShootTouchingBase. */
@@ -18,7 +19,7 @@ public class ShootTouchingBase extends ParallelCommandGroup {
     addCommands(
       new MoveShooterArmTo(ShooterArmConstants.ShootBaseAngle),
       new ShooterSetSpeed(ShooterConstants.ShootBaseSpeed),
-      new FeedToShooter()
+      new FeedToShooterBase()
     );
   }
 }

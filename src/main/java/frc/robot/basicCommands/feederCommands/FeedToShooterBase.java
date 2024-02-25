@@ -17,23 +17,26 @@ import frc.robot.subsystems.SwerveSubsystem;
 
 import static frc.robot.Constants.FeederConstants.*;
 
-public class FeedToShooter extends Command {
+public class FeedToShooterBase extends Command {
   private final ShooterSubsystem shooterSubsystem = ShooterSubsystem.getInstance();
   private final ShooterArmSubsystem shooterArmSubsystem = ShooterArmSubsystem.getInstance();
   private final FeederSubsystem feederSubsystem = FeederSubsystem.getInstance();
   private final SwerveSubsystem swerve = SwerveSubsystem.getInstance();
-  Timer timer = new Timer();
-  boolean startedShooting = false;
+  boolean startedShooting;
+  Timer timer;
 
   /** Creates a new StartFeeder. */
-  public FeedToShooter() {
+  public FeedToShooterBase() {
     this.addRequirements(feederSubsystem);
+    timer = new Timer();
+    startedShooting = false;
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
     feederSubsystem.setSpeed(0);
+    startedShooting = false;
     timer.reset();
     timer.start();
   }
@@ -42,7 +45,8 @@ public class FeedToShooter extends Command {
   @Override
   public void execute() {
     if (!startedShooting &&
-        timer.hasElapsed(0.0)) {
+        timer.hasElapsed(1)
+        &&shooterArmSubsystem.getArmPose()<2) {
 
       feederSubsystem.setSpeed(FeederShootSpeed);
       startedShooting = true;
@@ -61,6 +65,6 @@ public class FeedToShooter extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return startedShooting && timer.hasElapsed(0.3);
+    return startedShooting && timer.hasElapsed(0.2);
   }
 }

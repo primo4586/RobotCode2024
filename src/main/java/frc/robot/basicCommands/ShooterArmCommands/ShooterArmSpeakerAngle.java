@@ -28,7 +28,9 @@ public class ShooterArmSpeakerAngle extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-      shooterArmSubsystem.moveArmTo(shooterArmSubsystem.angleFromDistance(SwerveSubsystem.getInstance().getPose().getTranslation().getDistance(FieldConstants.Speaker.centerSpeakerOpening.getTranslation())));
+    double angle = shooterArmSubsystem.angleFromDistance(SwerveSubsystem.getInstance().getPose().getTranslation().getDistance(FieldConstants.Speaker.centerSpeakerOpening.getTranslation()));
+
+      shooterArmSubsystem.moveArmTo(angle>80?0:angle);
   }
 
   // Called once the command ends or is interrupted.

@@ -36,6 +36,6 @@ private final IntakeArmSubsystem intakeArm = IntakeArmSubsystem.getInstance();
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return intakeArm.checkIntakeArmPosion();
+      return Math.abs(intakeArm.getPose() + 175)<10;
   }
 }

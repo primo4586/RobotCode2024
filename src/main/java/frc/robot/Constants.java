@@ -42,7 +42,7 @@ public final class Constants {
         public static final double mmVelocity = 100;
         public static final double mmAcceleration = 800;
         public static final double mmJerk = 6000;
-        public static final double KP = 0.0;
+        public static final double KP = 0.1;
         public static final double KD = 0.0;
         public static final double KS = 0.051238;
         public static final double KV = 0.11136;
@@ -55,9 +55,9 @@ public final class Constants {
         public static final double gearRatio = 1;
         public static final double TICKS_PER_DEGREE = encoderCountsPerRevolution * gearRatio / 360.0;
         public static final boolean ForwardSoftLimitEnable = true;
-        public static final double ForwardSoftLimitThreshold = 10;
+        public static final double ForwardSoftLimitThreshold = 20;
         public static final boolean ReverseSoftLimitEnable = true;
-        public static final double RevesrseSoftLimitThreshold = -170;
+        public static final double RevesrseSoftLimitThreshold = -185;
         // not mm
         public static final double minimumError = 0;
         public static final double intakeArmStartingValue = 0;
@@ -70,16 +70,16 @@ public final class Constants {
         public static final int intakeArmDownSwitchID = 3;
 
         // set points
-        public static final double AmpSetPoint = 10;
+        public static final double AmpSetPoint = 2;
         public static final double SafeSetPoint = 0;
-        public static final double intakeSetPoint = -160;
+        public static final double intakeSetPoint = -175;
         
 
     }
 
     public static final class Swerve {
         public static final double minimumErrorAligning = 0; // TODO: This must be tuned to specific robot
-        public static final PIDController aligningPID = new PIDController(0.1, 0, 0.0);
+        public static final PIDController aligningPID = new PIDController(0.12, 0, 0.0);
 
         public static final int pigeonID = 11;
         public static final boolean invertGyro = false; // Always ensure Gyro is CCW+ CW-
@@ -143,7 +143,7 @@ public final class Constants {
         /* Swerve Profiling Values */
         /** Meters per Second */
         public static final double maxSpeed = 4.5; // TODO: This must be tuned to specific robot
-        public static final double XYSlowRatio = 0.1; // TODO: make it more accrute
+        public static final double XYSlowRatio = 0.25; // TODO: make it more accrute
         public static final double rotationSlowRatio = 0.1; // TODO: make it more accrute
         /** Radians per Second */
         public static final double maxAngularVelocity = 10.0; // TODO: This must be tuned to specific robot
@@ -224,7 +224,7 @@ public final class Constants {
         // Cam mounted facing forward, half a meter forward of center, half a meter up
         // from center.
         public static final Transform3d kRightRobotToCam = new Transform3d(new Translation3d(-0.339, 0.14, 0.5),
-                new Rotation3d(Math.asin(30.6/55.3), 0, Units.degreesToRadians(180+16)));
+                new Rotation3d(Math.asin(30.6/55.3), 0, Units.degreesToRadians(180+20)));
         public static final Transform3d kLeftRobotToCam = new Transform3d(new Translation3d(-0.339, 0.14, 0.5),
                 new Rotation3d(Math.asin(30.6/55.3), 0, -Units.degreesToRadians(180+14.24)));
 
@@ -234,11 +234,11 @@ public final class Constants {
         // The standard deviations of our vision estimated poses, which affect
         // correction rate
         // (Fake values. Experiment and determine estimation noise on an actual robot.)
-        public static final Matrix<N3, N1> kRightSingleTagStdDevs = VecBuilder.fill(4, 4, 8);
-        public static final Matrix<N3, N1> kRightMultiTagStdDevs = VecBuilder.fill(0.5, 0.5, 1);
+        public static final Matrix<N3, N1> kRightSingleTagStdDevs = VecBuilder.fill(0.1, 0.0, 2);
+        public static final Matrix<N3, N1> kRightMultiTagStdDevs = VecBuilder.fill(0.1, 0.0, 2);
 
-        public static final Matrix<N3, N1> kLeftSingleTagStdDevs = VecBuilder.fill(4, 4, 8);
-        public static final Matrix<N3, N1> kLeftMultiTagStdDevs = VecBuilder.fill(0.5, 0.5, 1);
+        public static final Matrix<N3, N1> kLeftSingleTagStdDevs = VecBuilder.fill(0, 0, 0);
+        public static final Matrix<N3, N1> kLeftMultiTagStdDevs = VecBuilder.fill(0, 0, 0);
 
         public static final Pose2d target = new Pose2d(1, 1, new Rotation2d(Units.degreesToRadians(0)));
     }
@@ -280,29 +280,17 @@ public final class Constants {
 
         public static final double shooterArmStartPose = 00;
 
+        public static final double offset = 0.0;
+
         public static final InterpolationMap SHOOTER_ANGLE_INTERPOLATION_MAP = new InterpolationMap()
-                .put(2, 5.7)        
-                .put(2.124, 12)
-                .put(2.3, 10.55)
-                .put(2.577, 15)
-                .put(2.6, 15.4)
-                .put(2.647, 16.125)
-                .put(2.9, 20.2)
-                .put(3, 21.79)
-                .put(3.1, 23.4)
-                .put(3.2, 25)
-                .put(3.4, 28.2)
-                .put(3.45, 29)
-                .put(3.7, 33.02)
-                .put(3.915, 36.474)
-                .put(4, 37.84)
-                .put(4.2, 4.1)
-                .put(4.3, 42.7)
-                .put(4.4, 44.3)
-                .put(4.6, 47.5)
-                .put(4.8, 50.7)
-                .put(4.9, 52.3)
-                .put(5, 56.9);
+                .put(2.13 + offset, 20)
+                .put(3.2 + offset, 37)
+                .put(3.655 + offset, 40.5)
+                .put(3.29 + offset, 39)
+                .put(5.441276465250574 + offset, 52.8)
+                .put(1.535 + offset, 13)
+                .put(2.135 + offset, 20)
+                .put(1.215 + offset, 11);
 
         public static final double ShootBaseAngle = 6.5; //6.1064453125
         public static final double ShootStageAngle = 3;
@@ -323,7 +311,7 @@ public final class Constants {
 
         public static final double GearRatio = 0.5;
 
-        public static final int MaxError = 5;
+        public static final int MaxError = 2;
 
         // PID values
         public static final double upKP = 0.06;//2

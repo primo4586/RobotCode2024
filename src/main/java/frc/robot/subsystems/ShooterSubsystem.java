@@ -160,9 +160,9 @@ public class ShooterSubsystem extends SubsystemBase {
     return m_downShooterMotor.getVelocity().getValue();
   }
 
-  public boolean checkIfShooterAtSpeed() {
-    return ((Math.abs(m_upShooterMotor.getClosedLoopError().getValue()) < MaxError)
-        && ((Math.abs(m_downShooterMotor.getClosedLoopError().getValue()) < MaxError)));
+  public boolean checkIfShooterAtSpeed(double speed) {
+    return ((Math.abs(getUpShooterSpeed() - speed) < MaxError)
+        && ((Math.abs(getDownShooterSpeed() - speed) < MaxError)));
   }
 
   public double speakerInterpolate(Pose2d pose2d) {

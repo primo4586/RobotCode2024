@@ -5,8 +5,8 @@
 package frc.robot.basicCommands.feederCommands;
 
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.Constants.FeederConstants;
 import frc.robot.subsystems.FeederSubsystem;
+import frc.robot.subsystems.IntakeArmSubsystem;
 
 public class FeedUntilNote extends Command {
   private final FeederSubsystem feederSubsystem = FeederSubsystem.getInstance();
@@ -31,6 +31,7 @@ public class FeedUntilNote extends Command {
   @Override
   public void end(boolean interrupted) {
     feederSubsystem.setSpeed(0);
+    IntakeArmSubsystem.getInstance().setSpeed(()->0);
   }
 
   // Returns true when the command should end.

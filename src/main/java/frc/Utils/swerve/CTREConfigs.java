@@ -1,8 +1,5 @@
 package frc.Utils.swerve;
 
-import static frc.robot.Constants.ShooterArmConstants.gearRatio;
-import static frc.robot.Constants.Swerve.driveGearRatio;
-
 import com.ctre.phoenix6.configs.CANcoderConfiguration;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.signals.AbsoluteSensorRangeValue;
@@ -40,7 +37,7 @@ public final class CTREConfigs {
 
         /* PID Config */
         var driveSlot0 = swerveDriveFXConfig.Slot0;
-        driveSlot0.kP = 0.1;
+        driveSlot0.kP = 0.2;
         driveSlot0.kI = 0;
         driveSlot0.kD = 0.0;
         driveSlot0.kS = 0.10502;

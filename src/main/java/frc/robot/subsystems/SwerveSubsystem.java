@@ -11,12 +11,11 @@ import static frc.robot.Constants.Swerve.*;
 
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
+import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.ctre.phoenix.sensors.PigeonIMU;
-
-import java.util.function.Supplier;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
@@ -30,8 +29,13 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
+/**
+ * Represents the swerve driver subsystem
+ * @implNote This is a singleton
+ */
 public class SwerveSubsystem extends SubsystemBase {
     public SwerveDrivePoseEstimator poseEstimation;
+    public SwerveDriveOdometry odometry;
     public SwerveModule[] mSwerveMods;
     public TalonSRX talonSRX;
     public PigeonIMU gyro;
@@ -41,7 +45,7 @@ public class SwerveSubsystem extends SubsystemBase {
     public Rotation2d headingSupplier = null;
     public PIDController headingPid = aligningPID;
 
-    private static SwerveSubsystem instance;
+    private static SwerveSubsystem instance = new SwerveSubsystem();
 
     // singelton
     public static SwerveSubsystem getInstance() {
@@ -71,10 +75,12 @@ public class SwerveSubsystem extends SubsystemBase {
             poseEstimation = new SwerveDrivePoseEstimator(swerveKinematics, getYaw(), getModulePositions(),
                 vision.getLeftEstimatedGlobalPose().get().estimatedPose.toPose2d());
         }
-        else{
+        else {
             poseEstimation = new SwerveDrivePoseEstimator(swerveKinematics, getYaw(), getModulePositions(),
-                new Pose2d(0, 0, new Rotation2d(0)));
+                    new Pose2d(0, 0, new Rotation2d(0)));
         }
+        
+        odometry = new SwerveDriveOdometry(swerveKinematics, getYaw(), getModulePositions());
                 
         headingPid.enableContinuousInput(-180, 180);
         headingPid.setTolerance(1);
@@ -125,8 +131,15 @@ public class SwerveSubsystem extends SubsystemBase {
         return poseEstimation.getEstimatedPosition();
     }
 
-    public void resetOdometry(Pose2d pose) {
+    public void resetPose(Pose2d pose) {
         poseEstimation.resetPosition(getYaw(), getModulePositions(), pose);
+    }
+    public Pose2d getOdometry() {
+        return odometry.getPoseMeters();
+    }
+
+    public Command resetOdometry(Pose2d pose) {
+        return runOnce(()->odometry.resetPosition(getYaw(), getModulePositions(), pose));
     }
 
     public SwerveModuleState[] getModuleStates() {
@@ -190,6 +203,7 @@ public class SwerveSubsystem extends SubsystemBase {
         SmartDashboard.putNumber("error", headingPid.getPositionError());
 
         poseEstimation.update(getYaw(), getModulePositions());
+        odometry.update(getYaw(), getModulePositions());
 
         vision.getRightEstimatedGlobalPose().ifPresent(
                 est -> {

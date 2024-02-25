@@ -19,13 +19,11 @@ import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.geometry.Translation3d;
-import edu.wpi.first.math.interpolation.InterpolatingDoubleTreeMap;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.util.Units;
 import frc.Utils.interpolation.InterpolationMap;
 import frc.Utils.swerve.COTSFalconSwerveConstants;
 import frc.Utils.swerve.SwerveModuleConstants;
-import frc.Utils.swerve.COTSFalconSwerveConstants.driveGearRatios;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
@@ -196,13 +194,13 @@ public final class Constants {
 
     public static final class AutoConstants { // TODO: The below constants are used in the example auto, and must be
                                               // tuned to specific robot
-        public static final double kMaxSpeedMetersPerSecond = 3.5;
-        public static final double kMaxAccelerationMetersPerSecondSquared = 9;
-        public static final double kMaxAngularSpeedRadiansPerSecond = 9;
-        public static final double kMaxAngularSpeedRadiansPerSecondSquared = 9;
+        public static final double kMaxSpeedMetersPerSecond = 3;
+        public static final double kMaxAccelerationMetersPerSecondSquared = 4.5;
+        public static final double kMaxAngularSpeedRadiansPerSecond = 4.5;
+        public static final double kMaxAngularSpeedRadiansPerSecondSquared = 4.5;
 
         public static final PIDConstants rotation_PID = new PIDConstants(3, 0);
-        public static final PIDConstants XY_PID = new PIDConstants(3, 0);
+        public static final PIDConstants XY_PID = new PIDConstants(5, 0);
 
         public static final double driveBaseRadius = Math.sqrt(Math.pow((Constants.Swerve.wheelBase / 2), 2)
                 + Math.pow((Constants.Swerve.trackWidth / 2), 2));
@@ -304,7 +302,7 @@ public final class Constants {
                 .put(4.9, 52.3)
                 .put(5, 56.9);
 
-        public static final double ShootBaseAngle = 6.5; //6.1064453125
+        public static final double ShootBaseAngle = 0; //6.1064453125
         public static final double ShootStageAngle = 3;
     }
 
@@ -346,7 +344,7 @@ public final class Constants {
                 .put(2.124, 100)
                 .put(3.2, 100);
 
-        public static final double ShootBaseSpeed = 120;
+        public static final double ShootBaseSpeed = 80;
         public static final double ShootStageSpeed = 3;
     }
 

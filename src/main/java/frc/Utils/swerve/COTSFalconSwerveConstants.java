@@ -5,7 +5,9 @@ import com.ctre.phoenix6.signals.SensorDirectionValue;
 
 import edu.wpi.first.math.util.Units;
 
-/* Contains values and required settings for common COTS swerve modules. */
+/**
+ * @brief Contains values and required settings for common COTS swerve modules.
+ **/
 public class COTSFalconSwerveConstants {
     public final double wheelDiameter;
     public final double wheelCircumference;

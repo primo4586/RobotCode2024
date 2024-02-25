@@ -5,7 +5,6 @@
 package frc.robot.aRobotOperations;
 
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
-import frc.robot.basicCommands.ClimbingCommands.ClimbingSetSpeed;
 import frc.robot.basicCommands.IntakeArmCommands.IntakeArmSetSpeed;
 import frc.robot.basicCommands.IntakeCommands.IntakeSetSpeed;
 import frc.robot.basicCommands.ShooterArmCommands.ShooterArmSetSpeed;
@@ -18,7 +17,6 @@ public class EStop extends ParallelCommandGroup {
 
   public EStop() {
     addCommands(
-      //new ClimbingSetSpeed(0),
       new FeederSetSpeed(()->0),
       new IntakeArmSetSpeed(()->0),
       new IntakeSetSpeed(()->0),

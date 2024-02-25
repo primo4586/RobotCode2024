@@ -4,16 +4,13 @@
 
 package frc.robot.basicCommands.ShooterArmCommands;
 
-import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.Utils.vision.Vision;
 import frc.robot.basicCommands.SwerveCommands.FieldConstants;
 import frc.robot.subsystems.ShooterArmSubsystem;
 import frc.robot.subsystems.SwerveSubsystem;
 
 public class ShooterArmSpeakerAngle extends Command {
   private final ShooterArmSubsystem shooterArmSubsystem = ShooterArmSubsystem.getInstance();
-  private final SwerveSubsystem swerve = SwerveSubsystem.getInstance();
 
   /** Creates a new ShooterAngleFromDistanceInterpolation. */
   public ShooterArmSpeakerAngle() {

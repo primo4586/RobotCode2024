@@ -4,22 +4,14 @@
 
 package frc.robot.basicCommands.SwerveCommands;
 
-import static frc.robot.Constants.Swerve.*;
-
-import org.photonvision.estimation.RotTrlTransform3d;
-
-import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.Utils.vision.Vision;
-import frc.robot.Robot;
 import frc.robot.basicCommands.SwerveCommands.FieldConstants.Speaker;
 import frc.robot.subsystems.FeederSubsystem;
 import frc.robot.subsystems.SwerveSubsystem;
@@ -29,7 +21,6 @@ public class AlignToSpeaker extends Command {
   SwerveSubsystem swerve = SwerveSubsystem.getInstance();
   FeederSubsystem feeder = FeederSubsystem.getInstance();
 
-  private PIDController pid = aligningPID;
   private Vision vision = Vision.getInstance();
   double angleFromTarget = vision.GetAngleFromTarget().getDegrees();
   

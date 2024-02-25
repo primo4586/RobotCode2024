@@ -1,11 +1,7 @@
 package frc.robot;
 
-import com.pathplanner.lib.path.GoalEndState;
-import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
-import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
@@ -13,23 +9,15 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.Utils.PathPlanner.PathPlannerHelper;
 import frc.robot.Constants.IntakeArmConstants;
 import frc.robot.aRobotOperations.CollectToFeeder;
-import frc.robot.aRobotOperations.CollectToIntake;
-import frc.robot.aRobotOperations.IntakeToFeeder;
 import frc.robot.aRobotOperations.PrepareForShoot;
 import frc.robot.aRobotOperations.ShootSpeaker;
 import frc.robot.aRobotOperations.ShootTouchingBase;
-import frc.robot.basicCommands.ClimbingCommands.ClimbingSetSpeed;
 import frc.robot.basicCommands.IntakeArmCommands.IntakeArmDown;
-import frc.robot.basicCommands.IntakeArmCommands.IntakeArmSetSpeed;
 import frc.robot.basicCommands.IntakeArmCommands.IntakeArmUP;
 import frc.robot.basicCommands.IntakeArmCommands.ZeroIntakeArm;
 import frc.robot.basicCommands.IntakeCommands.IntakeSetSpeed;
-import frc.robot.basicCommands.ShooterArmCommands.MoveShooterArmTo;
-import frc.robot.basicCommands.ShooterArmCommands.ShooterArmSpeakerAngle;
 import frc.robot.basicCommands.ShooterArmCommands.ZeroShooterArm;
-import frc.robot.basicCommands.ShooterCommands.ShooterSetSpeed;
 import frc.robot.basicCommands.SwerveCommands.*;
-import frc.robot.basicCommands.feederCommands.FeedToShooter;
 import frc.robot.basicCommands.feederCommands.FeederSetSpeed;
 import frc.robot.subsystems.*;
 
@@ -85,9 +73,11 @@ public class RobotContainer {
                         true,
                         () -> driver.getHID().getRightTriggerAxis() > 0.5));
 
-        // IntakeArmSubsystem.getInstance().setDefaultCommand(new IntakeArmSetSpeed(()->
-        // -test.getRightX()));
 
+        //IntakeArmSubsystem.getInstance().setDefaultCommand(new IntakeArmSetSpeed(()-> -test.getRightX()));
+
+
+        
         // ShooterArmSubsystem.getInstance().setDefaultCommand(new InstantCommand(()->{
         // ShooterArmSubsystem.getInstance().setSpeedArm(()-> test.getLeftX() / 10);
         // }, ShooterArmSubsystem.getInstance()));
@@ -126,8 +116,8 @@ public class RobotContainer {
         // test.b().onTrue(new IntakeArmUP());
         // test.x().onTrue(new IntakeArmDown());
 
-        driver.a().whileTrue(new InstantCommand(() -> ShooterSubsystem.getInstance().setShooterSpeed(100, 100),
-                ShooterSubsystem.getInstance()));
+        // driver.a().whileTrue(new InstantCommand(() -> ShooterSubsystem.getInstance().setShooterSpeed(100, 100),
+        //         ShooterSubsystem.getInstance()));
         // // test.leftBumper().onTrue(new ShootTouchingBase());
 
         configureButtonBindings();

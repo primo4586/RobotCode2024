@@ -5,7 +5,6 @@
 package frc.robot.basicCommands.IntakeArmCommands;
 
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.Constants.IntakeArmConstants;
 import frc.robot.subsystems.IntakeArmSubsystem;
 import static frc.robot.Constants.IntakeArmConstants.*;
 

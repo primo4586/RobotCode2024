@@ -11,16 +11,11 @@ import com.ctre.phoenix6.controls.MotionMagicVoltage;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.InvertedValue;
 
-import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.Utils.interpolation.InterpolateUtil;
-import frc.Utils.vision.Vision;
 import frc.robot.Constants;
-import frc.robot.basicCommands.SwerveCommands.AllianceFlipUtil;
-import frc.robot.basicCommands.SwerveCommands.FieldConstants;
-
 import static frc.robot.Constants.ShooterArmConstants.*;
 
 import java.util.function.DoubleSupplier;
@@ -38,7 +33,7 @@ public class ShooterArmSubsystem extends SubsystemBase {
   true, 
   false, 
   getSwitch());
-  private final Vision vision = Vision.getInstance();
+  double targetPose = 0;
 
   // the instance
   private static ShooterArmSubsystem instance;
@@ -103,6 +98,7 @@ public class ShooterArmSubsystem extends SubsystemBase {
 
   // moving function for the Arm
   public void moveArmTo(double degrees) {
+    targetPose = degrees;
     m_shooterArmMotor.setControl(motionMagic.withPosition(degrees));
   }
 
@@ -113,7 +109,7 @@ public class ShooterArmSubsystem extends SubsystemBase {
 
   // Checking the degree difference conditions
   public boolean isArmReady() {
-    return (Math.abs(m_shooterArmMotor.getClosedLoopError().getValue()) < minimumError);
+    return (Math.abs(getArmPose() - targetPose) < minimumError);
   }
 
   // geting if the switch is open

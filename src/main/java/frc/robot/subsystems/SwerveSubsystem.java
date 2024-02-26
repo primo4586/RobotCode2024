@@ -5,6 +5,7 @@ import frc.robot.Constants.Swerve.Mod0;
 import frc.robot.Constants.Swerve.Mod1;
 import frc.robot.Constants.Swerve.Mod2;
 import frc.robot.Constants.Swerve.Mod3;
+import frc.robot.basicCommands.SwerveCommands.AllianceFlipUtil;
 import frc.robot.basicCommands.SwerveCommands.FieldConstants;
 
 import static frc.robot.Constants.Swerve.*;
@@ -25,6 +26,7 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -34,6 +36,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 /**
  * Represents the swerve driver subsystem
  * @implNote This is a singleton
+ * 
  */
 public class SwerveSubsystem extends SubsystemBase {
     public SwerveDrivePoseEstimator poseEstimation;
@@ -207,13 +210,7 @@ public class SwerveSubsystem extends SubsystemBase {
 
                     poseEstimation.addVisionMeasurement(
                             est.estimatedPose.toPose2d(), est.timestampSeconds, estStdDevs);
-
-                    if(vision.getRightDisToTag()<3.5)
-                        gyro.setYaw(Units.radiansToDegrees(est.estimatedPose.getRotation().getAngle()));
-                    SmartDashboard.putNumber("cam yaw", est.estimatedPose.getRotation().getAngle());
                 });
-        
-        SmartDashboard.putNumber("yaw", getYaw().getDegrees());
 
         field2d.setRobotPose(poseEstimation.getEstimatedPosition());
         SmartDashboard.putNumber("dis", getPose().getTranslation().getDistance(FieldConstants.Speaker.centerSpeakerOpening.getTranslation()));

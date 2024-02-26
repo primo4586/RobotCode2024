@@ -41,7 +41,6 @@ public class FeedToShooter extends Command {
   @Override
   public void execute() {
     if (!startedShooting &&
-        swerve.headingPid.getPositionError() < 1 &&
         shooterSubsystem.checkIfShooterAtSpeed() &&
         shooterArmSubsystem.isArmReady()) {
 

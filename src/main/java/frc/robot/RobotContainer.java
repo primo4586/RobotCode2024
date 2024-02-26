@@ -9,6 +9,7 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.Utils.PathPlanner.PathPlannerHelper;
 import frc.robot.Constants.IntakeArmConstants;
 import frc.robot.aRobotOperations.CollectToFeeder;
+import frc.robot.aRobotOperations.FeederAlign;
 import frc.robot.aRobotOperations.PrepareForShoot;
 import frc.robot.aRobotOperations.ShootSpeaker;
 import frc.robot.aRobotOperations.ShootTouchingBase;
@@ -67,8 +68,8 @@ public class RobotContainer {
         swerve.setDefaultCommand(
                 new TeleopSwerve(
                         swerve,
-                        () -> driver.getHID().getLeftY(),
-                        () -> driver.getHID().getLeftX(),
+                        () -> -driver.getHID().getLeftY(),
+                        () -> -driver.getHID().getLeftX(),
                         () -> -driver.getHID().getRightX(),
                         true,
                         () -> driver.getHID().getRightTriggerAxis() > 0.5));
@@ -110,9 +111,6 @@ public class RobotContainer {
         // driver.b().onTrue(new CollectToFeeder());
         // driver.a().onTrue(new ShootSpeaker());
 
-        // // test.rightBumper().whileTrue(new InstantCommand(()->
-        // ShooterSubsystem.getInstance().setShooterSpeed(40, 40),
-        // ShooterSubsystem.getInstance()));
         // test.b().onTrue(new IntakeArmUP());
         // test.x().onTrue(new IntakeArmDown());
 
@@ -137,13 +135,16 @@ public class RobotContainer {
         // Driver Button Bindings
         driverYTrigger.onTrue(new InstantCommand(() -> swerve.zeroGyro()));
         driverXTrigger.onTrue(new ShootTouchingBase());
-        driverRightBumperTrigger.onTrue(new ShootSpeaker().finallyDo(() -> ShooterSubsystem.getInstance().coast()));
+        driverRightBumperTrigger.whileTrue(new FeederSetSpeed(()->1).repeatedly());
         driverLeftTriggerToggle.toggleOnTrue(new AlignToSpeaker());
         driverBackTrigger.onTrue(swerve.disableHeadingCommand());
         driverPovLeftTrigger.onTrue(new ZeroIntakeArm());
         driverPovRightTrigger.onTrue(new ZeroShooterArm());
+        driver.start().onTrue(new InstantCommand(()->ShooterSubsystem.getInstance().setShooterSpeed(70, 70
+        ),ShooterSubsystem.getInstance()));
 
         // Operator Button Bindings
+        operator.start().whileTrue(new FeederSetSpeed(()->1).repeatedly());
         operatorXTrigger.onTrue(new CollectToFeeder());
         operatorYTrigger.toggleOnTrue(new PrepareForShoot().repeatedly());
         operatorATrigger

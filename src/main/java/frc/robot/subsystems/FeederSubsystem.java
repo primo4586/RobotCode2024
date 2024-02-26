@@ -37,6 +37,7 @@ public class FeederSubsystem extends SubsystemBase {
     m_Feeder.configPeakCurrentDuration(10);
     m_Feeder.configContinuousCurrentLimit(25);
     m_Feeder.enableCurrentLimit(true);
+    m_Feeder.configVoltageCompSaturation(12);
   }
 
   // set speed function

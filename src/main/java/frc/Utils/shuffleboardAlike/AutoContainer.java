@@ -17,10 +17,13 @@ import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.Utils.PathPlanner.PathPlannerHelper;
 import frc.robot.aRobotOperations.CollectToFeeder;
+import frc.robot.aRobotOperations.PrepareForShoot;
 import frc.robot.aRobotOperations.ShootSpeaker;
 import frc.robot.aRobotOperations.ShootTouchingBase;
 import frc.robot.basicCommands.IntakeArmCommands.IntakeArmDown;
 import frc.robot.basicCommands.IntakeCommands.IntakeSetSpeed;
+import frc.robot.basicCommands.ShooterCommands.ShooterSetSpeed;
+import frc.robot.basicCommands.feederCommands.FeedToShooter;
 import frc.robot.basicCommands.feederCommands.FeedUntilNote;
 import frc.robot.subsystems.IntakeArmSubsystem;
 import frc.robot.subsystems.ShooterArmSubsystem;
@@ -38,18 +41,18 @@ public class AutoContainer {
     ShooterSubsystem shooter = ShooterSubsystem.getInstance();
 
     double waitForRot = 1;
-    double headingAccuracy = 3;
+    double headingAccuracy = 7;
 
     public AutoContainer() {
         this.autoPaths = new HashMap<String, Command>();
 
         this.autoPaths.put("base,2", new SequentialCommandGroup(
                 new ParallelCommandGroup(new ShootTouchingBase(), new IntakeArmDown()),
-                swerve.setHeadingCommand(new Rotation2d(Units.degreesToRadians(0))),
-                Commands.waitUntil(() -> Math.abs(Math.abs(swerve.getYaw().getDegrees()) - 0) < headingAccuracy),
                 new ParallelCommandGroup(pathPlanner.followChoreoPath("base to 2"), new FeedUntilNote(),
                         new IntakeSetSpeed(() -> getNoteSpeed)),
-                new ShootSpeaker()));
+                new PrepareForShoot().until(()->shooter.getUpShooterSpeed()>90),
+                new ShootSpeaker(),
+                new ShooterSetSpeed(0)));
 
         this.autoPaths.put("baseU,1", new SequentialCommandGroup(
                 new ParallelCommandGroup(new ShootSpeaker(), new IntakeArmDown()),

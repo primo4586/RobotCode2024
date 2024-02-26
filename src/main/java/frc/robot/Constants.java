@@ -52,9 +52,9 @@ public final class Constants {
         public static final int encoderCountsPerRevolution = 1;
         public static final double gearRatio = 1;
         public static final double TICKS_PER_DEGREE = encoderCountsPerRevolution * gearRatio / 360.0;
-        public static final boolean ForwardSoftLimitEnable = true;
+        public static final boolean ForwardSoftLimitEnable = false;
         public static final double ForwardSoftLimitThreshold = 20;
-        public static final boolean ReverseSoftLimitEnable = true;
+        public static final boolean ReverseSoftLimitEnable = false;
         public static final double RevesrseSoftLimitThreshold = -185;
         // not mm
         public static final double minimumError = 0;
@@ -232,8 +232,8 @@ public final class Constants {
         // The standard deviations of our vision estimated poses, which affect
         // correction rate
         // (Fake values. Experiment and determine estimation noise on an actual robot.)
-        public static final Matrix<N3, N1> kRightSingleTagStdDevs = VecBuilder.fill(0.1, 0.0, 2);
-        public static final Matrix<N3, N1> kRightMultiTagStdDevs = VecBuilder.fill(0.1, 0.0, 2);
+        public static final Matrix<N3, N1> kRightSingleTagStdDevs = VecBuilder.fill(0.0, 0.0, 0.5);
+        public static final Matrix<N3, N1> kRightMultiTagStdDevs = VecBuilder.fill(0.0, 0.0, 0.5);
 
         public static final Matrix<N3, N1> kLeftSingleTagStdDevs = VecBuilder.fill(0, 0, 0);
         public static final Matrix<N3, N1> kLeftMultiTagStdDevs = VecBuilder.fill(0, 0, 0);
@@ -278,17 +278,17 @@ public final class Constants {
 
         public static final double shooterArmStartPose = 00;
 
-        public static final double offset = 0.0;
-
         public static final InterpolationMap SHOOTER_ANGLE_INTERPOLATION_MAP = new InterpolationMap()
-                .put(2.13 + offset, 20)
-                .put(3.2 + offset, 37)
-                .put(3.655 + offset, 40.5)
-                .put(3.29 + offset, 39)
-                .put(5.441276465250574 + offset, 52.8)
-                .put(1.535 + offset, 13)
-                .put(2.135 + offset, 20)
-                .put(1.215 + offset, 11);
+                .put(2.13, 20)
+                .put(3.2, 37)
+                .put(3.655, 40.5)
+                .put(3.29, 39)
+                .put(5.441276465250574, 52.8)
+                .put(2.135, 20)
+                .put(2.19, 18)
+                .put(1.995, 15)
+                .put(1.46, 9)
+                .put(1, 0);
 
         public static final double ShootBaseAngle = 0; //6.1064453125
         public static final double ShootStageAngle = 3;

@@ -51,7 +51,6 @@ public class PrimoShuffleboard {
             // 4);
             // }
             tab.getTab().addDouble("Time left", () -> Timer.getMatchTime()).withPosition(0, 0).withSize(2, 1);
-
         } catch (IllegalArgumentException alreadyExists) {
         } // We ignore.
     }

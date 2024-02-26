@@ -65,6 +65,6 @@ public class FeedToShooterBase extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return startedShooting && timer.hasElapsed(0.2);
+    return startedShooting && timer.hasElapsed(0.3);
   }
 }

@@ -32,7 +32,7 @@ public class IntakeArmSubsystem extends SubsystemBase {
       0.0,
       0,
       true,
-      getUpSwitch(),
+      false,
       false);
 
   // singleton

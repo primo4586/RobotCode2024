@@ -11,7 +11,7 @@ import frc.robot.subsystems.SwerveSubsystem;
 
 public class ShooterSpeaker extends Command {
   private final ShooterSubsystem shooterSubsystem = ShooterSubsystem.getInstance();
-  // private final SwerveSubsystem swerveSubsystem = SwerveSubsystem.getInstance();
+  private final SwerveSubsystem swerveSubsystem = SwerveSubsystem.getInstance();
 
   /** Creates a new ShooterSetSpeedInterpolation. */
   public ShooterSpeaker() {
@@ -26,8 +26,15 @@ public class ShooterSpeaker extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    // boolean close = swerveSubsystem.getPose().getTranslation().getDistance(FieldConstants.Speaker.centerSpeakerOpening.getTranslation()) < 2;
-    this.shooterSubsystem.setShooterSpeed(100);
+    double distance = SwerveSubsystem.getInstance().getPose().getTranslation().getDistance(FieldConstants.Speaker.centerSpeakerOpening.getTranslation());
+    double speed = 0;
+    if(distance>2.6){
+      speed = 100;
+    }
+    if(distance<2.2){
+      speed = 70;
+    }
+    this.shooterSubsystem.setShooterSpeed(speed);
   }
 
   // Called once the command ends or is interrupted.

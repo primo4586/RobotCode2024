@@ -30,7 +30,7 @@ private final IntakeArmSubsystem intakeArm = IntakeArmSubsystem.getInstance();
 
   @Override
   public boolean isFinished() {
-      return Math.abs(intakeArm.getPose() + 175)<10;
+      return Math.abs(intakeArm.getPose() + intakeSetPoint)<10;
   }
 
 }

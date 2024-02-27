@@ -10,6 +10,7 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.Utils.PathPlanner.PathPlannerHelper;
 import frc.robot.Constants.IntakeArmConstants;
 import frc.robot.aRobotOperations.CollectToFeeder;
+import frc.robot.aRobotOperations.EStop;
 import frc.robot.aRobotOperations.PrepareForShoot;
 import frc.robot.aRobotOperations.ShootTouchingBase;
 import frc.robot.basicCommands.IntakeArmCommands.IntakeArmDown;
@@ -44,6 +45,7 @@ public class RobotContainer {
     Trigger driverBackTrigger = driver.back();
     Trigger driverPovLeftTrigger = driver.povLeft();
     Trigger driverPovRightTrigger = driver.povRight();
+    Trigger driverStart = driver.start();
 
     // Operator Triggers
     Trigger operatorXTrigger = operator.x();
@@ -52,6 +54,7 @@ public class RobotContainer {
     Trigger operatorRightBumperTrigger = operator.rightBumper();
     Trigger operatorLeftBumperTrigger = operator.leftBumper();
     Trigger operatorBTrigger = operator.b();
+    Trigger operatorStart = operator.start();
 
     PathPlannerHelper pathPlannerHelper = PathPlannerHelper.getInstace();
 
@@ -74,49 +77,6 @@ public class RobotContainer {
                         () -> driver.getHID().getRightTriggerAxis() > 0.5));
 
 
-        //IntakeArmSubsystem.getInstance().setDefaultCommand(new IntakeArmSetSpeed(()-> -test.getRightX()));
-
-
-        
-        // ShooterArmSubsystem.getInstance().setDefaultCommand(new InstantCommand(()->{
-        // ShooterArmSubsystem.getInstance().setSpeedArm(()-> test.getLeftX() / 10);
-        // }, ShooterArmSubsystem.getInstance()));
-        // test.b().onTrue(new ZeroShooterArm());
-
-        // ShooterSubsystem.getInstance().setDefaultCommand(new InstantCommand(()->{
-        // ShooterSubsystem.getInstance().manualSetShooterSpeed(()-> test.getRightY());
-        // }, ShooterSubsystem.getInstance()));
-
-        // IntakeSubsystem.getInstance().setDefaultCommand(new IntakeSetSpeed(()->
-        // -test.getLeftY()));
-
-        // test.a().onTrue(new CollectToIntake());
-
-        // Configure the button bindings
-        // test.x().onTrue(new MoveShooterArmTo(29));
-
-        // driver.leftBumper().onTrue(new FeederSetSpeed(()->1));
-        // test.rightBumper().onTrue(new FeederSetSpeed(()->0));
-        // driver.start().onTrue(new ZeroShooterArm());
-        // driver.x().whileTrue(new InstantCommand(()->
-        // ShooterSubsystem.getInstance().setShooterSpeed(100,100),
-        // ShooterSubsystem.getInstance()));
-        // test.start().whileTrue(new InstantCommand(()->
-        // ShooterSubsystem.getInstance().setShooterSpeed(0, 0),
-        // ShooterSubsystem.getInstance()));
-
-        // driver.leftTrigger().whileTrue(new AlignToSpeaker());
-        // driver.x().onTrue(new ShooterArmSpeakerAngle());
-        // driver.b().onTrue(new CollectToFeeder());
-        // driver.a().onTrue(new ShootSpeaker());
-
-        // test.b().onTrue(new IntakeArmUP());
-        // test.x().onTrue(new IntakeArmDown());
-
-        // driver.a().whileTrue(new InstantCommand(() -> ShooterSubsystem.getInstance().setShooterSpeed(100, 100),
-        //         ShooterSubsystem.getInstance()));
-        // // test.leftBumper().onTrue(new ShootTouchingBase());
-
         configureButtonBindings();
     }
 
@@ -132,6 +92,7 @@ public class RobotContainer {
     private void configureButtonBindings() {
 
         // Driver Button Bindings
+        driverStart.onTrue(new EStop());
         driverYTrigger.onTrue(new InstantCommand(() -> swerve.zeroGyro()));
         driverXTrigger.onTrue(new ShootTouchingBase());
         driverRightBumperTrigger.whileTrue(new FeederSetSpeed(()->1).repeatedly());
@@ -139,11 +100,9 @@ public class RobotContainer {
         driverBackTrigger.onTrue(swerve.disableHeadingCommand());
         driverPovLeftTrigger.onTrue(new ZeroIntakeArm());
         driverPovRightTrigger.onTrue(new ZeroShooterArm());
-        driver.start().onTrue(new InstantCommand(()->ShooterSubsystem.getInstance().setShooterSpeed(70, 70
-        ),ShooterSubsystem.getInstance()));
 
         // Operator Button Bindings
-        operator.start().whileTrue(new AlignToAngle(Rotation2d.fromDegrees(90)));
+        operatorStart.onTrue(new EStop());
         operatorXTrigger.onTrue(new CollectToFeeder());
         operatorYTrigger.toggleOnTrue(new PrepareForShoot().repeatedly());
         operatorATrigger

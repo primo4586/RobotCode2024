@@ -21,9 +21,7 @@ public class EStop extends ParallelCommandGroup {
       new IntakeArmSetSpeed(()->0),
       new IntakeSetSpeed(()->0),
       new ShooterArmSetSpeed(()-> 0),
-      new ShooterSetSpeed(0),
-      new TrapArmSetSpeed(0),
-      new TrapSetSpeed(0)
+      new ShooterSetSpeed(0)
     );
   }
 }

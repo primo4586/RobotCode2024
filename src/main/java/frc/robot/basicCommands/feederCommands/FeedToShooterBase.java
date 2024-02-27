@@ -8,6 +8,8 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.FeederSubsystem;
 import frc.robot.subsystems.ShooterArmSubsystem;
+import frc.robot.subsystems.ShooterSubsystem;
+
 import static frc.robot.Constants.FeederConstants.*;
 
 public class FeedToShooterBase extends Command {
@@ -37,7 +39,8 @@ public class FeedToShooterBase extends Command {
   public void execute() {
     if (!startedShooting &&
         timer.hasElapsed(1)
-        &&shooterArmSubsystem.getArmPose()<2) {
+        &&shooterArmSubsystem.isArmReady()&&
+        ShooterSubsystem.getInstance().checkIfShooterAtSpeed()) {
 
       feederSubsystem.setSpeed(FeederShootSpeed);
       startedShooting = true;

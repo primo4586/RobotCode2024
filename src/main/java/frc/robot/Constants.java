@@ -70,7 +70,7 @@ public final class Constants {
         // set points
         public static final double AmpSetPoint = 2;
         public static final double SafeSetPoint = 0;
-        public static final double intakeSetPoint = -175;
+        public static final double intakeSetPoint = -152;
         
 
     }

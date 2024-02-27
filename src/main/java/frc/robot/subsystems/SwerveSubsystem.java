@@ -5,7 +5,6 @@ import frc.robot.Constants.Swerve.Mod0;
 import frc.robot.Constants.Swerve.Mod1;
 import frc.robot.Constants.Swerve.Mod2;
 import frc.robot.Constants.Swerve.Mod3;
-import frc.robot.basicCommands.SwerveCommands.AllianceFlipUtil;
 import frc.robot.basicCommands.SwerveCommands.FieldConstants;
 
 import static frc.robot.Constants.Swerve.*;
@@ -21,12 +20,9 @@ import com.ctre.phoenix.sensors.PigeonIMU;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
-import edu.wpi.first.math.util.Units;
-import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -83,7 +79,7 @@ public class SwerveSubsystem extends SubsystemBase {
         odometry = new SwerveDriveOdometry(swerveKinematics, getYaw(), getModulePositions());
                 
         headingPid.enableContinuousInput(-180, 180);
-        headingPid.setTolerance(1);
+        headingPid.setTolerance( 1);
     }
 
     public void drive(Translation2d translation, double rotation, boolean fieldRelative, boolean isOpenLoop,
@@ -209,7 +205,7 @@ public class SwerveSubsystem extends SubsystemBase {
                     var estStdDevs = vision.getEstimationStdDevsRight(estPose);
 
                     poseEstimation.addVisionMeasurement(
-                            est.estimatedPose.toPose2d(), est.timestampSeconds, estStdDevs);
+                            new Pose2d(estPose.getTranslation(), getYaw()), est.timestampSeconds, estStdDevs);
                 });
 
         field2d.setRobotPose(poseEstimation.getEstimatedPosition());

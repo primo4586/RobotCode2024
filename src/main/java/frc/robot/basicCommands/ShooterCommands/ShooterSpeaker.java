@@ -27,11 +27,11 @@ public class ShooterSpeaker extends Command {
   @Override
   public void execute() {
     double distance = SwerveSubsystem.getInstance().getPose().getTranslation().getDistance(FieldConstants.Speaker.centerSpeakerOpening.getTranslation());
-    double speed = 0;
+    double speed = 70;
     if(distance>2.6){
       speed = 100;
     }
-    if(distance<2.2){
+    if(distance<2.6){
       speed = 70;
     }
     this.shooterSubsystem.setShooterSpeed(speed);

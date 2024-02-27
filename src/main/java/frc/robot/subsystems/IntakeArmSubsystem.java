@@ -17,7 +17,6 @@ import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
-
 import static frc.robot.Constants.IntakeArmConstants.*;
 
 import java.util.function.DoubleSupplier;
@@ -39,6 +38,7 @@ public class IntakeArmSubsystem extends SubsystemBase {
   private static IntakeArmSubsystem instance;
 
   SoftwareLimitSwitchConfigs limitConfig = new SoftwareLimitSwitchConfigs();
+  boolean zeroedOut = false;
 
   public static IntakeArmSubsystem getInstance() {
     if (instance == null) {
@@ -164,12 +164,24 @@ public class IntakeArmSubsystem extends SubsystemBase {
     m_IntakeArmMotor.setNeutralMode(NeutralModeValue.Brake);
   }
 
+  public void manualZeroIntakeArm(){
+    
+    coast();
+    if(getUpSwitch()){
+      while (getUpSwitch()) {
+      }
+    }
+    while (!getUpSwitch()) {}
+    setEncoder(zeroEncoderValue);
+    zeroedOut = true;
+    breakMode();
+  }
+
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-
+    SmartDashboard.putBoolean("intake arm zero", zeroedOut);
     SmartDashboard.putBoolean("intkeArmSwitch", getUpSwitch());
-    SmartDashboard.putBoolean("intkeArmDownSwitch", getDownSwitch());
     SmartDashboard.putNumber("intakeArm pose", m_IntakeArmMotor.getPosition().getValueAsDouble());
   }
 }

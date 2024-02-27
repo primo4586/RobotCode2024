@@ -1,5 +1,6 @@
 package frc.robot;
 
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Commands;
@@ -9,9 +10,7 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.Utils.PathPlanner.PathPlannerHelper;
 import frc.robot.Constants.IntakeArmConstants;
 import frc.robot.aRobotOperations.CollectToFeeder;
-import frc.robot.aRobotOperations.FeederAlign;
 import frc.robot.aRobotOperations.PrepareForShoot;
-import frc.robot.aRobotOperations.ShootSpeaker;
 import frc.robot.aRobotOperations.ShootTouchingBase;
 import frc.robot.basicCommands.IntakeArmCommands.IntakeArmDown;
 import frc.robot.basicCommands.IntakeArmCommands.IntakeArmUP;
@@ -144,7 +143,7 @@ public class RobotContainer {
         ),ShooterSubsystem.getInstance()));
 
         // Operator Button Bindings
-        operator.start().whileTrue(new FeederSetSpeed(()->1).repeatedly());
+        operator.start().whileTrue(new AlignToAngle(Rotation2d.fromDegrees(90)));
         operatorXTrigger.onTrue(new CollectToFeeder());
         operatorYTrigger.toggleOnTrue(new PrepareForShoot().repeatedly());
         operatorATrigger

@@ -9,7 +9,6 @@ import frc.robot.Constants.ShooterArmConstants;
 import frc.robot.Constants.ShooterConstants;
 import frc.robot.basicCommands.ShooterArmCommands.MoveShooterArmTo;
 import frc.robot.basicCommands.ShooterCommands.ShooterSetSpeed;
-import frc.robot.basicCommands.feederCommands.FeedToShooter;
 import frc.robot.basicCommands.feederCommands.FeedToShooterBase;
 
 public class ShootTouchingBase extends ParallelCommandGroup {

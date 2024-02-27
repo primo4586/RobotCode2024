@@ -4,15 +4,12 @@
 
 package frc.robot.aRobotOperations;
 
-import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import frc.robot.Constants.IntakeConstants;
 import frc.robot.basicCommands.IntakeArmCommands.IntakeArmDown;
 import frc.robot.basicCommands.IntakeArmCommands.IntakeArmUP;
 import frc.robot.basicCommands.IntakeCommands.IntakeSetSpeed;
 import frc.robot.basicCommands.feederCommands.FeedUntilNote;
-import frc.robot.basicCommands.feederCommands.FeederSetSpeed;
-import frc.robot.subsystems.FeederSubsystem;
 
 public class CollectToFeeder extends ParallelCommandGroup {
   /** Creates a new MoveIntakeToCollectNote. */

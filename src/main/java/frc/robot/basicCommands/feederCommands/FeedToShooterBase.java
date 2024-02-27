@@ -4,24 +4,15 @@
 
 package frc.robot.basicCommands.feederCommands;
 
-import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.Robot;
-import frc.robot.Constants.FeederConstants;
-import frc.robot.Constants.Swerve;
 import frc.robot.subsystems.FeederSubsystem;
 import frc.robot.subsystems.ShooterArmSubsystem;
-import frc.robot.subsystems.ShooterSubsystem;
-import frc.robot.subsystems.SwerveSubsystem;
-
 import static frc.robot.Constants.FeederConstants.*;
 
 public class FeedToShooterBase extends Command {
-  private final ShooterSubsystem shooterSubsystem = ShooterSubsystem.getInstance();
   private final ShooterArmSubsystem shooterArmSubsystem = ShooterArmSubsystem.getInstance();
   private final FeederSubsystem feederSubsystem = FeederSubsystem.getInstance();
-  private final SwerveSubsystem swerve = SwerveSubsystem.getInstance();
   boolean startedShooting;
   Timer timer;
 

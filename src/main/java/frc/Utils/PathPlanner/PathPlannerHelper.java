@@ -52,7 +52,8 @@ public class PathPlannerHelper {
                         AutoConstants.driveBaseRadius,
                         AutoConstants.replanningConfig),
                 () -> {
-                    // Boolean supplier that controls when the path will be mirrored for the red alliance
+                    // Boolean supplier that controls when the path will be mirrored for the red
+                    // alliance
                     // This will flip the path being followed to the red side of the field.
                     // THE ORIGIN WILL REMAIN ON THE BLUE SIDE
 
@@ -64,7 +65,7 @@ public class PathPlannerHelper {
                 },
                 swerve);
     }
-    
+
     public Command followPath(PathPlannerPath path) {
         if (path == null)
             return Commands.none();
@@ -74,28 +75,38 @@ public class PathPlannerHelper {
         return AutoBuilder.followPath(path);
     }
 
-    public Command followPath(String pathName) {
+    public Command followPath(String pathName, boolean resetOdometry) {
         // Load the path you want to follow using its name in the GUI
         try {
             PathPlannerPath path = PathPlannerPath.fromPathFile(pathName);
 
             // Create a path following command using AutoBuilder. This will also trigger
             // event markers.
-            return swerve.resetOdometry(AllianceFlipUtil.apply(path.getPreviewStartingHolonomicPose())).andThen(AutoBuilder.followPath(path));
+            if (resetOdometry) {
+
+                return swerve.resetOdometry(AllianceFlipUtil.apply(path.getPreviewStartingHolonomicPose()))
+                        .andThen(AutoBuilder.followPath(path));
+            }
+            return AutoBuilder.followPath(path);
+
         } catch (Exception e) {
             SmartDashboard.putString("faild" + pathName, pathName);
             return Commands.none();
         }
     }
-    
-    public Command followChoreoPath(String ChoreoTrajectory) {
+
+    public Command followChoreoPath(String ChoreoTrajectory, boolean resetOdometry) {
         // Load the path you want to follow using its name in the GUI
         try {
             PathPlannerPath path = PathPlannerPath.fromChoreoTrajectory(ChoreoTrajectory);
 
             // Create a path following command using AutoBuilder. This will also trigger
             // event markers.
-            return swerve.resetOdometry(AllianceFlipUtil.apply(path.getPreviewStartingHolonomicPose())).andThen( AutoBuilder.followPath(path));
+            if (resetOdometry) {
+                return swerve.resetOdometry(AllianceFlipUtil.apply(path.getPreviewStartingHolonomicPose()))
+                        .andThen(AutoBuilder.followPath(path));
+            }
+            return AutoBuilder.followPath(path);
         } catch (Exception e) {
             SmartDashboard.putString("faild" + ChoreoTrajectory, ChoreoTrajectory);
             return Commands.none();
@@ -119,7 +130,7 @@ public class PathPlannerHelper {
         return Commands.runOnce(() -> {
             Translation2d currentPose = swerve.getPose().getTranslation();
             Rotation2d rotation = angleBetweenPoints(currentPose, endPoint);
-            //rotation = Rotation2d.fromDegrees(0);
+            // rotation = Rotation2d.fromDegrees(0);
             Pose2d startPose = new Pose2d(currentPose, rotation);
             Pose2d endPos = new Pose2d(endPoint, rotation);
 
@@ -131,7 +142,7 @@ public class PathPlannerHelper {
         Translation2d anglePoint = point1.minus(point2);
 
         // Calculate the angle in radians
-        double angleRad = Math.atan2(anglePoint.getY(),anglePoint.getX());
+        double angleRad = Math.atan2(anglePoint.getY(), anglePoint.getX());
 
         // Ensure the angle is between 0 and 2π (0 and 360 degrees)
         if (angleRad < 0) {

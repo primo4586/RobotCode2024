@@ -34,7 +34,7 @@ public final class Constants {
     
     public static final String canBus_name = "canBus";
 
-    public static final class IntakeArmConstants { // TODO: This must be tuned to specific robot
+    public static final class IntakeArmConstants {
         // mm
         public static final int IntakeArmMotorID = 8;
         public static final double mmVelocity = 100;
@@ -57,7 +57,7 @@ public final class Constants {
         public static final boolean ReverseSoftLimitEnable = false;
         public static final double RevesrseSoftLimitThreshold = -185;
         // not mm
-        public static final double minimumError = 0;
+        public static final double minimumError = 10;
         public static final double intakeArmStartingValue = 0;
         public static final double zeroEncoderValue = 0;
         public static final double intakeArmZeroSpeed = 0.3;
@@ -76,7 +76,7 @@ public final class Constants {
     }
 
     public static final class Swerve {
-        public static final double minimumErrorAligning = 0; // TODO: This must be tuned to specific robot
+        public static final double minimumErrorAligning = 0; 
         public static final PIDController aligningPID = new PIDController(0.12, 0, 0.0);
 
         public static final int pigeonID = 11;
@@ -140,11 +140,11 @@ public final class Constants {
 
         /* Swerve Profiling Values */
         /** Meters per Second */
-        public static final double maxSpeed = 4.5; // TODO: This must be tuned to specific robot
-        public static final double XYSlowRatio = 0.25; // TODO: make it more accrute
-        public static final double rotationSlowRatio = 0.1; // TODO: make it more accrute
+        public static final double maxSpeed = 4.5;
+        public static final double XYSlowRatio = 0.25;
+        public static final double rotationSlowRatio = 0.1;
         /** Radians per Second */
-        public static final double maxAngularVelocity = 10.0; // TODO: This must be tuned to specific robot
+        public static final double maxAngularVelocity = 10.0;
 
         /* Neutral Modes */
         public static final IdleMode angleNeutralMode = IdleMode.kCoast;
@@ -192,8 +192,7 @@ public final class Constants {
         }
     }
 
-    public static final class AutoConstants { // TODO: The below constants are used in the example auto, and must be
-                                              // tuned to specific robot
+    public static final class AutoConstants { 
         public static final double kMaxSpeedMetersPerSecond = 3;
         public static final double kMaxAccelerationMetersPerSecondSquared = 4.5;
         public static final double kMaxAngularSpeedRadiansPerSecond = 4.5;
@@ -278,7 +277,7 @@ public final class Constants {
 
         public static final double shooterArmStartPose = 00;
 
-        public static final InterpolationMap SHOOTER_ANGLE_INTERPOLATION_MAP = new InterpolationMap()
+        public static InterpolationMap SHOOTER_ANGLE_INTERPOLATION_MAP = new InterpolationMap()
                 .put(2.13, 20)
                 .put(3.2, 37)
                 .put(3.655, 40.5)

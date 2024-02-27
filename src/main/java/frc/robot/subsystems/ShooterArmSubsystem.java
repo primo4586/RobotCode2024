@@ -10,12 +10,13 @@ import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.MotionMagicVoltage;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.InvertedValue;
-
+import com.ctre.phoenix6.signals.NeutralModeValue;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.Utils.interpolation.InterpolateUtil;
 import frc.robot.Constants;
+
 import static frc.robot.Constants.ShooterArmConstants.*;
 
 import java.util.function.DoubleSupplier;
@@ -34,6 +35,9 @@ public class ShooterArmSubsystem extends SubsystemBase {
   false, 
   getSwitch());
   double targetPose = 0;
+
+  boolean atLimit = false;
+  boolean zeroedOut = false;
 
   // the instance
   private static ShooterArmSubsystem instance;
@@ -66,7 +70,7 @@ public class ShooterArmSubsystem extends SubsystemBase {
     configuration.Voltage.PeakReverseVoltage = peekReverseVoltage;
 
     // forward and backword limits
-    configuration.SoftwareLimitSwitch.ForwardSoftLimitEnable = false;//TODO: change to true
+    configuration.SoftwareLimitSwitch.ForwardSoftLimitEnable = false;
     configuration.SoftwareLimitSwitch.ReverseSoftLimitEnable = false;
     configuration.SoftwareLimitSwitch.ForwardSoftLimitThreshold = forwardLimit;
     configuration.SoftwareLimitSwitch.ReverseSoftLimitThreshold = backwordLimit;
@@ -132,10 +136,37 @@ public class ShooterArmSubsystem extends SubsystemBase {
   public double getCharacterizationVelocity() {
     return m_shooterArmMotor.getVelocity().getValueAsDouble();
   }
+  public void coast(){
+    m_shooterArmMotor.setNeutralMode(NeutralModeValue.Coast);
+  }
+
+  public void breakMode(){
+    m_shooterArmMotor.setNeutralMode(NeutralModeValue.Brake);
+  }
+  
+  public void manualZeroShooterArm(){
+    coast();
+    if(getSwitch()){
+      while (getSwitch()) {
+      }
+    }
+    while (!getSwitch()) {}
+    setPosition(resetPose);
+    zeroedOut = true;
+    breakMode();
+  }
 
   @Override
   public void periodic() {
     SmartDashboard.putBoolean("ShooterArmSwitch", getSwitch());
     SmartDashboard.putNumber("ShooterArm pose", getArmPose());
+    SmartDashboard.putBoolean("shooter arm zero", zeroedOut);
+    if(getSwitch()&&!atLimit){
+      m_shooterArmMotor.setPosition(resetPose);
+      atLimit = true;
+    }
+    if(atLimit&&!getSwitch()){
+      atLimit = false;
+    }
   }
 }

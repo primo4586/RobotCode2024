@@ -4,13 +4,18 @@
 
 package frc.robot;
 
+import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.Utils.interpolation.InterpolationMap;
 import frc.Utils.shuffleboardAlike.AutoContainer;
 import frc.Utils.shuffleboardAlike.PrimoShuffleboard;
 import frc.Utils.swerve.CTREConfigs;
+import frc.robot.subsystems.IntakeArmSubsystem;
+import frc.robot.subsystems.ShooterArmSubsystem;
+import frc.robot.subsystems.SwerveSubsystem;
 
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to
@@ -26,6 +31,7 @@ public class Robot extends TimedRobot {
   private RobotContainer m_robotContainer;
   
   private AutoContainer autoContainer;
+  double offset = -0.6;
 
   /**
    * This function is run when the robot is first started up and should be used for any
@@ -38,8 +44,20 @@ public class Robot extends TimedRobot {
     m_robotContainer = new RobotContainer();
     autoContainer = new AutoContainer();
     PrimoShuffleboard.getInstance().initDashboard();
-   enableLiveWindowInTest(true);
- 
+    enableLiveWindowInTest(true);
+    SmartDashboard.putNumber("offset", offset);
+
+    Constants.ShooterArmConstants.SHOOTER_ANGLE_INTERPOLATION_MAP = new InterpolationMap()
+      .put(2.13 + offset, 20)
+      .put(3.2 + offset, 37)
+      .put(3.655 + offset, 40.5)
+      .put(3.29 + offset, 39)
+      .put(5.441276465250574 + offset, 52.8)
+      .put(2.135 + offset, 20)
+      .put(2.19 + offset, 18)
+      .put(1.995 + offset, 15)
+      .put(1.46 + offset, 9)
+      .put(1 + offset, 0);
   }
 
   /**
@@ -56,6 +74,20 @@ public class Robot extends TimedRobot {
     // and running subsystem periodic() methods.  This must be called from the robot's periodic
     // block in order for anything in the Command-based framework to work.
     CommandScheduler.getInstance().run();
+    if(SmartDashboard.getNumber("offset", offset) != offset){
+      offset = SmartDashboard.getNumber("offset", offset);
+      Constants.ShooterArmConstants.SHOOTER_ANGLE_INTERPOLATION_MAP = new InterpolationMap()
+      .put(2.13 + offset, 20)
+      .put(3.2 + offset, 37)
+      .put(3.655 + offset, 40.5)
+      .put(3.29 + offset, 39)
+      .put(5.441276465250574 + offset, 52.8)
+      .put(2.135 + offset, 20)
+      .put(2.19 + offset, 18)
+      .put(1.995 + offset, 15)
+      .put(1.46 + offset, 9)
+      .put(1 + offset, 0);
+    }
   }
 
   /** This function is called once each time the robot enters Disabled mode. */
@@ -63,7 +95,13 @@ public class Robot extends TimedRobot {
   public void disabledInit() {}
 
   @Override
-  public void disabledPeriodic() {}
+  public void disabledPeriodic() {
+    if(RobotController.getUserButton()){
+      SwerveSubsystem.getInstance().zeroGyro();
+      IntakeArmSubsystem.getInstance().manualZeroIntakeArm();
+      ShooterArmSubsystem.getInstance().manualZeroShooterArm();
+    }
+  }
 
   /** This autonomous runs the autonomous command selected by your {@link RobotContainer} class. */
   @Override

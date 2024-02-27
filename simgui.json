@@ -10,12 +10,11 @@
         "Robot": {
           "style": "Box/Image"
         },
-        "bottom": 544,
-        "builtin": "2024 Crescendo",
-        "height": 8.013679504394531,
-        "left": 46,
-        "right": 1088,
-        "top": 36,
+        "bottom": 1476,
+        "height": 8.210550308227539,
+        "left": 150,
+        "right": 2961,
+        "top": 79,
         "width": 16.541748046875,
         "window": {
           "visible": true
@@ -25,6 +24,18 @@
   },
   "NetworkTables": {
     "transitory": {
+      "Shuffleboard": {
+        "Competition Dashboard": {
+          "SendableChooser[0]": {
+            "open": true,
+            "string[]##v_/Shuffleboard/Competition Dashboard/SendableChooser[0]/options": {
+              "open": true
+            }
+          },
+          "open": true
+        },
+        "open": true
+      },
       "SmartDashboard": {
         "field": {
           "double[]##v_/SmartDashboard/field/Robot": {

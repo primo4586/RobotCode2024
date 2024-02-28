@@ -70,7 +70,7 @@ public final class Constants {
         // set points
         public static final double AmpSetPoint = 2;
         public static final double SafeSetPoint = 0;
-        public static final double intakeSetPoint = -152;
+        public static final double intakeSetPoint = -161.5;
         
 
     }
@@ -338,7 +338,7 @@ public final class Constants {
     public static class IntakeConstants {
         public static final int intakeNoteSensorID = 5;//todo
         public static final int IntakeMotorID = 7;
-        public static final double getNoteSpeed = 0.9;
+        public static final double getNoteSpeed = 0.6;
         public static final double feedToTrapSpeed = 0.4;
     }
 

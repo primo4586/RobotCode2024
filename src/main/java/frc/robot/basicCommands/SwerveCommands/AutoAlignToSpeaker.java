@@ -36,9 +36,9 @@ public class AutoAlignToSpeaker extends Command {
   public void initialize() {
 
     Pose2d robot = swerve.getPose();
-    
-    double deltaX = Math.abs(robot.getX() - Speaker.centerSpeakerOpening.getX());
-    double deltaY = Speaker.centerSpeakerOpening.getY() - robot.getY();
+    Pose2d speaker = AllianceFlipUtil.apply(Speaker.centerSpeakerOpening);
+    double deltaX = Math.abs(robot.getX() - speaker.getX());
+    double deltaY = speaker.getY() - robot.getY();
     double tempHeading = Units.radiansToDegrees(Math.atan2(deltaY, deltaX));
     if(DriverStation.getAlliance().get() == Alliance.Red)
       heading = new Rotation2d(Units.degreesToRadians(tempHeading + 180));
@@ -55,8 +55,9 @@ public class AutoAlignToSpeaker extends Command {
   public void execute() {
     Pose2d robot = swerve.getPose();
     
-    double deltaX = Math.abs(robot.getX() - Speaker.centerSpeakerOpening.getX());
-    double deltaY = Speaker.centerSpeakerOpening.getY() - robot.getY();
+    Pose2d speaker = AllianceFlipUtil.apply(Speaker.centerSpeakerOpening);
+    double deltaX = Math.abs(robot.getX() - speaker.getX());
+    double deltaY = speaker.getY() - robot.getY();
     double tempHeading = Units.radiansToDegrees(Math.atan2(deltaY, deltaX));
     if(DriverStation.getAlliance().get() == Alliance.Red)
       heading = new Rotation2d(Units.degreesToRadians(tempHeading + 180));

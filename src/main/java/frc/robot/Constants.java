@@ -70,7 +70,7 @@ public final class Constants {
         // set points
         public static final double AmpSetPoint = 2;
         public static final double SafeSetPoint = 0;
-        public static final double intakeSetPoint = -161.5;
+        public static final double intakeSetPoint = -166.0;
         
 
     }
@@ -113,7 +113,7 @@ public final class Constants {
         public static final SensorDirectionValue cancoderInvert = chosenModule.cancoderInvert;
 
         /* Swerve Current Limiting */
-        public static final int angleCurrentLimit = 35;
+        public static final int angleCurrentLimit = 40;
         public static final int angleCurrentThreshold = 40;
         public static final double angleCurrentThresholdTime = 0.1;
         public static final boolean angleEnableCurrentLimit = true;

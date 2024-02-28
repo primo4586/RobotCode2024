@@ -92,27 +92,27 @@ public class RobotContainer {
     private void configureButtonBindings() {
 
         // Driver Button Bindings
-        driverStart.onTrue(new EStop());
-        driverYTrigger.onTrue(new InstantCommand(() -> swerve.zeroGyro()));
+        // driverStart.onTrue(new EStop());
+        // driverYTrigger.onTrue(new InstantCommand(() -> swerve.zeroGyro()));
         driverXTrigger.onTrue(new ShootTouchingBase());
-        driverRightBumperTrigger.whileTrue(new FeederSetSpeed(()->1).repeatedly());
-        driverLeftTriggerToggle.toggleOnTrue(new AlignToSpeaker());
-        driverBackTrigger.onTrue(swerve.disableHeadingCommand());
-        driverPovLeftTrigger.onTrue(new ZeroIntakeArm());
-        driverPovRightTrigger.onTrue(new ZeroShooterArm());
+        // driverRightBumperTrigger.whileTrue(new FeederSetSpeed(()->1).repeatedly());
+        // driverLeftTriggerToggle.toggleOnTrue(new AlignToSpeaker());
+        // driverBackTrigger.onTrue(swerve.disableHeadingCommand());
+        // // driverPovLeftTrigger.onTrue(new ZeroIntakeArm());
+        // // driverPovRightTrigger.onTrue(new ZeroShooterArm());
 
-        // Operator Button Bindings
-        operatorStart.onTrue(new EStop());
-        operatorXTrigger.onTrue(new CollectToFeeder());
-        operatorYTrigger.toggleOnTrue(new PrepareForShoot().repeatedly());
-        operatorATrigger
-                .onTrue(Commands.runOnce(() -> intakeArm.moveArmTo(IntakeArmConstants.SafeSetPoint), intakeArm));
-        operatorRightBumperTrigger.onTrue(new IntakeArmDown());
-        operatorLeftBumperTrigger.onTrue(new IntakeArmUP());
-        operatorBTrigger.onTrue(
-                new InstantCommand(() -> ShooterSubsystem.getInstance().coast(), ShooterSubsystem.getInstance()));
+        // // Operator Button Bindings
+        // operatorStart.onTrue(new EStop());
+        // operatorXTrigger.onTrue(new CollectToFeeder());
+        // operatorYTrigger.toggleOnTrue(new PrepareForShoot().repeatedly());
+        // operatorATrigger
+        //         .onTrue(Commands.runOnce(() -> intakeArm.moveArmTo(IntakeArmConstants.SafeSetPoint), intakeArm));
+        // operatorRightBumperTrigger.onTrue(new IntakeArmDown());
+        // operatorLeftBumperTrigger.onTrue(new IntakeArmUP());
+        // operatorBTrigger.onTrue(
+        //         new InstantCommand(() -> ShooterSubsystem.getInstance().coast(), ShooterSubsystem.getInstance()));
 
-        IntakeSubsystem.getInstance().setDefaultCommand(new IntakeSetSpeed(() -> -operator.getHID().getLeftY()));
-        FeederSubsystem.getInstance().setDefaultCommand(new FeederSetSpeed(() -> -operator.getHID().getLeftY()));
+        // IntakeSubsystem.getInstance().setDefaultCommand(new IntakeSetSpeed(() -> -operator.getHID().getLeftY()));
+        // FeederSubsystem.getInstance().setDefaultCommand(new FeederSetSpeed(() -> -operator.getHID().getLeftY()));
     }
 }

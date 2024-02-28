@@ -10,9 +10,12 @@ import java.util.HashMap;
 import java.util.Map;
 
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
+import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.Utils.PathPlanner.PathPlannerHelper;
 import frc.robot.aRobotOperations.PrepareForShoot;
@@ -20,10 +23,12 @@ import frc.robot.aRobotOperations.ShootTouchingBase;
 import frc.robot.basicCommands.IntakeArmCommands.IntakeArmDown;
 import frc.robot.basicCommands.IntakeArmCommands.IntakeArmUP;
 import frc.robot.basicCommands.IntakeCommands.IntakeSetSpeed;
+import frc.robot.basicCommands.ShooterArmCommands.ZeroShooterArm;
 import frc.robot.basicCommands.ShooterCommands.ShooterSetSpeed;
 import frc.robot.basicCommands.SwerveCommands.AlignToAngle;
 import frc.robot.basicCommands.SwerveCommands.AllianceFlipUtil;
 import frc.robot.basicCommands.SwerveCommands.AutoAlignToSpeaker;
+import frc.robot.basicCommands.SwerveCommands.TeleopSwerve;
 import frc.robot.basicCommands.feederCommands.FeedUntilNote;
 import frc.robot.basicCommands.feederCommands.FeederSetSpeedForever;
 import frc.robot.subsystems.IntakeArmSubsystem;
@@ -47,15 +52,36 @@ public class AutoContainer {
     public AutoContainer() {
         this.autoPaths = new HashMap<String, Command>();
 
-        this.autoPaths.put("base,2", new SequentialCommandGroup(
-                new ShootTouchingBase().until(()->shooter.getUpShooterSpeed()>60), 
-                new FeederSetSpeedForever(1).withTimeout(0.5),
-                new IntakeArmDown(),
-                new ParallelCommandGroup(pathPlanner.followChoreoPath("base to 2", true), new FeedUntilNote(),
-                        new IntakeSetSpeed(() -> getNoteSpeed)),
-                new PrepareForShoot().repeatedly().until(()->shooter.getUpShooterSpeed()>65&&shooterArm.getArmPose()>20),
-                new ParallelCommandGroup(new FeederSetSpeedForever(1),new PrepareForShoot().repeatedly()).withTimeout(2),
-                new ShooterSetSpeed(0)));
+        this.autoPaths.put("no auto", Commands.none());
+
+        this.autoPaths.put("shoot only", new SequentialCommandGroup(
+                new PrepareForShoot().repeatedly().until(()->shooter.checkIfShooterAtSpeed()&&shooterArm.isArmReady()).withTimeout(4),
+                new PrepareForShoot().repeatedly().until(()->shooter.getUpShooterSpeed()>65&&shooterArm.isArmReady()),
+                new ParallelCommandGroup(new FeederSetSpeedForever(1),new PrepareForShoot().repeatedly()).withTimeout(1.5)));
+
+        this.autoPaths.put("shoot drive", new SequentialCommandGroup(
+                
+                new ShooterSetSpeed(60),
+                Commands.waitUntil(()->shooter.checkIfShooterAtSpeed()),
+
+                new FeederSetSpeedForever(1))
+                // new InstantCommand(()->swerve.drive(new Translation2d(-2, 0), 0, false, true, false)),
+                // Commands.waitSeconds(2),
+                // new InstantCommand(()->swerve.drive(new Translation2d(0, 0), 0, false, true, false))
+                
+                // ,new ZeroShooterArm())
+                );
+
+        // this.autoPaths.put("base,2", new SequentialCommandGroup(
+        //         .
+        //         new ShootTouchingBase().until(()->shooter.getUpShooterSpeed()>60), 
+        //         new FeederSetSpeedForever(1).withTimeout(0.5),
+        //         new IntakeArmDown(),
+        //         new ParallelCommandGroup(pathPlanner.followChoreoPath("base to 2", true), new FeedUntilNote(),
+        //                 new IntakeSetSpeed(() -> getNoteSpeed)),
+        //         new PrepareForShoot().repeatedly().until(()->shooter.getUpShooterSpeed()>65&&shooterArm.getArmPose()>20),
+        //         new ParallelCommandGroup(new FeederSetSpeedForever(1),new PrepareForShoot().repeatedly()).withTimeout(2),
+        //         new ShooterSetSpeed(0)));
 
         this.autoPaths.put("baseU,1", new SequentialCommandGroup(
                 // new AlignToAngle(AllianceFlipUtil.apply(Rotation2d.fromDegrees(0))),

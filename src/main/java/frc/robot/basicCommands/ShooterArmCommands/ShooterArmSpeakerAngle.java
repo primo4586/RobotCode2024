@@ -5,6 +5,7 @@
 package frc.robot.basicCommands.ShooterArmCommands;
 
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.basicCommands.SwerveCommands.AllianceFlipUtil;
 import frc.robot.basicCommands.SwerveCommands.FieldConstants;
 import frc.robot.subsystems.ShooterArmSubsystem;
 import frc.robot.subsystems.SwerveSubsystem;
@@ -25,7 +26,7 @@ public class ShooterArmSpeakerAngle extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    double angle = shooterArmSubsystem.angleFromDistance(SwerveSubsystem.getInstance().getPose().getTranslation().getDistance(FieldConstants.Speaker.centerSpeakerOpening.getTranslation()));
+    double angle = shooterArmSubsystem.angleFromDistance(SwerveSubsystem.getInstance().getPose().getTranslation().getDistance(AllianceFlipUtil.apply( FieldConstants.Speaker.centerSpeakerOpening).getTranslation()));
 
       shooterArmSubsystem.moveArmTo(angle>80?0:angle);
   }

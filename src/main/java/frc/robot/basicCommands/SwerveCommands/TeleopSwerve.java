@@ -44,7 +44,7 @@ public class TeleopSwerve extends Command {
                 rotationVal * Constants.Swerve.maxAngularVelocity, 
                 fieldSentric, 
                 true,
-                true
+                false
             );
         /* Slow mode drive */
         }else{
@@ -53,7 +53,7 @@ public class TeleopSwerve extends Command {
                 rotationVal * Constants.Swerve.maxAngularVelocity * Constants.Swerve.rotationSlowRatio, 
                 fieldSentric, 
                 true,
-                true
+                false
             );
         }
     }

@@ -40,8 +40,8 @@ public class AlignToSpeaker extends Command {
   public void execute() {
     Pose2d robot = swerve.getPose();
     
-    double deltaX = Math.abs(robot.getX() - Speaker.centerSpeakerOpening.getX());
-    double deltaY = Speaker.centerSpeakerOpening.getY() - robot.getY();
+    double deltaX = Math.abs(robot.getX() - AllianceFlipUtil.apply(Speaker.centerSpeakerOpening).getX());
+    double deltaY = AllianceFlipUtil.apply(Speaker.centerSpeakerOpening).getY() - robot.getY();
     double tempHeading = Units.radiansToDegrees(Math.atan2(deltaY, deltaX));
     if(DriverStation.getAlliance().get() == Alliance.Red)
       heading = new Rotation2d(Units.degreesToRadians(tempHeading + 180));

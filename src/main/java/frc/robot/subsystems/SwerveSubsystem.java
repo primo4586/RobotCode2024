@@ -5,6 +5,7 @@ import frc.robot.Constants.Swerve.Mod0;
 import frc.robot.Constants.Swerve.Mod1;
 import frc.robot.Constants.Swerve.Mod2;
 import frc.robot.Constants.Swerve.Mod3;
+import frc.robot.basicCommands.SwerveCommands.AllianceFlipUtil;
 import frc.robot.basicCommands.SwerveCommands.FieldConstants;
 
 import static frc.robot.Constants.Swerve.*;
@@ -209,7 +210,9 @@ public class SwerveSubsystem extends SubsystemBase {
                 });
 
         field2d.setRobotPose(poseEstimation.getEstimatedPosition());
-        SmartDashboard.putNumber("dis", getPose().getTranslation().getDistance(FieldConstants.Speaker.centerSpeakerOpening.getTranslation()));
+        SmartDashboard.putNumberArray("swerve state", getAdvantageModuleStates());
+        SmartDashboard.putNumberArray("swerve desierd", getAdvantageDesiredModuleStates());
+        SmartDashboard.putNumber("dis", getPose().getTranslation().getDistance(AllianceFlipUtil.apply( FieldConstants.Speaker.centerSpeakerOpening.getTranslation())));
 
     }
 

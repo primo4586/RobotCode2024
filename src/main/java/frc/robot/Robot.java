@@ -13,8 +13,11 @@ import frc.Utils.interpolation.InterpolationMap;
 import frc.Utils.shuffleboardAlike.AutoContainer;
 import frc.Utils.shuffleboardAlike.PrimoShuffleboard;
 import frc.Utils.swerve.CTREConfigs;
+import frc.robot.basicCommands.IntakeArmCommands.ZeroIntakeArm;
+import frc.robot.basicCommands.ShooterArmCommands.ZeroShooterArm;
 import frc.robot.subsystems.IntakeArmSubsystem;
 import frc.robot.subsystems.ShooterArmSubsystem;
+import frc.robot.subsystems.ShooterSubsystem;
 import frc.robot.subsystems.SwerveSubsystem;
 
 /**
@@ -98,14 +101,14 @@ public class Robot extends TimedRobot {
   public void disabledPeriodic() {
     if(RobotController.getUserButton()){
       SwerveSubsystem.getInstance().zeroGyro();
-      IntakeArmSubsystem.getInstance().manualZeroIntakeArm();
-      ShooterArmSubsystem.getInstance().manualZeroShooterArm();
+      ShooterArmSubsystem.getInstance().coast();
     }
   }
 
   /** This autonomous runs the autonomous command selected by your {@link RobotContainer} class. */
   @Override
   public void autonomousInit() {
+    ShooterArmSubsystem.getInstance().breakMode();
     m_autonomousCommand = autoContainer.getAutonomousCommand();
 
     // schedule the autonomous command (example)

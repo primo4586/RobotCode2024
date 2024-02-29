@@ -1,4 +1,4 @@
-package frc.Utils.swerve;
+package frc.utils.swerve;
 
 import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.SensorDirectionValue;

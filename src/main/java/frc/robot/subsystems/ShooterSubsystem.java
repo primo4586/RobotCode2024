@@ -21,9 +21,9 @@ import java.util.function.DoubleSupplier;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.Utils.interpolation.InterpolateUtil;
-import frc.Utils.vision.Vision;
 import frc.robot.Constants;
+import frc.utils.interpolation.InterpolateUtil;
+import frc.utils.vision.Vision;
 
 public class ShooterSubsystem extends SubsystemBase {
   private TalonFX m_upShooterMotor;
@@ -49,8 +49,8 @@ public class ShooterSubsystem extends SubsystemBase {
   /** Creates a new ShooterSubsysem. */
   private ShooterSubsystem() {
     // giving values to the motors
-    this.m_upShooterMotor = new TalonFX(kUpMotorShooterID, Constants.canBus_name);
-    this.m_downShooterMotor = new TalonFX(kDownMotorShooterID, Constants.canBus_name);
+    this.m_upShooterMotor = new TalonFX(kUpMotorShooterID, Constants.CAN_BUS_NAME);
+    this.m_downShooterMotor = new TalonFX(kDownMotorShooterID, Constants.CAN_BUS_NAME);
 
     // declaring Configs
     TalonFXConfiguration upConfigs = new TalonFXConfiguration();

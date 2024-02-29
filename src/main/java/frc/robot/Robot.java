@@ -9,13 +9,11 @@ import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
-import frc.Utils.interpolation.InterpolationMap;
-import frc.Utils.shuffleboardAlike.AutoContainer;
-import frc.Utils.shuffleboardAlike.PrimoShuffleboard;
-import frc.Utils.swerve.CTREConfigs;
-import frc.robot.subsystems.IntakeArmSubsystem;
-import frc.robot.subsystems.ShooterArmSubsystem;
 import frc.robot.subsystems.SwerveSubsystem;
+import frc.utils.interpolation.InterpolationMap;
+import frc.utils.shuffleboardAlike.AutoContainer;
+import frc.utils.shuffleboardAlike.PrimoShuffleboard;
+import frc.utils.swerve.CTREConfigs;
 
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to

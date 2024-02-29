@@ -1,4 +1,4 @@
-package frc.Utils.interpolation;
+package frc.utils.interpolation;
 
 import java.util.HashMap;
 

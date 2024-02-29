@@ -21,9 +21,9 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.util.Units;
-import frc.Utils.interpolation.InterpolationMap;
-import frc.Utils.swerve.COTSFalconSwerveConstants;
-import frc.Utils.swerve.SwerveModuleConstants;
+import frc.utils.interpolation.InterpolationMap;
+import frc.utils.swerve.COTSFalconSwerveConstants;
+import frc.utils.swerve.SwerveModuleConstants;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
@@ -32,7 +32,7 @@ public final class Constants {
 
     public static final double stickDeadband = 0.1;
     
-    public static final String canBus_name = "canBus";
+    public static final String CAN_BUS_NAME = "canBus";
 
     public static final class IntakeArmConstants {
         // mm
@@ -240,59 +240,6 @@ public final class Constants {
         public static final Pose2d target = new Pose2d(1, 1, new Rotation2d(Units.degreesToRadians(0)));
     }
 
-    public static class ShooterArmConstants {
-
-        // technical Constants
-        public static final int ShooterArmID = 5;
-        public static final int SwitchID = 2;
-        public static final int encoderCountsPerRevolution = 1;
-        public static final double gearRatio = 100.0/22.0 * 100.0;
-        public static final double TICKS_PER_DEGREE = encoderCountsPerRevolution * gearRatio / 360.0;
-
-        // condition Costants
-        public static final double minimumError = 2.0;
-
-        // motionMagic Constants
-        public static final double mmCruise = 80;
-        public static final double mmAcceleration = 300;
-        public static final double mmJerk = 1600;
-
-        public static final double kp = 0.1;
-        public static final double kd = 0.0;
-        public static final double ks = 0.032658;
-        public static final double ka = 0.001121;
-        public static final double kv = 0.13707;
-
-        // MaxVol Constant
-        public static final double peekReverseVoltage = -11.5;
-        public static final double peekForwardVoltage = 11.5;
-
-        // Constant limit values
-        public static final double forwardLimit = 300;
-        public static final double backwordLimit = 300;
-
-        // ArmPoseReset Constant
-        public static final double resetPose = 0.0;
-        public static final double resetSpeed = -0.1;
-
-        public static final double shooterArmStartPose = 00;
-
-        public static InterpolationMap SHOOTER_ANGLE_INTERPOLATION_MAP = new InterpolationMap()
-                .put(2.13, 20)
-                .put(3.2, 37)
-                .put(3.655, 40.5)
-                .put(3.29, 39)
-                .put(5.441276465250574, 52.8)
-                .put(2.135, 20)
-                .put(2.19, 18)
-                .put(1.995, 15)
-                .put(1.46, 9)
-                .put(1, 0);
-
-        public static final double ShootBaseAngle = 0; //6.1064453125
-        public static final double ShootStageAngle = 3;
-    }
-
     public static class ShooterConstants {
         // m_shooterMotor ID
         public static final int kUpMotorShooterID = 6;
@@ -333,42 +280,5 @@ public final class Constants {
 
         public static final double ShootBaseSpeed = 80;
         public static final double ShootStageSpeed = 3;
-    }
-
-    public static class IntakeConstants {
-        public static final int intakeNoteSensorID = 5;//todo
-        public static final int IntakeMotorID = 7;
-        public static final double getNoteSpeed = 0.9;
-        public static final double feedToTrapSpeed = 0.4;
-    }
-
-    public static class FeederConstants {
-
-        public static final int FeederShootSpeed = 1;
-        public static final int FeederMotorId = 9;
-        public static final int feederNoteSensorID = 4;//todo
-        public static final double FeederMotorSpeed = 0.8;
-        public static final double getNoteSpeed = 0.9;
-        public static final double TimeToFeed = 0.7;
-
-    }
-
-    public static class TrapArmConstants {
-        public static final int ArmMotorID = 10;
-        public static final int OuterSwitchID = 9;//todo
-        public static final double GoInSpeed = -0.1;
-        public static final double GoOutSpeed = 0.1;
-
-    }
-
-    public static class trapConstants {
-        public static final int TRAP_MOTOR_ID = 11;
-        public static final int TrapNoteSensorID = 0;//todo
-        public static final double TrapCollectSpeed = 0.1;
-    }
-
-    public static class climbingConstants {
-        public static final int M_CLIMBINGRIGHT_MOTOR_ID = 6;
-        public static final int M_CLIMBINGLEFT_MOTOR_ID = 5;
     }
 }

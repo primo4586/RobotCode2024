@@ -1,4 +1,4 @@
-package frc.Utils.shuffleboardAlike;
+package frc.utils.shuffleboardAlike;
 
 import java.util.ArrayList;
 import java.util.List;

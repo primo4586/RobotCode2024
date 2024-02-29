@@ -7,20 +7,10 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
-import frc.Utils.PathPlanner.PathPlannerHelper;
 import frc.robot.Constants.IntakeArmConstants;
-import frc.robot.aRobotOperations.CollectToFeeder;
-import frc.robot.aRobotOperations.EStop;
-import frc.robot.aRobotOperations.PrepareForShoot;
-import frc.robot.aRobotOperations.ShootTouchingBase;
-import frc.robot.basicCommands.IntakeArmCommands.IntakeArmDown;
-import frc.robot.basicCommands.IntakeArmCommands.IntakeArmUP;
-import frc.robot.basicCommands.IntakeArmCommands.ZeroIntakeArm;
-import frc.robot.basicCommands.IntakeCommands.IntakeSetSpeed;
-import frc.robot.basicCommands.ShooterArmCommands.ZeroShooterArm;
-import frc.robot.basicCommands.SwerveCommands.*;
-import frc.robot.basicCommands.feederCommands.FeederSetSpeed;
+import frc.robot.commands.SwerveCommands.*;
 import frc.robot.subsystems.*;
+import frc.utils.PathPlanner.PathPlannerHelper;
 
 /**
  * This class is where the bulk of the robot should be declared. Since
@@ -60,8 +50,6 @@ public class RobotContainer {
 
     /* Subsystems */
     private final SwerveSubsystem swerve = SwerveSubsystem.getInstance();
-    private final IntakeSubsystem intake = IntakeSubsystem.getInstance();
-    private final IntakeArmSubsystem intakeArm = IntakeArmSubsystem.getInstance();
 
     /**
      * The container for the robot. Contains subsystems, OI devices, and commands.
@@ -92,27 +80,27 @@ public class RobotContainer {
     private void configureButtonBindings() {
 
         // Driver Button Bindings
-        driverStart.onTrue(new EStop());
-        driverYTrigger.onTrue(new InstantCommand(() -> swerve.zeroGyro()));
-        driverXTrigger.onTrue(new ShootTouchingBase());
-        driverRightBumperTrigger.whileTrue(new FeederSetSpeed(()->1).repeatedly());
-        driverLeftTriggerToggle.toggleOnTrue(new AlignToSpeaker());
-        driverBackTrigger.onTrue(swerve.disableHeadingCommand());
-        driverPovLeftTrigger.onTrue(new ZeroIntakeArm());
-        driverPovRightTrigger.onTrue(new ZeroShooterArm());
+        // driverStart.onTrue(new EStop());
+        // driverYTrigger.onTrue(new InstantCommand(() -> swerve.zeroGyro()));
+        // driverXTrigger.onTrue(new ShootTouchingBase());
+        // driverRightBumperTrigger.whileTrue(new FeederSetSpeed(()->1).repeatedly());
+        // driverLeftTriggerToggle.toggleOnTrue(new AlignToSpeaker());
+        // driverBackTrigger.onTrue(swerve.disableHeadingCommand());
+        // driverPovLeftTrigger.onTrue(new ZeroIntakeArm());
+        // driverPovRightTrigger.onTrue(new ZeroShooterArm());
 
-        // Operator Button Bindings
-        operatorStart.onTrue(new EStop());
-        operatorXTrigger.onTrue(new CollectToFeeder());
-        operatorYTrigger.toggleOnTrue(new PrepareForShoot().repeatedly());
-        operatorATrigger
-                .onTrue(Commands.runOnce(() -> intakeArm.moveArmTo(IntakeArmConstants.SafeSetPoint), intakeArm));
-        operatorRightBumperTrigger.onTrue(new IntakeArmDown());
-        operatorLeftBumperTrigger.onTrue(new IntakeArmUP());
-        operatorBTrigger.onTrue(
-                new InstantCommand(() -> ShooterSubsystem.getInstance().coast(), ShooterSubsystem.getInstance()));
+        // // Operator Button Bindings
+        // operatorStart.onTrue(new EStop());
+        // operatorXTrigger.onTrue(new CollectToFeeder());
+        // operatorYTrigger.toggleOnTrue(new PrepareForShoot().repeatedly());
+        // operatorATrigger
+        //         .onTrue(Commands.runOnce(() -> intakeArm.moveArmTo(IntakeArmConstants.SafeSetPoint), intakeArm));
+        // operatorRightBumperTrigger.onTrue(new IntakeArmDown());
+        // operatorLeftBumperTrigger.onTrue(new IntakeArmUP());
+        // operatorBTrigger.onTrue(
+        //         new InstantCommand(() -> ShooterSubsystem.getInstance().coast(), ShooterSubsystem.getInstance()));
 
-        IntakeSubsystem.getInstance().setDefaultCommand(new IntakeSetSpeed(() -> -operator.getHID().getLeftY()));
-        FeederSubsystem.getInstance().setDefaultCommand(new FeederSetSpeed(() -> -operator.getHID().getLeftY()));
+        // IntakeSubsystem.getInstance().setDefaultCommand(new IntakeSetSpeed(() -> -operator.getHID().getLeftY()));
+        // FeederSubsystem.getInstance().setDefaultCommand(new FeederSetSpeed(() -> -operator.getHID().getLeftY()));
     }
 }

@@ -14,13 +14,13 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.Timer;
-import frc.Utils.motors.CANSparkMaxUtil;
-import frc.Utils.motors.FalconConversions;
-import frc.Utils.motors.CANSparkMaxUtil.Usage;
-import frc.Utils.swerve.CTREModuleState;
-import frc.Utils.swerve.SwerveModuleConstants;
 import frc.robot.Constants;
 import frc.robot.Robot;
+import frc.utils.motors.CANSparkMaxUtil;
+import frc.utils.motors.FalconConversions;
+import frc.utils.motors.CANSparkMaxUtil.Usage;
+import frc.utils.swerve.CTREModuleState;
+import frc.utils.swerve.SwerveModuleConstants;
 
 public class SwerveModule {
     public int moduleNumber;
@@ -47,7 +47,7 @@ public class SwerveModule {
         this.angleOffset = moduleConstants.angleOffset;
 
         /* Angle Encoder Config */
-        mCancoder = new CANcoder(moduleConstants.cancoderID, Constants.canBus_name);
+        mCancoder = new CANcoder(moduleConstants.cancoderID, Constants.CAN_BUS_NAME);
         configAngleEncoder();
 
         /* Angle Motor Config */
@@ -57,7 +57,7 @@ public class SwerveModule {
         configAngleMotor();
 
         /* Drive Motor Config */
-        mDriveMotor = new TalonFX(moduleConstants.driveMotorID, Constants.canBus_name);
+        mDriveMotor = new TalonFX(moduleConstants.driveMotorID, Constants.CAN_BUS_NAME);
         configDriveMotor();
 
         lastAngle = getState().angle;

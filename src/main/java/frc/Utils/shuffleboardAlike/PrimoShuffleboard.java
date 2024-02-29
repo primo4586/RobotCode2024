@@ -1,4 +1,4 @@
-package frc.Utils.shuffleboardAlike;
+package frc.utils.shuffleboardAlike;
 
 import java.util.HashMap;
 import java.util.Map;

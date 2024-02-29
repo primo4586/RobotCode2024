@@ -1,4 +1,4 @@
-package frc.Utils.interpolation;
+package frc.utils.interpolation;
 
 public class InterpolationPoint {
 

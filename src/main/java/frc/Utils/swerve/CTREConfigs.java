@@ -5,7 +5,7 @@ import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.signals.AbsoluteSensorRangeValue;
 
 import edu.wpi.first.math.util.Units;
-import frc.robot.Constants;
+import frc.robot.subsystems.swerve.SwerveConstants.swerveConstants;
 import frc.utils.motors.FalconConversions;
 
 public final class CTREConfigs {
@@ -17,23 +17,23 @@ public final class CTREConfigs {
         /** Swerve Drive Motor Configuration */
         /* Motor Inverts and Neutral Mode */
         var driveMotorOutput = swerveDriveFXConfig.MotorOutput;
-        driveMotorOutput.Inverted = Constants.Swerve.driveMotorInvert;
-        driveMotorOutput.NeutralMode = Constants.Swerve.driveNeutralMode;
+        driveMotorOutput.Inverted = swerveConstants.driveMotorInvert;
+        driveMotorOutput.NeutralMode = swerveConstants.driveNeutralMode;
 
         //MM
         var driveMotionMagic = swerveDriveFXConfig.MotionMagic;
         driveMotionMagic.MotionMagicAcceleration = FalconConversions.MPSToTalon(7, Units.inchesToMeters(4),
-                Constants.Swerve.driveGearRatio);
+                swerveConstants.driveGearRatio);
         driveMotionMagic.MotionMagicCruiseVelocity = FalconConversions.MPSToTalon(3.5, Units.inchesToMeters(4),
-                Constants.Swerve.driveGearRatio);
+                swerveConstants.driveGearRatio);
         driveMotionMagic.MotionMagicJerk = driveMotionMagic.MotionMagicAcceleration * 10;
 
         /* Current Limiting */
         var driveCurrentLimits = swerveDriveFXConfig.CurrentLimits;
-        driveCurrentLimits.SupplyCurrentLimitEnable = Constants.Swerve.driveEnableCurrentLimit;
-        driveCurrentLimits.SupplyCurrentLimit = Constants.Swerve.driveCurrentLimit;
-        driveCurrentLimits.SupplyCurrentThreshold = Constants.Swerve.driveCurrentThreshold;
-        driveCurrentLimits.SupplyTimeThreshold = Constants.Swerve.driveCurrentThresholdTime;
+        driveCurrentLimits.SupplyCurrentLimitEnable = swerveConstants.driveEnableCurrentLimit;
+        driveCurrentLimits.SupplyCurrentLimit = swerveConstants.driveCurrentLimit;
+        driveCurrentLimits.SupplyCurrentThreshold = swerveConstants.driveCurrentThreshold;
+        driveCurrentLimits.SupplyTimeThreshold = swerveConstants.driveCurrentThresholdTime;
 
         /* PID Config */
         var driveSlot0 = swerveDriveFXConfig.Slot0;
@@ -46,14 +46,14 @@ public final class CTREConfigs {
 
 
         /* Open and Closed Loop Ramping */
-        swerveDriveFXConfig.OpenLoopRamps.DutyCycleOpenLoopRampPeriod = Constants.Swerve.openLoopRamp;
-        swerveDriveFXConfig.OpenLoopRamps.VoltageOpenLoopRampPeriod = Constants.Swerve.openLoopRamp;
+        swerveDriveFXConfig.OpenLoopRamps.DutyCycleOpenLoopRampPeriod = swerveConstants.openLoopRamp;
+        swerveDriveFXConfig.OpenLoopRamps.VoltageOpenLoopRampPeriod = swerveConstants.openLoopRamp;
 
-        swerveDriveFXConfig.ClosedLoopRamps.DutyCycleClosedLoopRampPeriod = Constants.Swerve.closedLoopRamp;
-        swerveDriveFXConfig.ClosedLoopRamps.VoltageClosedLoopRampPeriod = Constants.Swerve.closedLoopRamp;
+        swerveDriveFXConfig.ClosedLoopRamps.DutyCycleClosedLoopRampPeriod = swerveConstants.closedLoopRamp;
+        swerveDriveFXConfig.ClosedLoopRamps.VoltageClosedLoopRampPeriod = swerveConstants.closedLoopRamp;
 
         /** Swerve CANCoder Configuration */
-        swerveCANcoderConfig.MagnetSensor.SensorDirection = Constants.Swerve.cancoderInvert;
+        swerveCANcoderConfig.MagnetSensor.SensorDirection = swerveConstants.cancoderInvert;
         swerveCANcoderConfig.MagnetSensor.AbsoluteSensorRange = AbsoluteSensorRangeValue.Unsigned_0To1;
     }
 }

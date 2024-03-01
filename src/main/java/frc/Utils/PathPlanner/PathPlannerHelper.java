@@ -18,9 +18,8 @@ import edu.wpi.first.wpilibj2.command.Commands;
 
 import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
 
-import frc.robot.Constants;
-import frc.robot.Constants.AutoConstants;
 import frc.robot.subsystems.swerve.SwerveSubsystem;
+import frc.robot.subsystems.swerve.SwerveConstants.AutoConstants;
 import frc.utils.AllianceFlipUtil;
 
 /** Add your docs here. */
@@ -48,7 +47,7 @@ public class PathPlannerHelper {
                 new HolonomicPathFollowerConfig(
                         AutoConstants.XY_PID,
                         AutoConstants.rotation_PID,
-                        Constants.AutoConstants.kMaxSpeedMetersPerSecond,
+                        AutoConstants.kMaxSpeedMetersPerSecond,
                         AutoConstants.driveBaseRadius,
                         AutoConstants.replanningConfig),
                 () -> {

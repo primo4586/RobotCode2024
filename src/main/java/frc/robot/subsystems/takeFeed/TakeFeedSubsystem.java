@@ -39,12 +39,20 @@ public class TakeFeedSubsystem extends SubsystemBase {
     m_motor.getConfigurator().apply(motorConfig);
   }
 
-  public void setSpeed(Double voltage) {
+  public void setSpeed(double voltage) {
     m_motor.setControl(voltageOut.withOutput(voltage));
   }
 
   public boolean getOpticSensorValue() {
     return m_opticSensor.get();
+  }
+
+  public double getSpeed() {
+    return m_motor.getVelocity().getValueAsDouble();
+  }
+
+  public boolean atShootSpeed(){
+    return getSpeed() >= takeFeedConstants.AT_SHOOTING_SPEED;
   }
 
   @Override

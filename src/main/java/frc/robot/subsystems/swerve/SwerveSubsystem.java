@@ -1,13 +1,12 @@
 package frc.robot.subsystems.swerve;
 
 import frc.robot.FieldConstants;
-import frc.robot.Constants.Swerve.Mod0;
-import frc.robot.Constants.Swerve.Mod1;
-import frc.robot.Constants.Swerve.Mod2;
-import frc.robot.Constants.Swerve.Mod3;
+import frc.robot.subsystems.swerve.SwerveConstants.swerveConstants;
+import frc.robot.subsystems.swerve.SwerveConstants.swerveConstants.Mod0;
+import frc.robot.subsystems.swerve.SwerveConstants.swerveConstants.Mod1;
+import frc.robot.subsystems.swerve.SwerveConstants.swerveConstants.Mod2;
+import frc.robot.subsystems.swerve.SwerveConstants.swerveConstants.Mod3;
 import frc.utils.vision.Vision;
-
-import static frc.robot.Constants.Swerve.*;
 
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
@@ -44,7 +43,7 @@ public class SwerveSubsystem extends SubsystemBase {
     Field2d field2d = new Field2d();
     Rotation2d simYaw = new Rotation2d();
     public Rotation2d headingSupplier = null;
-    public PIDController headingPid = aligningPID;
+    public PIDController headingPid = swerveConstants.aligningPID;
 
     private static SwerveSubsystem instance = new SwerveSubsystem();
 
@@ -57,7 +56,7 @@ public class SwerveSubsystem extends SubsystemBase {
     }
 
     private SwerveSubsystem() {
-        talonSRX = new TalonSRX(pigeonID);
+        talonSRX = new TalonSRX(swerveConstants.pigeonID);
         gyro = new PigeonIMU(talonSRX);
         gyro.configFactoryDefault();
         zeroGyro();
@@ -73,10 +72,10 @@ public class SwerveSubsystem extends SubsystemBase {
                 new SwerveModule(3, Mod3.constants)
         };
 
-            poseEstimation = new SwerveDrivePoseEstimator(swerveKinematics, getYaw(), getModulePositions(),
+            poseEstimation = new SwerveDrivePoseEstimator(swerveConstants.swerveKinematics, getYaw(), getModulePositions(),
                     new Pose2d(0, 0, new Rotation2d(0)));
         
-        odometry = new SwerveDriveOdometry(swerveKinematics, getYaw(), getModulePositions());
+        odometry = new SwerveDriveOdometry(swerveConstants.swerveKinematics, getYaw(), getModulePositions());
                 
         headingPid.enableContinuousInput(-180, 180);
         headingPid.setTolerance( 1);
@@ -84,7 +83,7 @@ public class SwerveSubsystem extends SubsystemBase {
 
     public void drive(Translation2d translation, double rotation, boolean fieldRelative, boolean isOpenLoop,
             boolean scaled) {
-        SwerveModuleState[] swerveModuleStates = swerveKinematics.toSwerveModuleStates(
+        SwerveModuleState[] swerveModuleStates = swerveConstants.swerveKinematics.toSwerveModuleStates(
                 fieldRelative ? ChassisSpeeds.fromFieldRelativeSpeeds(
                         translation.getX(),
                         translation.getY(),
@@ -96,7 +95,7 @@ public class SwerveSubsystem extends SubsystemBase {
                                 translation.getX(),
                                 translation.getY(),
                                 rotation));
-        SwerveDriveKinematics.desaturateWheelSpeeds(swerveModuleStates, maxSpeed);
+        SwerveDriveKinematics.desaturateWheelSpeeds(swerveModuleStates, swerveConstants.maxSpeed);
 
         if (!scaled) {
             for (SwerveModule mod : mSwerveMods) {
@@ -112,7 +111,7 @@ public class SwerveSubsystem extends SubsystemBase {
 
     /* Used by SwerveControllerCommand in Auto */
     public void setModuleStates(SwerveModuleState[] desiredStates) {
-        SwerveDriveKinematics.desaturateWheelSpeeds(desiredStates, maxSpeed);
+        SwerveDriveKinematics.desaturateWheelSpeeds(desiredStates, swerveConstants.maxSpeed);
 
         for (SwerveModule mod : mSwerveMods) {
             mod.setDesiredState(desiredStates[mod.moduleNumber], false);
@@ -120,7 +119,7 @@ public class SwerveSubsystem extends SubsystemBase {
     }
 
     public void setChassisSpeeds(ChassisSpeeds chassisSpeeds) {
-        setModuleStates(swerveKinematics.toSwerveModuleStates(chassisSpeeds));
+        setModuleStates(swerveConstants.swerveKinematics.toSwerveModuleStates(chassisSpeeds));
     }
 
     public Pose2d getPose() {
@@ -156,7 +155,7 @@ public class SwerveSubsystem extends SubsystemBase {
     }
 
     public Rotation2d getYaw() {
-        return (invertGyro) ? Rotation2d.fromDegrees(360 - gyro.getYaw())
+        return (swerveConstants.invertGyro) ? Rotation2d.fromDegrees(360 - gyro.getYaw())
                 : Rotation2d.fromDegrees(gyro.getYaw());
     }
 
@@ -185,7 +184,7 @@ public class SwerveSubsystem extends SubsystemBase {
     }
 
     public ChassisSpeeds getRobotVelocity() {
-        return swerveKinematics.toChassisSpeeds(getModuleStates());
+        return swerveConstants.swerveKinematics.toChassisSpeeds(getModuleStates());
     }
 
     @Override
@@ -245,41 +244,6 @@ public class SwerveSubsystem extends SubsystemBase {
             driveVelocityAverage += module.getCharacterizationVelocity();
         }
         return driveVelocityAverage / 4.0;
-    }
-
-    public SwerveModuleState[] getSimStates() {
-        SwerveModuleState[] states = new SwerveModuleState[4];
-        for (SwerveModule mod : mSwerveMods) {
-            states[mod.moduleNumber] = mod.getDesierdState();
-        }
-        return states;
-    }
-
-    SwerveModulePosition simModPose = new SwerveModulePosition();
-    SwerveModulePosition[] poses = new SwerveModulePosition[] {
-            simModPose, simModPose, simModPose, simModPose
-    };
-    Rotation2d rotation2d = new Rotation2d();
-    double distance = 0;
-
-    @Override
-    public void simulationPeriodic() {
-        super.simulationPeriodic();
-
-        ChassisSpeeds chassisSpeed = swerveKinematics.toChassisSpeeds(getSimStates());
-
-        simYaw = getYaw();
-
-        simModPose.angle = getSimStates()[0].angle;
-        simModPose.distanceMeters += getSimStates()[0].speedMetersPerSecond * 0.02;
-
-        for (int i = 0; i < 4; i++) {
-            poses[i] = simModPose;
-        }
-
-        poseEstimation.update(simYaw, poses);
-
-        field2d.setRobotPose(getPose());
     }
 
     public void setHeading(Rotation2d heading) {

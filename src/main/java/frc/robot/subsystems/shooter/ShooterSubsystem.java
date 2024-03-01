@@ -12,25 +12,22 @@ import com.ctre.phoenix6.signals.NeutralModeValue;
 
 import static frc.robot.subsystems.shooter.ShooterConstants.shooterConstants;
 
-import java.util.function.DoubleSupplier;
-
-import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
-import frc.robot.Constants.Swerve;
+import frc.robot.FieldConstants;
 import frc.robot.subsystems.swerve.SwerveSubsystem;
+import frc.utils.AllianceFlipUtil;
 import frc.utils.interpolation.InterpolateUtil;
-import frc.utils.vision.Vision;
 
 public class ShooterSubsystem extends SubsystemBase {
     private TalonFX m_upShooterMotor;
     private TalonFX m_downShooterMotor;
     private double targetSpeed;
+    private final SwerveSubsystem swerve = SwerveSubsystem.getInstance();
 
-    private final Vision vision = Vision.getInstance();
-
-    private final MotionMagicVelocityVoltage motionMagic = new MotionMagicVelocityVoltage(0, shooterConstants.MOTION_MAGIC_ACCELERATION,
+    private final MotionMagicVelocityVoltage motionMagic = new MotionMagicVelocityVoltage(0,
+            shooterConstants.MOTION_MAGIC_ACCELERATION,
             false, 0.0, 0, false, false, false);
 
     private static ShooterSubsystem instance;
@@ -160,8 +157,11 @@ public class ShooterSubsystem extends SubsystemBase {
                 && ((Math.abs(getDownShooterSpeed() - targetSpeed) < shooterConstants.MAX_ERROR)));
     }
 
-    public double speakerInterpolate(Pose2d pose2d) {
-        return InterpolateUtil.interpolate(shooterConstants.SHOOTER_INTERPOLATION, SwerveSubsystem.getInstance().getPose().getTranslation().getDistance(null));
+    public double speakerInterpolate() {
+        return InterpolateUtil.interpolate(
+                shooterConstants.SHOOTER_INTERPOLATION,
+                swerve.getPose().getTranslation().getDistance(
+                        AllianceFlipUtil.apply(FieldConstants.Speaker.centerSpeakerOpening).getTranslation()));
     }
 
     public void coast() {

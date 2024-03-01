@@ -14,6 +14,8 @@ public class TakeFeedConstants {
 
         public static final int SHOOT_SPEED = 1;
         public static final double COLLECT_SPEED = 0.9;
+        public static final double AT_SHOOTING_SPEED = 0;
+        public static final double FEED_SHOOTER_TIME = 0;
     }
 
 }

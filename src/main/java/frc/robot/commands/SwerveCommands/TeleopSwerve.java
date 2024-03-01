@@ -2,6 +2,7 @@ package frc.robot.commands.SwerveCommands;
 
 import frc.robot.Constants;
 import frc.robot.subsystems.swerve.SwerveSubsystem;
+import frc.robot.subsystems.swerve.SwerveConstants.swerveConstants;
 
 import java.util.function.BooleanSupplier;
 import java.util.function.DoubleSupplier;
@@ -40,8 +41,8 @@ public class TeleopSwerve extends Command {
         /* Drive */
         if (!slowMode.getAsBoolean()){
             s_Swerve.drive(
-                new Translation2d(translationVal, strafeVal).times(Constants.Swerve.maxSpeed), 
-                rotationVal * Constants.Swerve.maxAngularVelocity, 
+                new Translation2d(translationVal, strafeVal).times(swerveConstants.maxSpeed), 
+                rotationVal * swerveConstants.maxAngularVelocity, 
                 fieldSentric, 
                 true,
                 false
@@ -49,8 +50,8 @@ public class TeleopSwerve extends Command {
         /* Slow mode drive */
         }else{
             s_Swerve.drive(
-                new Translation2d(translationVal, strafeVal).times(Constants.Swerve.maxSpeed * Constants.Swerve.XYSlowRatio), 
-                rotationVal * Constants.Swerve.maxAngularVelocity * Constants.Swerve.rotationSlowRatio, 
+                new Translation2d(translationVal, strafeVal).times(swerveConstants.maxSpeed * swerveConstants.XYSlowRatio), 
+                rotationVal * swerveConstants.maxAngularVelocity * swerveConstants.rotationSlowRatio, 
                 fieldSentric, 
                 true,
                 false

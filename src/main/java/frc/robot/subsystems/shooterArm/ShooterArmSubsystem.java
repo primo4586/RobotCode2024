@@ -17,20 +17,25 @@ import com.ctre.phoenix6.signals.NeutralModeValue;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
+import frc.robot.FieldConstants;
 import frc.robot.subsystems.shooterArm.ShooterArmConstants.shooterArmConstants;
+import frc.robot.subsystems.swerve.SwerveSubsystem;
+import frc.utils.AllianceFlipUtil;
+import frc.utils.interpolation.InterpolateUtil;
 
 public class ShooterArmSubsystem extends SubsystemBase {
 
+  private final SwerveSubsystem swerve = SwerveSubsystem.getInstance();
   private TalonFX m_shooterArmMotor;
   DigitalInput limitSwitch = new DigitalInput(shooterArmConstants.SWITCH_ID);
   private final MotionMagicVoltage motionMagic = new MotionMagicVoltage(0,
-  false,
-  0.0, 
-  0, 
-  true, 
-  false, 
+      false,
+      0.0,
+      0,
+      true,
+      false,
       getSwitch());
-  
+
   double targetPose = 0;
 
   private ShooterArmSubsystem() {
@@ -78,7 +83,6 @@ public class ShooterArmSubsystem extends SubsystemBase {
 
   }
 
-
   // set the position of the arm
   public void setPosition(double pose) {
     m_shooterArmMotor.setPosition(pose);
@@ -108,25 +112,33 @@ public class ShooterArmSubsystem extends SubsystemBase {
   public void setSpeedArm(DoubleSupplier speed) {
     m_shooterArmMotor.set(speed.getAsDouble());
   }
-  
-  public void coast(){
+
+  public void coast() {
     m_shooterArmMotor.setNeutralMode(NeutralModeValue.Coast);
   }
 
-  public void breakMode(){
+  public void breakMode() {
     m_shooterArmMotor.setNeutralMode(NeutralModeValue.Brake);
   }
 
-  public void manualZeroShooterArm(){
+  public void manualZeroShooterArm() {
     coast();
-    if(getSwitch()){
-      while (getSwitch()) {}
+    if (getSwitch()) {
+      while (getSwitch()) {
+      }
     }
-    while(!getSwitch()){}
+    while (!getSwitch()) {
+    }
     setPosition(0);
     breakMode();
   }
 
+  public double speakerInterpolate() {
+    return InterpolateUtil.interpolate(
+        shooterArmConstants.SHOOTER_ANGLE_INTERPOLATION_MAP,
+        swerve.getPose().getTranslation().getDistance(
+            AllianceFlipUtil.apply(FieldConstants.Speaker.centerSpeakerOpening).getTranslation()));
+  }
 
   @Override
   public void periodic() {

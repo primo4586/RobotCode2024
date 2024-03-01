@@ -5,7 +5,6 @@ import static edu.wpi.first.apriltag.AprilTagFields.k2024Crescendo;
 import edu.wpi.first.apriltag.AprilTagFieldLayout;
 import edu.wpi.first.math.geometry.*;
 import edu.wpi.first.math.util.Units;
-import frc.utils.AllianceFlipUtil;
 
 import java.io.IOException;
 

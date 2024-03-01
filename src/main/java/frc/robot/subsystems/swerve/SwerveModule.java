@@ -75,18 +75,6 @@ public class SwerveModule {
         this.desiredState = desiredState;
     }
 
-    public void scaledSetDesiredState(SwerveModuleState desiredState, boolean isOpenLoop) {
-        /*
-         * This is a custom optimize function, since default WPILib optimize assumes
-         * continuous controller which CTRE and Rev onboard is not
-         */
-        desiredState = CTREModuleState.optimize(desiredState, getState().angle);
-        desiredState.speedMetersPerSecond *= desiredState.angle.minus(getAngle()).getCos();
-        setAngle(desiredState);
-        setSpeed(desiredState, isOpenLoop);
-        this.desiredState = desiredState;
-    }
-
     private void setSpeed(SwerveModuleState desiredState, boolean isOpenLoop) {
         if (isOpenLoop) {
             driveDutyCycle.Output = desiredState.speedMetersPerSecond / swerveConstants.maxSpeed;

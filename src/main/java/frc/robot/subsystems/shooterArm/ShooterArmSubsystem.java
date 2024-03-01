@@ -11,6 +11,7 @@ import com.ctre.phoenix6.configs.MotionMagicConfigs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.MotionMagicVoltage;
 import com.ctre.phoenix6.hardware.TalonFX;
+import com.ctre.phoenix6.signals.ForwardLimitTypeValue;
 import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 
@@ -33,8 +34,8 @@ public class ShooterArmSubsystem extends SubsystemBase {
       0.0,
       0,
       true,
-      false,
-      getSwitch());
+      true,
+      true);
 
   double targetPose = 0;
 
@@ -109,8 +110,8 @@ public class ShooterArmSubsystem extends SubsystemBase {
     return !this.limitSwitch.get();
   }
 
-  public void setSpeedArm(DoubleSupplier speed) {
-    m_shooterArmMotor.set(speed.getAsDouble());
+  public void setSpeed(double speed) {
+    m_shooterArmMotor.set(speed);
   }
 
   public void coast() {

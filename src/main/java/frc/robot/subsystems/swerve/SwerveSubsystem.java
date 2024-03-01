@@ -30,6 +30,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 /**
  * Represents the swerve driver subsystem
+ * 
  * @implNote This is a singleton
  * 
  */
@@ -72,17 +73,16 @@ public class SwerveSubsystem extends SubsystemBase {
                 new SwerveModule(3, Mod3.constants)
         };
 
-            poseEstimation = new SwerveDrivePoseEstimator(swerveConstants.swerveKinematics, getYaw(), getModulePositions(),
-                    new Pose2d(0, 0, new Rotation2d(0)));
-        
+        poseEstimation = new SwerveDrivePoseEstimator(swerveConstants.swerveKinematics, getYaw(), getModulePositions(),
+                new Pose2d(0, 0, new Rotation2d(0)));
+
         odometry = new SwerveDriveOdometry(swerveConstants.swerveKinematics, getYaw(), getModulePositions());
-                
+
         headingPid.enableContinuousInput(-180, 180);
-        headingPid.setTolerance( 1);
+        headingPid.setTolerance(1);
     }
 
-    public void drive(Translation2d translation, double rotation, boolean fieldRelative, boolean isOpenLoop,
-            boolean scaled) {
+    public void drive(Translation2d translation, double rotation, boolean fieldRelative, boolean isOpenLoop) {
         SwerveModuleState[] swerveModuleStates = swerveConstants.swerveKinematics.toSwerveModuleStates(
                 fieldRelative ? ChassisSpeeds.fromFieldRelativeSpeeds(
                         translation.getX(),
@@ -97,14 +97,8 @@ public class SwerveSubsystem extends SubsystemBase {
                                 rotation));
         SwerveDriveKinematics.desaturateWheelSpeeds(swerveModuleStates, swerveConstants.maxSpeed);
 
-        if (!scaled) {
-            for (SwerveModule mod : mSwerveMods) {
-                mod.setDesiredState(swerveModuleStates[mod.moduleNumber], isOpenLoop);
-            }
-        } else {
-            for (SwerveModule mod : mSwerveMods) {
-                mod.scaledSetDesiredState(swerveModuleStates[mod.moduleNumber], isOpenLoop);
-            }
+        for (SwerveModule mod : mSwerveMods) {
+            mod.setDesiredState(swerveModuleStates[mod.moduleNumber], isOpenLoop);
         }
 
     }
@@ -126,12 +120,16 @@ public class SwerveSubsystem extends SubsystemBase {
         return poseEstimation.getEstimatedPosition();
     }
 
+    public Command resetPose(Pose2d pose) {
+        return runOnce(() -> poseEstimation.resetPosition(getYaw(), getModulePositions(), pose));
+    }
+
     public Pose2d getOdometry() {
         return odometry.getPoseMeters();
     }
 
     public Command resetOdometry(Pose2d pose) {
-        return runOnce(()->odometry.resetPosition(getYaw(), getModulePositions(), pose));
+        return runOnce(() -> odometry.resetPosition(getYaw(), getModulePositions(), pose));
     }
 
     public SwerveModuleState[] getModuleStates() {
@@ -191,7 +189,7 @@ public class SwerveSubsystem extends SubsystemBase {
     public void periodic() {
 
         SmartDashboard.putNumber("vel", getRobotVelocity().vxMetersPerSecond);
-        
+
         SmartDashboard.putNumber("error", headingPid.getPositionError());
 
         poseEstimation.update(getYaw(), getModulePositions());
@@ -208,7 +206,8 @@ public class SwerveSubsystem extends SubsystemBase {
                 });
 
         field2d.setRobotPose(poseEstimation.getEstimatedPosition());
-        SmartDashboard.putNumber("dis", getPose().getTranslation().getDistance(FieldConstants.Speaker.centerSpeakerOpening.getTranslation()));
+        SmartDashboard.putNumber("dis",
+                getPose().getTranslation().getDistance(FieldConstants.Speaker.centerSpeakerOpening.getTranslation()));
 
     }
 

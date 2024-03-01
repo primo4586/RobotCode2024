@@ -4,7 +4,7 @@ import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
-import frc.robot.commands.SwerveCommands.*;
+import frc.robot.basicCommands.SwerveCommands.*;
 import frc.robot.subsystems.swerve.SwerveSubsystem;
 import frc.utils.PathPlanner.PathPlannerHelper;
 
@@ -52,7 +52,6 @@ public class RobotContainer {
     public RobotContainer() {
         swerve.setDefaultCommand(
                 new TeleopSwerve(
-                        swerve,
                         () -> -driver.getHID().getLeftY(),
                         () -> -driver.getHID().getLeftX(),
                         () -> -driver.getHID().getRightX(),

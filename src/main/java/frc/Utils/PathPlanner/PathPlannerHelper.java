@@ -40,8 +40,8 @@ public class PathPlannerHelper {
         swerve = SwerveSubsystem.getInstance();
 
         AutoBuilder.configureHolonomic(
-                swerve::getOdometry,
-                swerve::resetOdometry,
+                swerve::getPose,
+                swerve::resetPose,
                 swerve::getRobotVelocity,
                 swerve::setChassisSpeeds,
                 new HolonomicPathFollowerConfig(

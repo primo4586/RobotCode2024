@@ -1,4 +1,4 @@
-package frc.robot.commands.SwerveCommands;
+package frc.robot.basicCommands.SwerveCommands;
 
 import frc.robot.Constants;
 import frc.robot.subsystems.swerve.SwerveSubsystem;
@@ -13,18 +13,17 @@ import edu.wpi.first.wpilibj2.command.Command;
 
 
 public class TeleopSwerve extends Command {    
-    private SwerveSubsystem s_Swerve;    
+    private SwerveSubsystem swerve = SwerveSubsystem.getInstance();    
     private DoubleSupplier translationSup;
     private DoubleSupplier strafeSup;
     private DoubleSupplier rotationSup;
     private Boolean fieldSentric;
     private BooleanSupplier slowMode;
 
-    public TeleopSwerve(SwerveSubsystem s_Swerve, DoubleSupplier translationSup, DoubleSupplier strafeSup, DoubleSupplier rotationSup, boolean fieldSentric, BooleanSupplier slowMode) {
-        this.s_Swerve = s_Swerve;
-        this.slowMode = slowMode;
-        addRequirements(s_Swerve);
+    public TeleopSwerve(DoubleSupplier translationSup, DoubleSupplier strafeSup, DoubleSupplier rotationSup, boolean fieldSentric, BooleanSupplier slowMode) {
+        addRequirements(swerve);
 
+        this.slowMode = slowMode;
         this.translationSup = translationSup;
         this.strafeSup = strafeSup;
         this.rotationSup = rotationSup;
@@ -40,21 +39,19 @@ public class TeleopSwerve extends Command {
 
         /* Drive */
         if (!slowMode.getAsBoolean()){
-            s_Swerve.drive(
+            swerve.drive(
                 new Translation2d(translationVal, strafeVal).times(swerveConstants.maxSpeed), 
                 rotationVal * swerveConstants.maxAngularVelocity, 
                 fieldSentric, 
-                true,
-                false
+                true
             );
         /* Slow mode drive */
         }else{
-            s_Swerve.drive(
+            swerve.drive(
                 new Translation2d(translationVal, strafeVal).times(swerveConstants.maxSpeed * swerveConstants.XYSlowRatio), 
                 rotationVal * swerveConstants.maxAngularVelocity * swerveConstants.rotationSlowRatio, 
                 fieldSentric, 
-                true,
-                false
+                true
             );
         }
     }

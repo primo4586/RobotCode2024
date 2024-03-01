@@ -7,9 +7,8 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
-import frc.robot.Constants.IntakeArmConstants;
 import frc.robot.commands.SwerveCommands.*;
-import frc.robot.subsystems.*;
+import frc.robot.subsystems.swerve.SwerveSubsystem;
 import frc.utils.PathPlanner.PathPlannerHelper;
 
 /**

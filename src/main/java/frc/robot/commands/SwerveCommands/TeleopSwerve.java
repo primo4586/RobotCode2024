@@ -1,7 +1,7 @@
 package frc.robot.commands.SwerveCommands;
 
 import frc.robot.Constants;
-import frc.robot.subsystems.SwerveSubsystem;
+import frc.robot.subsystems.swerve.SwerveSubsystem;
 
 import java.util.function.BooleanSupplier;
 import java.util.function.DoubleSupplier;
@@ -44,7 +44,7 @@ public class TeleopSwerve extends Command {
                 rotationVal * Constants.Swerve.maxAngularVelocity, 
                 fieldSentric, 
                 true,
-                true
+                false
             );
         /* Slow mode drive */
         }else{
@@ -53,7 +53,7 @@ public class TeleopSwerve extends Command {
                 rotationVal * Constants.Swerve.maxAngularVelocity * Constants.Swerve.rotationSlowRatio, 
                 fieldSentric, 
                 true,
-                true
+                false
             );
         }
     }

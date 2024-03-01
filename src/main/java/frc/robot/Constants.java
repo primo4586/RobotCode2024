@@ -34,46 +34,6 @@ public final class Constants {
     
     public static final String CAN_BUS_NAME = "canBus";
 
-    public static final class IntakeArmConstants {
-        // mm
-        public static final int IntakeArmMotorID = 8;
-        public static final double mmVelocity = 100;
-        public static final double mmAcceleration = 800;
-        public static final double mmJerk = 6000;
-        public static final double KP = 0.1;
-        public static final double KD = 0.0;
-        public static final double KS = 0.051238;
-        public static final double KV = 0.11136;
-        public static final double KA = 0.0026838;
-
-
-        public static final double PeakForwardVoltage = 12;
-        public static final double PeakReverseVoltage = -12;
-        public static final int encoderCountsPerRevolution = 1;
-        public static final double gearRatio = 1;
-        public static final double TICKS_PER_DEGREE = encoderCountsPerRevolution * gearRatio / 360.0;
-        public static final boolean ForwardSoftLimitEnable = false;
-        public static final double ForwardSoftLimitThreshold = 20;
-        public static final boolean ReverseSoftLimitEnable = false;
-        public static final double RevesrseSoftLimitThreshold = -185;
-        // not mm
-        public static final double minimumError = 10;
-        public static final double intakeArmStartingValue = 0;
-        public static final double zeroEncoderValue = 0;
-        public static final double intakeArmZeroSpeed = 0.3;
-        public static final double intakeArmUpSpeed = 1;
-        public static final double intakeArmDownSpeed = -1;
-        // switch
-        public static final int intakeArmUpSwitchID = 0;
-        public static final int intakeArmDownSwitchID = 3;
-
-        // set points
-        public static final double AmpSetPoint = 2;
-        public static final double SafeSetPoint = 0;
-        public static final double intakeSetPoint = -152;
-        
-
-    }
 
     public static final class Swerve {
         public static final double minimumErrorAligning = 0; 
@@ -240,45 +200,4 @@ public final class Constants {
         public static final Pose2d target = new Pose2d(1, 1, new Rotation2d(Units.degreesToRadians(0)));
     }
 
-    public static class ShooterConstants {
-        // m_shooterMotor ID
-        public static final int kUpMotorShooterID = 6;
-        public static final int kDownMotorShooterID = 7;
-
-        // Motion Magic Values
-        public static final int MotionMagicCruiseVelocity = 80;
-        public static final int MotionMagicAcceleration = 160;
-        public static final int MotionMagicJerk = 1600;
-
-        public static final double PeakForwardVoltage = 11.5;
-        public static final double PeakReverseVoltage = -11.5;
-
-        public static final double GearRatio = 0.5;
-
-        public static final int MaxError = 2;
-
-        // PID values
-        public static final double upKP = 0.06;//2
-        public static final double upKD = 0.0;
-        public static final double upKS = 0.16 ;
-        public static final double upKV = 0.057;
-        public static final double upKA = 0.0;
-
-
-        public static final double downKP = 0.02;
-        public static final double downKD = 0.0;
-        public static final double downKS = 0.2998046875;
-        public static final double downKV = 0.058;
-        public static final double downKA = 0.079175;
-
-
-        // Interpolation Map
-        public static final InterpolationMap ShooterInterpolation = new InterpolationMap()
-                .put(2.577, 100)
-                .put(2.124, 100)
-                .put(3.2, 100);
-
-        public static final double ShootBaseSpeed = 80;
-        public static final double ShootStageSpeed = 3;
-    }
 }

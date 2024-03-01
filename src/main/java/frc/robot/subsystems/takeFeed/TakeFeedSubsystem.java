@@ -35,6 +35,8 @@ public class TakeFeedSubsystem extends SubsystemBase {
     motorConfig.CurrentLimits.SupplyTimeThreshold = 0.1;
     motorConfig.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
     motorConfig.MotorOutput.NeutralMode = NeutralModeValue.Brake;
+
+    m_motor.getConfigurator().apply(motorConfig);
   }
 
   public void setSpeed(Double voltage) {

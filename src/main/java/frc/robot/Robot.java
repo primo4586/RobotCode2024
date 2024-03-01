@@ -9,7 +9,9 @@ import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
-import frc.robot.subsystems.SwerveSubsystem;
+import frc.robot.subsystems.shooterArm.ShooterArmConstants;
+import frc.robot.subsystems.shooterArm.ShooterArmSubsystem;
+import frc.robot.subsystems.swerve.SwerveSubsystem;
 import frc.utils.interpolation.InterpolationMap;
 import frc.utils.shuffleboardAlike.AutoContainer;
 import frc.utils.shuffleboardAlike.PrimoShuffleboard;
@@ -45,7 +47,7 @@ public class Robot extends TimedRobot {
     enableLiveWindowInTest(true);
     SmartDashboard.putNumber("offset", offset);
 
-    Constants.ShooterArmConstants.SHOOTER_ANGLE_INTERPOLATION_MAP = new InterpolationMap()
+    ShooterArmConstants.shooterArmConstants.SHOOTER_ANGLE_INTERPOLATION_MAP = new InterpolationMap()
       .put(2.13 + offset, 20)
       .put(3.2 + offset, 37)
       .put(3.655 + offset, 40.5)
@@ -74,7 +76,7 @@ public class Robot extends TimedRobot {
     CommandScheduler.getInstance().run();
     if(SmartDashboard.getNumber("offset", offset) != offset){
       offset = SmartDashboard.getNumber("offset", offset);
-      Constants.ShooterArmConstants.SHOOTER_ANGLE_INTERPOLATION_MAP = new InterpolationMap()
+      ShooterArmConstants.shooterArmConstants.SHOOTER_ANGLE_INTERPOLATION_MAP = new InterpolationMap()
       .put(2.13 + offset, 20)
       .put(3.2 + offset, 37)
       .put(3.655 + offset, 40.5)
@@ -96,7 +98,6 @@ public class Robot extends TimedRobot {
   public void disabledPeriodic() {
     if(RobotController.getUserButton()){
       SwerveSubsystem.getInstance().zeroGyro();
-      IntakeArmSubsystem.getInstance().manualZeroIntakeArm();
       ShooterArmSubsystem.getInstance().manualZeroShooterArm();
     }
   }

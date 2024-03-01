@@ -11,9 +11,10 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.commands.SwerveCommands.FieldConstants.Speaker;
-import frc.robot.subsystems.FeederSubsystem;
-import frc.robot.subsystems.SwerveSubsystem;
+import frc.robot.FieldConstants.Speaker;
+import frc.robot.subsystems.swerve.SwerveSubsystem;
+import frc.robot.subsystems.takeFeed.TakeFeedSubsystem;
+import frc.utils.AllianceFlipUtil;
 import frc.utils.vision.Vision;
 
 public class AlignToSpeaker extends Command {
@@ -40,7 +41,7 @@ public class AlignToSpeaker extends Command {
   public void execute() {
     Pose2d robot = swerve.getPose();
     
-    double deltaX = Math.abs(robot.getX() - Speaker.centerSpeakerOpening.getX());
+    double deltaX = Math.abs(robot.getX() - AllianceFlipUtil.apply(Speaker.centerSpeakerOpening.getX()));
     double deltaY = Speaker.centerSpeakerOpening.getY() - robot.getY();
     double tempHeading = Units.radiansToDegrees(Math.atan2(deltaY, deltaX));
     if(DriverStation.getAlliance().get() == Alliance.Red)

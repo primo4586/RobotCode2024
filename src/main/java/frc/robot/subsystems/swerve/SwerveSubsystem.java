@@ -1,10 +1,10 @@
-package frc.robot.subsystems;
+package frc.robot.subsystems.swerve;
 
+import frc.robot.FieldConstants;
 import frc.robot.Constants.Swerve.Mod0;
 import frc.robot.Constants.Swerve.Mod1;
 import frc.robot.Constants.Swerve.Mod2;
 import frc.robot.Constants.Swerve.Mod3;
-import frc.robot.commands.SwerveCommands.FieldConstants;
 import frc.utils.vision.Vision;
 
 import static frc.robot.Constants.Swerve.*;

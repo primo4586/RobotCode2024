@@ -13,10 +13,10 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.commands.SwerveCommands.AlignToAngle;
-import frc.robot.commands.SwerveCommands.AllianceFlipUtil;
 import frc.robot.commands.SwerveCommands.AutoAlignToSpeaker;
-import frc.robot.subsystems.ShooterSubsystem;
-import frc.robot.subsystems.SwerveSubsystem;
+import frc.robot.subsystems.shooter.ShooterSubsystem;
+import frc.robot.subsystems.swerve.SwerveSubsystem;
+import frc.utils.AllianceFlipUtil;
 import frc.utils.PathPlanner.PathPlannerHelper;
 
 /** Add your docs here. */

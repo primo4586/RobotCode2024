@@ -117,6 +117,16 @@ public class ShooterArmSubsystem extends SubsystemBase {
     m_shooterArmMotor.setNeutralMode(NeutralModeValue.Brake);
   }
 
+  public void manualZeroShooterArm(){
+    coast();
+    if(getSwitch()){
+      while (getSwitch()) {}
+    }
+    while(!getSwitch()){}
+    setPosition(0);
+    breakMode();
+  }
+
 
   @Override
   public void periodic() {

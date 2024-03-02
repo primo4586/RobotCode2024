@@ -1,4 +1,4 @@
-package frc.utils.swerve;
+package frc.util.swerve;
 
 import edu.wpi.first.math.geometry.Rotation2d;
 

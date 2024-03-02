@@ -1,4 +1,4 @@
-package frc.utils.motors;
+package frc.util.motors;
 
 public class FalconConversions {
 

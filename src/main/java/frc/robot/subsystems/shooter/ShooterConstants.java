@@ -4,7 +4,7 @@
 
 package frc.robot.subsystems.shooter;
 
-import frc.utils.interpolation.InterpolationMap;
+import frc.util.interpolation.InterpolationMap;
 
 /** Add your docs here. */
 public class ShooterConstants {
@@ -48,5 +48,7 @@ public class ShooterConstants {
 
         public static final double SHOOT_BASE_SPEED = 80;
         public static final double SHOOT_STAGE_SPEED = 3;
+        public static final double SHOOT_SPEED = 0;
+        public static final double AMP_SPEED = 0;
     }
 }

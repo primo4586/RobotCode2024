@@ -15,8 +15,8 @@ import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.FieldConstants.Speaker;
 import frc.robot.subsystems.swerve.SwerveSubsystem;
 import frc.robot.subsystems.takeFeed.TakeFeedSubsystem;
-import frc.utils.AllianceFlipUtil;
-import frc.utils.vision.Vision;
+import frc.util.AllianceFlipUtil;
+import frc.util.vision.Vision;
 
 public class AutoAlignToSpeaker extends Command {
   /** Creates a new TurnToDegree. */

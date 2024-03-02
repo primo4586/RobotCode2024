@@ -6,7 +6,7 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.basicCommands.SwerveCommands.*;
 import frc.robot.subsystems.swerve.SwerveSubsystem;
-import frc.utils.PathPlanner.PathPlannerHelper;
+import frc.util.PathPlanner.PathPlannerHelper;
 
 /**
  * This class is where the bulk of the robot should be declared. Since

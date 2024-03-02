@@ -1,4 +1,4 @@
-package frc.utils.swerve;
+package frc.util.swerve;
 
 import com.ctre.phoenix6.configs.CANcoderConfiguration;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
@@ -6,7 +6,7 @@ import com.ctre.phoenix6.signals.AbsoluteSensorRangeValue;
 
 import edu.wpi.first.math.util.Units;
 import frc.robot.subsystems.swerve.SwerveConstants.swerveConstants;
-import frc.utils.motors.FalconConversions;
+import frc.util.motors.FalconConversions;
 
 public final class CTREConfigs {
     public TalonFXConfiguration swerveDriveFXConfig = new TalonFXConfiguration();

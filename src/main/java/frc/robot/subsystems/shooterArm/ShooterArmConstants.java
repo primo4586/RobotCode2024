@@ -4,7 +4,7 @@
 
 package frc.robot.subsystems.shooterArm;
 
-import frc.utils.interpolation.InterpolationMap;
+import frc.util.interpolation.InterpolationMap;
 
 public class ShooterArmConstants {
 
@@ -59,5 +59,6 @@ public class ShooterArmConstants {
 
         public static final double SHOOT_BASE_ANGLE = 0; //6.1064453125
         public static final double SHOOT_STAGE_ANGLE = 3;
+        public static final double AMP_ANGLE = 0;
     }
 }

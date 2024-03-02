@@ -17,8 +17,8 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.FieldConstants;
 import frc.robot.subsystems.swerve.SwerveSubsystem;
-import frc.utils.AllianceFlipUtil;
-import frc.utils.interpolation.InterpolateUtil;
+import frc.util.AllianceFlipUtil;
+import frc.util.interpolation.InterpolateUtil;
 
 public class ShooterSubsystem extends SubsystemBase {
     private TalonFX m_upShooterMotor;

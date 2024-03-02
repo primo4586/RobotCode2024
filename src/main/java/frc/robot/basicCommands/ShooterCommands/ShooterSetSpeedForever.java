@@ -4,15 +4,15 @@
 
 package frc.robot.basicCommands.ShooterCommands;
 
-import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.shooter.ShooterSubsystem;
 
-public class ShooterSetSpeed extends InstantCommand {
+public class ShooterSetSpeedForever extends Command {
   
   ShooterSubsystem shooter = ShooterSubsystem.getInstance();
   double speed;
 
-  public ShooterSetSpeed(double speed) {
+  public ShooterSetSpeedForever(double speed) {
     addRequirements(shooter);
     this.speed = speed;
   }
@@ -20,5 +20,16 @@ public class ShooterSetSpeed extends InstantCommand {
   @Override
   public void initialize() {
     shooter.setShooterSpeed(speed);
+  }
+
+  @Override
+  public void end(boolean interrupted) {
+    shooter.coast();
+  }
+
+  // Returns true when the command should end.
+  @Override
+  public boolean isFinished() {
+    return false;
   }
 }

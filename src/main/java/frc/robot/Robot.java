@@ -12,10 +12,10 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.subsystems.shooterArm.ShooterArmConstants;
 import frc.robot.subsystems.shooterArm.ShooterArmSubsystem;
 import frc.robot.subsystems.swerve.SwerveSubsystem;
-import frc.utils.interpolation.InterpolationMap;
-import frc.utils.shuffleboardAlike.AutoContainer;
-import frc.utils.shuffleboardAlike.PrimoShuffleboard;
-import frc.utils.swerve.CTREConfigs;
+import frc.util.interpolation.InterpolationMap;
+import frc.util.shuffleboardAlike.AutoContainer;
+import frc.util.shuffleboardAlike.PrimoShuffleboard;
+import frc.util.swerve.CTREConfigs;
 
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to

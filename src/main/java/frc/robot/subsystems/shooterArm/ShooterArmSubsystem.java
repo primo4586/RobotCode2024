@@ -4,14 +4,11 @@
 
 package frc.robot.subsystems.shooterArm;
 
-import java.util.function.DoubleSupplier;
-
 import com.ctre.phoenix6.StatusCode;
 import com.ctre.phoenix6.configs.MotionMagicConfigs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.MotionMagicVoltage;
 import com.ctre.phoenix6.hardware.TalonFX;
-import com.ctre.phoenix6.signals.ForwardLimitTypeValue;
 import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 
@@ -21,8 +18,8 @@ import frc.robot.Constants;
 import frc.robot.FieldConstants;
 import frc.robot.subsystems.shooterArm.ShooterArmConstants.shooterArmConstants;
 import frc.robot.subsystems.swerve.SwerveSubsystem;
-import frc.utils.AllianceFlipUtil;
-import frc.utils.interpolation.InterpolateUtil;
+import frc.util.AllianceFlipUtil;
+import frc.util.interpolation.InterpolateUtil;
 
 public class ShooterArmSubsystem extends SubsystemBase {
 

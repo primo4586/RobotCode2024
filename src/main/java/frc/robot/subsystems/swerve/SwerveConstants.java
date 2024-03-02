@@ -17,8 +17,8 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
-import frc.utils.swerve.COTSFalconSwerveConstants;
-import frc.utils.swerve.SwerveModuleConstants;
+import frc.util.swerve.COTSFalconSwerveConstants;
+import frc.util.swerve.SwerveModuleConstants;
 
 /** Add your docs here. */
 public class SwerveConstants {

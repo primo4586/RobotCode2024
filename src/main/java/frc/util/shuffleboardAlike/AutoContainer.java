@@ -2,15 +2,16 @@
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
-package frc.utils.shuffleboardAlike;
+package frc.util.shuffleboardAlike;
 
 import java.util.HashMap;
 import java.util.Map;
 
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.subsystems.shooter.ShooterSubsystem;
 import frc.robot.subsystems.swerve.SwerveSubsystem;
-import frc.utils.PathPlanner.PathPlannerHelper;
+import frc.util.PathPlanner.PathPlannerHelper;
 
 /** Add your docs here. */
 public class AutoContainer {
@@ -26,6 +27,7 @@ public class AutoContainer {
     public AutoContainer() {
         this.autoPaths = new HashMap<String, Command>();
 
+        this.autoPaths.put("no auto", Commands.none());
         // this.autoPaths.put("base,2", new SequentialCommandGroup(
         //         new ShootTouchingBase().until(()->shooter.getUpShooterSpeed()>60), 
         //         new FeederSetSpeedForever(1).withTimeout(0.5),

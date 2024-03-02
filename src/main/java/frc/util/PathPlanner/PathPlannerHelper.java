@@ -2,7 +2,7 @@
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
-package frc.utils.PathPlanner;
+package frc.util.PathPlanner;
 
 import java.util.List;
 import com.pathplanner.lib.auto.AutoBuilder;
@@ -20,7 +20,7 @@ import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
 
 import frc.robot.subsystems.swerve.SwerveSubsystem;
 import frc.robot.subsystems.swerve.SwerveConstants.AutoConstants;
-import frc.utils.AllianceFlipUtil;
+import frc.util.AllianceFlipUtil;
 
 /** Add your docs here. */
 public class PathPlannerHelper {

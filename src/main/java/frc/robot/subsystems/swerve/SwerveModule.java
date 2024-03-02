@@ -17,11 +17,11 @@ import edu.wpi.first.wpilibj.Timer;
 import frc.robot.Constants;
 import frc.robot.Robot;
 import frc.robot.subsystems.swerve.SwerveConstants.swerveConstants;
-import frc.utils.motors.CANSparkMaxUtil;
-import frc.utils.motors.FalconConversions;
-import frc.utils.motors.CANSparkMaxUtil.Usage;
-import frc.utils.swerve.CTREModuleState;
-import frc.utils.swerve.SwerveModuleConstants;
+import frc.util.motors.CANSparkMaxUtil;
+import frc.util.motors.FalconConversions;
+import frc.util.motors.CANSparkMaxUtil.Usage;
+import frc.util.swerve.CTREModuleState;
+import frc.util.swerve.SwerveModuleConstants;
 
 public class SwerveModule {
     public int moduleNumber;

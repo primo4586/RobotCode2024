@@ -21,7 +21,6 @@ import frc.util.vision.Vision;
 public class AutoAlignToSpeaker extends Command {
   /** Creates a new TurnToDegree. */
   SwerveSubsystem swerve = SwerveSubsystem.getInstance();
-  TakeFeedSubsystem feeder = TakeFeedSubsystem.getInstance();
 
   private Vision vision = Vision.getInstance();
   double angleFromTarget = vision.GetAngleFromTarget().getDegrees();

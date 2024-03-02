@@ -13,14 +13,12 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.FieldConstants.Speaker;
 import frc.robot.subsystems.swerve.SwerveSubsystem;
-import frc.robot.subsystems.takeFeed.TakeFeedSubsystem;
 import frc.util.AllianceFlipUtil;
 import frc.util.vision.Vision;
 
 public class TeleopAlignToSpeaker extends Command {
   /** Creates a new TurnToDegree. */
   SwerveSubsystem swerve = SwerveSubsystem.getInstance();
-  TakeFeedSubsystem feeder = TakeFeedSubsystem.getInstance();
 
   private Vision vision = Vision.getInstance();
   double angleFromTarget = vision.GetAngleFromTarget().getDegrees();

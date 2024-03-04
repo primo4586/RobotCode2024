@@ -5,6 +5,7 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.basicCommands.SwerveCommands.*;
+import frc.robot.subsystems.Leds.Leds;
 import frc.robot.subsystems.swerve.SwerveSubsystem;
 import frc.util.PathPlanner.PathPlannerHelper;
 
@@ -41,6 +42,8 @@ public class RobotContainer {
     Trigger operatorBTrigger = operator.b();
     Trigger operatorStart = operator.start();
 
+    Leds leds = Leds.getInstance();
+
     PathPlannerHelper pathPlannerHelper = PathPlannerHelper.getInstace();
 
     /* Subsystems */
@@ -60,6 +63,8 @@ public class RobotContainer {
 
 
         configureButtonBindings();
+
+        leds.turnLedsByRGB(200, 0, 0);
     }
 
     /**

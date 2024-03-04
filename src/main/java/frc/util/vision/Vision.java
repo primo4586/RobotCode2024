@@ -110,9 +110,9 @@ public class Vision {
      *     used for estimation.
      */
     public Optional<EstimatedRobotPose> getLeftEstimatedGlobalPose() {
-        var leftVisionEst = rightPhotonEstimator.update();
+        var leftVisionEst = leftPhotonEstimator.update();
 
-        double leftLatestTimestamp = rightCamera.getLatestResult().getTimestampSeconds();
+        double leftLatestTimestamp = leftCamera.getLatestResult().getTimestampSeconds();
 
         boolean leftNewResult = Math.abs(leftLatestTimestamp - leftLastEstTimestamp) > 1e-5;
 

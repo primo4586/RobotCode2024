@@ -26,10 +26,11 @@ public final class Constants {
         public static final String kLeftCameraName = "left_Camera";
         // Cam mounted facing forward, half a meter forward of center, half a meter up
         // from center.
-        public static final Transform3d kRightRobotToCam = new Transform3d(new Translation3d(-0.339, 0.14, 0.5),
-                new Rotation3d(Math.asin(30.6/55.3), 0, Units.degreesToRadians(180+20)));
-        public static final Transform3d kLeftRobotToCam = new Transform3d(new Translation3d(-0.339, 0.14, 0.5),
-                new Rotation3d(Math.asin(30.6/55.3), 0, -Units.degreesToRadians(180+14.24)));
+        public static final Transform3d kRightRobotToCam = new Transform3d(new Translation3d(-0.16, -0.075, 0.45),
+                new Rotation3d(- Units.degreesToRadians(-27.55), 0, Units.degreesToRadians(180)));
+
+        public static final Transform3d kLeftRobotToCam = new Transform3d(new Translation3d(-0.171, 0.316, 0.40),
+                new Rotation3d(Units.degreesToRadians(-20.2), 0, Units.degreesToRadians(180)));
 
         // The layout of the AprilTags on the field
         public static final AprilTagFieldLayout kTagLayout = AprilTagFields.kDefaultField.loadAprilTagLayoutField();
@@ -37,11 +38,11 @@ public final class Constants {
         // The standard deviations of our vision estimated poses, which affect
         // correction rate
         // (Fake values. Experiment and determine estimation noise on an actual robot.)
-        public static final Matrix<N3, N1> kRightSingleTagStdDevs = VecBuilder.fill(0.0, 0.0, 0.5);
-        public static final Matrix<N3, N1> kRightMultiTagStdDevs = VecBuilder.fill(0.0, 0.0, 0.5);
+        public static final Matrix<N3, N1> kRightSingleTagStdDevs = VecBuilder.fill(4, 4, 8);
+        public static final Matrix<N3, N1> kRightMultiTagStdDevs = VecBuilder.fill(0.5, 0.5, 1);
 
-        public static final Matrix<N3, N1> kLeftSingleTagStdDevs = VecBuilder.fill(0, 0, 0);
-        public static final Matrix<N3, N1> kLeftMultiTagStdDevs = VecBuilder.fill(0, 0, 0);
+        public static final Matrix<N3, N1> kLeftSingleTagStdDevs = VecBuilder.fill(4, 4, 8);
+        public static final Matrix<N3, N1> kLeftMultiTagStdDevs = VecBuilder.fill(0.5, 0.5, 1);
 
         public static final Pose2d target = new Pose2d(1, 1, new Rotation2d(Units.degreesToRadians(0)));
     }

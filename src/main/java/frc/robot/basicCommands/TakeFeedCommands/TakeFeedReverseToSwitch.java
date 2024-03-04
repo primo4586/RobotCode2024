@@ -4,28 +4,30 @@
 
 package frc.robot.basicCommands.TakeFeedCommands;
 
-import java.util.function.DoubleSupplier;
-
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.takeFeed.TakeFeedSubsystem;
 
-public class TakeSpeedJoystickSetSpeed extends Command {
-  
+public class TakeFeedReverseToSwitch extends Command {
+
   TakeFeedSubsystem takeFeed = TakeFeedSubsystem.getInstance();
 
-  DoubleSupplier input;
-
-  public TakeSpeedJoystickSetSpeed(DoubleSupplier input) {
+  public TakeFeedReverseToSwitch() {
     addRequirements(takeFeed);
   }
-  @Override
-  public void execute() {
-    takeFeed.setSpeed(input.getAsDouble() * 12);
-  }
 
+  @Override
+  public void initialize() {
+    takeFeed.setSpeed(-6);
+  }
+  
   @Override
   public void end(boolean interrupted) {
     takeFeed.setSpeed(0.0);
+    
   }
-
+  
+  @Override
+  public boolean isFinished() {
+    return takeFeed.getOpticSensorValue();
+  }
 }

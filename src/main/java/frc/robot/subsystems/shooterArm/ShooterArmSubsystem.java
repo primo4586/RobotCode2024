@@ -13,6 +13,7 @@ import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 
 import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.FieldConstants;
@@ -31,8 +32,8 @@ public class ShooterArmSubsystem extends SubsystemBase {
       0.0,
       0,
       true,
-      true,
-      true);
+      false,
+      false);
 
   double targetPose = 0;
 
@@ -88,6 +89,8 @@ public class ShooterArmSubsystem extends SubsystemBase {
 
   // moving function for the Arm
   public void moveArmTo(double degrees) {
+    degrees = degrees<0?0:degrees;
+    degrees = degrees>80?80:degrees;
     targetPose = degrees;
     m_shooterArmMotor.setControl(motionMagic.withPosition(degrees));
   }
@@ -127,6 +130,7 @@ public class ShooterArmSubsystem extends SubsystemBase {
     }
     while (!getSwitch()) {
     }
+    SmartDashboard.putBoolean("zerod out shooter", true);
     setPosition(0);
     breakMode();
   }
@@ -135,11 +139,13 @@ public class ShooterArmSubsystem extends SubsystemBase {
     return InterpolateUtil.interpolate(
         shooterArmConstants.SHOOTER_ANGLE_INTERPOLATION_MAP,
         swerve.getPose().getTranslation().getDistance(
-            AllianceFlipUtil.apply(FieldConstants.Speaker.centerSpeakerOpening).getTranslation()));
+            AllianceFlipUtil.apply(FieldConstants.Speaker.centerSpeakerOpening).getTranslation()))
+            -Math.abs(swerve.getPose().getY()-FieldConstants.Speaker.centerSpeakerOpening.getY());
   }
 
   @Override
   public void periodic() {
+    SmartDashboard.putBoolean("shooter arm switch", getSwitch());
   }
 
   private static ShooterArmSubsystem instance;

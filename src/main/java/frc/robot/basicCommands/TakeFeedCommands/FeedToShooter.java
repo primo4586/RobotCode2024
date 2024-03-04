@@ -28,6 +28,7 @@ public class FeedToShooter extends Command {
 
   @Override
   public void initialize() {
+    startedShooting = false;
     timer.reset();
     timer.stop();
   }
@@ -36,9 +37,10 @@ public class FeedToShooter extends Command {
   public void execute() {
     if (!startedShooting &&
         shooterArm.isArmReady() &&
-        shooter.checkIfShooterAtSpeed() &&
-        swerve.headingPid.atSetpoint()) {
-
+        shooter.checkIfShooterAtSpeed() 
+        // && swerve.headingPid.atSetpoint()
+        ) {
+      startedShooting = true;
       feeder.setSpeed(takeFeedConstants.SHOOT_SPEED);
       timer.restart();
     }

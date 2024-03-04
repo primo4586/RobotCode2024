@@ -12,7 +12,6 @@ import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 
-import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.ctre.phoenix.sensors.PigeonIMU;
 
 import edu.wpi.first.math.controller.PIDController;
@@ -37,7 +36,6 @@ public class SwerveSubsystem extends SubsystemBase {
     public SwerveDrivePoseEstimator poseEstimation;
     public SwerveDriveOdometry odometry;
     public SwerveModule[] mSwerveMods;
-    public TalonSRX talonSRX;
     public PigeonIMU gyro;
     public Vision vision;
     Field2d field2d = new Field2d();
@@ -56,8 +54,7 @@ public class SwerveSubsystem extends SubsystemBase {
     }
 
     private SwerveSubsystem() {
-        talonSRX = new TalonSRX(swerveConstants.pigeonID);
-        gyro = new PigeonIMU(talonSRX);
+        gyro = new PigeonIMU(swerveConstants.pigeonID);
         gyro.configFactoryDefault();
         zeroGyro();
 
@@ -203,10 +200,22 @@ public class SwerveSubsystem extends SubsystemBase {
                     poseEstimation.addVisionMeasurement(
                             new Pose2d(estPose.getTranslation(), getYaw()), est.timestampSeconds, estStdDevs);
                 });
+                
+        vision.getLeftEstimatedGlobalPose().ifPresent(
+                est -> {
+                    var estPose = est.estimatedPose.toPose2d();
+                    // Change our trust in the measurement based on the tags we can see
+                    var estStdDevs = vision.getEstimationStdDevsLeft(estPose);
+
+                    poseEstimation.addVisionMeasurement(
+                            new Pose2d(estPose.getTranslation(), getYaw()), est.timestampSeconds, estStdDevs);
+                });
 
         field2d.setRobotPose(poseEstimation.getEstimatedPosition());
         SmartDashboard.putNumber("dis",
                 getPose().getTranslation().getDistance(FieldConstants.Speaker.centerSpeakerOpening.getTranslation()));
+
+        SmartDashboard.putNumberArray("swerve state ", getAdvantageModuleStates());
 
     }
 

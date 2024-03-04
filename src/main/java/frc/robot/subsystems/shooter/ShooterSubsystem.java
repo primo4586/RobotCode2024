@@ -136,6 +136,7 @@ public class ShooterSubsystem extends SubsystemBase {
 
     // set (active) Shooter motors speed
     public void setShooterSpeed(double speed) {
+        this.targetSpeed = speed;
         setShooterSpeed(speed, speed);
     }
 

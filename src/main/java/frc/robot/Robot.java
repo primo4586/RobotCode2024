@@ -9,6 +9,7 @@ import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import frc.robot.basicCommands.ShooterCommands.ShooterCoast;
 import frc.robot.subsystems.shooterArm.ShooterArmConstants;
 import frc.robot.subsystems.shooterArm.ShooterArmSubsystem;
 import frc.robot.subsystems.swerve.SwerveSubsystem;
@@ -31,7 +32,7 @@ public class Robot extends TimedRobot {
   private RobotContainer m_robotContainer;
   
   private AutoContainer autoContainer;
-  double offset = -0.6;
+  double offset = 0.0;
 
   /**
    * This function is run when the robot is first started up and should be used for any
@@ -48,16 +49,9 @@ public class Robot extends TimedRobot {
     SmartDashboard.putNumber("offset", offset);
 
     ShooterArmConstants.shooterArmConstants.SHOOTER_ANGLE_INTERPOLATION_MAP = new InterpolationMap()
-      .put(2.13 + offset, 20)
-      .put(3.2 + offset, 37)
-      .put(3.655 + offset, 40.5)
-      .put(3.29 + offset, 39)
-      .put(5.441276465250574 + offset, 52.8)
-      .put(2.135 + offset, 20)
-      .put(2.19 + offset, 18)
-      .put(1.995 + offset, 15)
-      .put(1.46 + offset, 9)
-      .put(1 + offset, 0);
+      .put(2.9 + offset, 62)
+      .put(2.52 + offset, 55)
+      .put(2.15 + offset, 50);
   }
 
   /**
@@ -76,17 +70,11 @@ public class Robot extends TimedRobot {
     CommandScheduler.getInstance().run();
     if(SmartDashboard.getNumber("offset", offset) != offset){
       offset = SmartDashboard.getNumber("offset", offset);
-      ShooterArmConstants.shooterArmConstants.SHOOTER_ANGLE_INTERPOLATION_MAP = new InterpolationMap()
-      .put(2.13 + offset, 20)
-      .put(3.2 + offset, 37)
-      .put(3.655 + offset, 40.5)
-      .put(3.29 + offset, 39)
-      .put(5.441276465250574 + offset, 52.8)
-      .put(2.135 + offset, 20)
-      .put(2.19 + offset, 18)
-      .put(1.995 + offset, 15)
-      .put(1.46 + offset, 9)
-      .put(1 + offset, 0);
+
+    ShooterArmConstants.shooterArmConstants.SHOOTER_ANGLE_INTERPOLATION_MAP = new InterpolationMap()
+      .put(2.9 + offset, 62)
+      .put(2.52 + offset, 55)
+      .put(2.15 + offset, 50);
     }
   }
 
@@ -109,7 +97,7 @@ public class Robot extends TimedRobot {
 
     // schedule the autonomous command (example)
     if (m_autonomousCommand != null) {
-      m_autonomousCommand.schedule();
+      m_autonomousCommand.andThen(new ShooterCoast()).schedule();
     }
 
     

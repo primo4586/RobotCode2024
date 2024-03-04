@@ -13,6 +13,7 @@ import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 
 import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.subsystems.takeFeed.TakeFeedConstants.takeFeedConstants;
 
@@ -25,15 +26,16 @@ public class TakeFeedSubsystem extends SubsystemBase {
 
   private TakeFeedSubsystem() {
     m_motor = new TalonFX(takeFeedConstants.MOTOR_ID, CAN_BUS_NAME);
+    m_opticSensor = new DigitalInput(takeFeedConstants.OPTIC_SENSOR_ID);
 
 
     TalonFXConfiguration motorConfig = new TalonFXConfiguration();
 
-    motorConfig.CurrentLimits.SupplyCurrentLimit = 30;
+    motorConfig.CurrentLimits.SupplyCurrentLimit = 40;
     motorConfig.CurrentLimits.SupplyCurrentLimitEnable = true;
-    motorConfig.CurrentLimits.SupplyCurrentThreshold = 60;
-    motorConfig.CurrentLimits.SupplyTimeThreshold = 0.1;
-    motorConfig.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
+    motorConfig.CurrentLimits.SupplyCurrentThreshold = 100;
+    motorConfig.CurrentLimits.SupplyTimeThreshold = 0.2;
+    motorConfig.MotorOutput.Inverted = InvertedValue.CounterClockwise_Positive;
     motorConfig.MotorOutput.NeutralMode = NeutralModeValue.Brake;
 
     m_motor.getConfigurator().apply(motorConfig);
@@ -57,6 +59,7 @@ public class TakeFeedSubsystem extends SubsystemBase {
 
   @Override
   public void periodic() {
+    SmartDashboard.putBoolean("feeder optic", getOpticSensorValue());
   }
   
   // singelton

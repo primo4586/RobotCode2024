@@ -2,10 +2,23 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
+import frc.robot.a_robotCommandGroups.ReadyShootSpeaker;
+import frc.robot.a_robotCommandGroups.ShootBase;
+import frc.robot.a_robotCommandGroups.ShootSpeaker;
+import frc.robot.basicCommands.ShooterArmCommands.ShooterArmMoveToAngle;
+import frc.robot.basicCommands.ShooterArmCommands.ShooterArmSetSpeed;
+import frc.robot.basicCommands.ShooterArmCommands.ZeroShooterArm;
+import frc.robot.basicCommands.ShooterCommands.ShooterSetSpeedForever;
 import frc.robot.basicCommands.SwerveCommands.*;
+import frc.robot.basicCommands.TakeFeedCommands.CollectUntilNote;
+import frc.robot.basicCommands.TakeFeedCommands.TakeFeedJoystickSetSpeed;
+import frc.robot.basicCommands.TakeFeedCommands.TakeFeedSetSpeed;
+import frc.robot.subsystems.shooter.ShooterSubsystem;
 import frc.robot.subsystems.swerve.SwerveSubsystem;
+import frc.robot.subsystems.takeFeed.TakeFeedSubsystem;
 import frc.util.PathPlanner.PathPlannerHelper;
 
 /**
@@ -75,26 +88,25 @@ public class RobotContainer {
 
         // Driver Button Bindings
         // driverStart.onTrue(new EStop());
-        // driverYTrigger.onTrue(new InstantCommand(() -> swerve.zeroGyro()));
-        // driverXTrigger.onTrue(new ShootTouchingBase());
-        // driverRightBumperTrigger.whileTrue(new FeederSetSpeed(()->1).repeatedly());
+        driverYTrigger.onTrue(new InstantCommand(() -> swerve.zeroGyro()));
+        driverXTrigger.onTrue(new ShootBase());
+        driverRightBumperTrigger.whileTrue(new ShootSpeaker()
+        );
         // driverLeftTriggerToggle.toggleOnTrue(new AlignToSpeaker());
         // driverBackTrigger.onTrue(swerve.disableHeadingCommand());
-        // driverPovLeftTrigger.onTrue(new ZeroIntakeArm());
-        // driverPovRightTrigger.onTrue(new ZeroShooterArm());
+        driverPovRightTrigger.onTrue(new ZeroShooterArm());
 
         // // Operator Button Bindings
+        operatorRightBumperTrigger.whileTrue(new ShooterSetSpeedForever(23.5));
+        operatorLeftBumperTrigger.onTrue(new InstantCommand(()->ShooterSubsystem.getInstance().coast()));
         // operatorStart.onTrue(new EStop());
-        // operatorXTrigger.onTrue(new CollectToFeeder());
-        // operatorYTrigger.toggleOnTrue(new PrepareForShoot().repeatedly());
-        // operatorATrigger
-        //         .onTrue(Commands.runOnce(() -> intakeArm.moveArmTo(IntakeArmConstants.SafeSetPoint), intakeArm));
+        operatorXTrigger.onTrue(new CollectUntilNote());
+        operatorYTrigger.onTrue(new ReadyShootSpeaker());
+        operatorBTrigger.onTrue(new ShooterArmMoveToAngle(53));
         // operatorRightBumperTrigger.onTrue(new IntakeArmDown());
         // operatorLeftBumperTrigger.onTrue(new IntakeArmUP());
         // operatorBTrigger.onTrue(
         //         new InstantCommand(() -> ShooterSubsystem.getInstance().coast(), ShooterSubsystem.getInstance()));
-
-        // IntakeSubsystem.getInstance().setDefaultCommand(new IntakeSetSpeed(() -> -operator.getHID().getLeftY()));
-        // FeederSubsystem.getInstance().setDefaultCommand(new FeederSetSpeed(() -> -operator.getHID().getLeftY()));
+        TakeFeedSubsystem.getInstance().setDefaultCommand(new TakeFeedJoystickSetSpeed(()-> - operator.getHID().getRightY()));
     }
 }

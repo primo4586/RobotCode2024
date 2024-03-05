@@ -12,8 +12,10 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import frc.robot.a_robotCommandGroups.ReadyShootSpeaker;
 import frc.robot.a_robotCommandGroups.ShootBase;
 import frc.robot.a_robotCommandGroups.ShootSpeaker;
+import frc.robot.basicCommands.ShooterCommands.ShooterCoast;
 import frc.robot.basicCommands.SwerveCommands.AutoAlignToSpeaker;
 import frc.robot.basicCommands.TakeFeedCommands.CollectUntilNote;
 import frc.robot.subsystems.shooter.ShooterSubsystem;
@@ -32,60 +34,6 @@ public class AutoContainer {
     double headingAccuracy = 7;
 
     public AutoContainer() {
-    Command baseTo2 = new SequentialCommandGroup(
-            new ShootBase(),
-            new ParallelCommandGroup(
-                    pathPlanner.followChoreoPath("base to 2", false),
-                    new CollectUntilNote()),
-            new AutoAlignToSpeaker(),
-            new ShootSpeaker());
-
-    Command twoTo3 = new SequentialCommandGroup(
-            new ParallelCommandGroup(
-                    pathPlanner.followChoreoPath("2 to 1", false),
-                    new CollectUntilNote()),
-            new AutoAlignToSpeaker(),
-            new ShootSpeaker());
-
-    Command baseU1 = new SequentialCommandGroup(
-            new AutoAlignToSpeaker(),
-            new ShootSpeaker(),
-            new ParallelCommandGroup(
-                    pathPlanner.followChoreoPath("baseU to 1", false),
-                    new CollectUntilNote()),
-            new AutoAlignToSpeaker(),
-            new ShootSpeaker());
-
-    Command oneTo2 = new SequentialCommandGroup(
-            new ParallelCommandGroup(
-                    pathPlanner.followChoreoPath("1 to 2", false),
-                    new CollectUntilNote()),
-            new AutoAlignToSpeaker(),
-            new ShootSpeaker());
-
-    Command oneTo1m = new SequentialCommandGroup(
-            new ParallelCommandGroup(
-                    pathPlanner.followChoreoPath("1 to 1m", false),
-                    new CollectUntilNote()),
-            pathPlanner.followChoreoPath("1m shoot", false),
-            new AutoAlignToSpeaker(),
-            new ShootSpeaker());
-
-    Command baseD3 = new SequentialCommandGroup(
-            new AutoAlignToSpeaker(),
-            new ShootSpeaker(),
-            new ParallelCommandGroup(
-                    pathPlanner.followChoreoPath("baseD to 3", false),
-                    new CollectUntilNote()),
-            new AutoAlignToSpeaker(),
-            new ShootSpeaker());
-    Command three5m = new SequentialCommandGroup(
-            new ParallelCommandGroup(
-                    pathPlanner.followChoreoPath("3 to 5m", false),
-                    new CollectUntilNote()),
-            pathPlanner.followChoreoPath("5m shoot", false),
-            new AutoAlignToSpeaker(),
-            new ShootSpeaker());
 
     Command baseD5m = new SequentialCommandGroup(
             new AutoAlignToSpeaker(),
@@ -106,20 +54,70 @@ public class AutoContainer {
             new ParallelCommandGroup(
                     pathPlanner.followChoreoPath("base to 2", false),
                     new CollectUntilNote()),
+            Commands.waitSeconds(0.2),
             new AutoAlignToSpeaker(),
             new ShootSpeaker()));
 
         this.autoPaths.put("base,2,1", new SequentialCommandGroup(
-                baseTo2,
-                twoTo3
-                ));
+            new ShootBase(),
+            new ParallelCommandGroup(
+                    pathPlanner.followChoreoPath("base to 2", false),
+                    new CollectUntilNote()),
+            Commands.waitSeconds(0.2),
+            new AutoAlignToSpeaker().raceWith(new ReadyShootSpeaker()),
+            new ShootSpeaker(),
+            new ParallelCommandGroup(
+                    pathPlanner.followChoreoPath("1 to 2", false),
+                    new CollectUntilNote()),
+            new AutoAlignToSpeaker(),
+            new ShootSpeaker()));
 
-        this.autoPaths.put("baseU,1", baseU1);
+        this.autoPaths.put("baseU,1", new SequentialCommandGroup(
+            new AutoAlignToSpeaker().raceWith(new ReadyShootSpeaker()),
+            new ShootSpeaker(),
+            new ParallelCommandGroup(
+                    pathPlanner.followChoreoPath("baseU to 1", false),
+                    new CollectUntilNote()),
+            new AutoAlignToSpeaker().raceWith(new ReadyShootSpeaker()),
+            new ShootSpeaker(),
+            new ShooterCoast()));
+
+        this.autoPaths.put("baseU,1,2", new SequentialCommandGroup(
+            new AutoAlignToSpeaker().raceWith(new ReadyShootSpeaker()),
+            new AutoAlignToSpeaker().raceWith(new ReadyShootSpeaker()),
+            new ShootSpeaker(),
+            new ParallelCommandGroup(
+                    pathPlanner.followChoreoPath("baseU to 1", false),
+                    new CollectUntilNote()),
+            new AutoAlignToSpeaker().raceWith(new ReadyShootSpeaker()),
+            new AutoAlignToSpeaker().raceWith(new ReadyShootSpeaker()),
+            new ShootSpeaker(),
+            new ParallelCommandGroup(
+                    pathPlanner.followChoreoPath("1 to 2", false),
+                    new CollectUntilNote()),
+            Commands.waitSeconds(0.2),
+            new AutoAlignToSpeaker().raceWith(new ReadyShootSpeaker()),
+            Commands.waitSeconds(0.5),
+            new AutoAlignToSpeaker().raceWith(new ReadyShootSpeaker()),
+            new ReadyShootSpeaker().withTimeout(0.5),
+            new ShootSpeaker()));
 
         this.autoPaths.put("baseU,1,1m", new SequentialCommandGroup(
-            baseU1,
-            oneTo1m
-        ));
+            new AutoAlignToSpeaker().raceWith(new ReadyShootSpeaker()),
+            new AutoAlignToSpeaker().raceWith(new ReadyShootSpeaker()),
+            new ShootSpeaker(),
+            new ParallelCommandGroup(
+                    pathPlanner.followChoreoPath("baseU to 1", false),
+                    new CollectUntilNote()),
+            new AutoAlignToSpeaker().raceWith(new ReadyShootSpeaker()),
+            new AutoAlignToSpeaker().raceWith(new ReadyShootSpeaker()),
+            new ShootSpeaker(),
+            new ParallelCommandGroup(
+                    pathPlanner.followChoreoPath("1 to 1m", false),
+                    new CollectUntilNote()),
+            pathPlanner.followChoreoPath("1m shoot", false),
+            new AutoAlignToSpeaker(),
+            new ShootSpeaker()));
 
         this.autoPaths.put("baseD,3", new SequentialCommandGroup(
             new AutoAlignToSpeaker(),
@@ -130,13 +128,28 @@ public class AutoContainer {
             new AutoAlignToSpeaker(),
             new ShootSpeaker()));
 
-        this.autoPaths.put("baseD,3,5m", 
-        new SequentialCommandGroup(
-            baseD3,
-            three5m
-        ));
+        this.autoPaths.put("baseD,3,5m", new SequentialCommandGroup(
+            new AutoAlignToSpeaker(),
+            new ShootSpeaker(),
+            new ParallelCommandGroup(
+                    pathPlanner.followChoreoPath("baseD to 3", false),
+                    new CollectUntilNote()),
+            new AutoAlignToSpeaker(),
+            new ShootSpeaker(),
+            new ParallelCommandGroup(
+                    pathPlanner.followChoreoPath("3 to 5m", false),
+                    new CollectUntilNote()),
+            pathPlanner.followChoreoPath("5m shoot", false),
+            new AutoAlignToSpeaker(),
+            new ShootSpeaker()));
 
-        this.autoPaths.put("baseD,5m", baseD5m);
+        this.autoPaths.put("baseD,5m", new SequentialCommandGroup(
+            new ParallelCommandGroup(
+                    pathPlanner.followChoreoPath("3 to 5m", false),
+                    new CollectUntilNote()),
+            pathPlanner.followChoreoPath("5m shoot", false),
+            new AutoAlignToSpeaker(),
+            new ShootSpeaker()));
 
         this.autoSelector = new CommandSelector(autoPaths, PrimoShuffleboard.getInstance().getCompTabTitle());
     }

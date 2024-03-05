@@ -22,6 +22,7 @@ private boolean canReset = false;
   @Override
   public void initialize() {
     canReset = !shooterArm.getSwitch();
+    zerodOut = false;
   }
 
   // Called every time the scheduler runs while the command is scheduled.

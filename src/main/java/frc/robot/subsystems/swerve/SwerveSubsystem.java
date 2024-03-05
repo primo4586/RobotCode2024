@@ -190,6 +190,7 @@ public class SwerveSubsystem extends SubsystemBase {
 
         poseEstimation.update(getYaw(), getModulePositions());
         odometry.update(getYaw(), getModulePositions());
+        SmartDashboard.putNumber("yaw", getYaw().getDegrees());
 
         vision.getRightEstimatedGlobalPose().ifPresent(
                 est -> {

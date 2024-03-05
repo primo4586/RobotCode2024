@@ -173,7 +173,16 @@ public class ShooterSubsystem extends SubsystemBase {
     @Override
     public void periodic() {
         // This method will be called once per scheduler run
+        // SmartDashboard.putNumber("uper shooter heat", m_upShooterMotor.getDeviceTemp().getValueAsDouble());
+        // SmartDashboard.putNumber("lower shooter heat", m_downShooterMotor.getDeviceTemp().getValueAsDouble());
+        // SmartDashboard.putNumber("uper shooter current", m_upShooterMotor.getSupplyCurrent().getValueAsDouble());
+        // SmartDashboard.putNumber("lower shooter current", m_downShooterMotor.getSupplyCurrent().getValueAsDouble());
         SmartDashboard.putNumber("lower shooter Speed", getDownShooterSpeed());
         SmartDashboard.putNumber("upper shooter Speed", getUpShooterSpeed());
+
+        SmartDashboard.putNumber("up error", getUpShooterSpeed()-70);
+        SmartDashboard.putNumber("down error", getDownShooterSpeed()-70);
+
+        SmartDashboard.putBoolean("shooter ready", Math.abs(getDownShooterSpeed()-getUpShooterSpeed())<0.3);
     }
 }

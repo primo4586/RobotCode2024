@@ -4,6 +4,8 @@
 
 package frc.robot.basicCommands.TakeFeedCommands;
 
+import edu.wpi.first.wpilibj.RobotController;
+import edu.wpi.first.wpilibj.RobotState;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.swerve.SwerveSubsystem;
@@ -14,33 +16,47 @@ public class CollectUntilNote extends Command {
   
   TakeFeedSubsystem takeFeed = TakeFeedSubsystem.getInstance();
   boolean collected = false;
+  boolean finished = false;
   Timer timer;
 
   public CollectUntilNote() {
     addRequirements(takeFeed);
     timer = new Timer();
+    finished = false;
   }
 
   @Override
   public void initialize() {
-    double robotVelocity = 
-      Math.abs(SwerveSubsystem.getInstance().getRobotVelocity().vxMetersPerSecond) 
-      + Math.abs(SwerveSubsystem.getInstance().getRobotVelocity().vyMetersPerSecond);
+    // double robotVelocity = 
+    //   Math.abs(SwerveSubsystem.getInstance().getRobotVelocity().vxMetersPerSecond) 
+    //   + Math.abs(SwerveSubsystem.getInstance().getRobotVelocity().vyMetersPerSecond);
 
+    // if(RobotState.isAutonomous()){
+    //   takeFeed.setSpeed(4);
+    // }
+    // else{
+      // takeFeed.setSpeed(robotVelocity>0.5? takeFeedConstants.COLLECT_SPEED:9);
+    // }
 
-    takeFeed.setSpeed(robotVelocity>0.5? takeFeedConstants.COLLECT_SPEED:12);
-    collected = false;
-    timer.reset();
-    timer.stop();
+    // collected = false;
+    // finished = false;
+    // timer.reset();
+    // timer.stop();
+    takeFeed.setSpeed(takeFeedConstants.COLLECT_SPEED);
   }
 
   @Override
   public void execute() {
-    if(!collected&&takeFeed.getOpticSensorValue()){
-      takeFeed.setSpeed(-1);
-      timer.start();
-      collected = true;
-    }
+    // if(!collected&&takeFeed.getOpticSensorValue()){
+    //   takeFeed.setSpeed(-2);
+    //   timer.start();
+    //   collected = true;
+    // }
+
+    // if(collected&&timer.hasElapsed(0.05)&&takeFeed.getOpticSensorValue()){
+    //   finished = true;
+    // }
+
   }
   
   @Override
@@ -50,6 +66,7 @@ public class CollectUntilNote extends Command {
   
   @Override
   public boolean isFinished() {
-    return collected&&timer.hasElapsed(0.05)&&takeFeed.getOpticSensorValue();
+    return takeFeed.getOpticSensorValue();
+    // return finished&&!takeFeed.getOpticSensorValue();
   }
 }

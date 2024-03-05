@@ -18,7 +18,7 @@ public class ShooterArmConstants {
         public static final double TICKS_PER_DEGREE = ENCODER_COUNTS_PER_REVOLUTION * GEAR_RATIO / 360.0;
 
         // Condition Constants
-        public static final double MINIMUM_ERROR = 2.0;
+        public static final double MINIMUM_ERROR = 1;
 
         // MotionMagic Constants
         public static final double MM_CRUISE = 80;
@@ -48,10 +48,12 @@ public class ShooterArmConstants {
         public static InterpolationMap SHOOTER_ANGLE_INTERPOLATION_MAP = new InterpolationMap()
         .put(2.9, 62)
         .put(2.52 , 55)
-        .put(2.15 , 50);
+        .put(2.15 , 50)
+        .put(3.59, 63)
+        .put(3.04, 56);
 
         public static final double SHOOT_BASE_ANGLE = 26; //6.1064453125
-        public static final double SHOOT_STAGE_ANGLE = 3;
+        public static final double SHOOT_STAGE_ANGLE = 56;
         public static final double AMP_ANGLE = 0;
     }
 }

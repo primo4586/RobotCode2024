@@ -13,7 +13,6 @@ import frc.robot.subsystems.shooter.ShooterConstants.shooterConstants;
 public class ReadyShootSpeaker extends ParallelCommandGroup {
   public ReadyShootSpeaker() {
     addCommands(
-        new TakeFeedSetSpeedForever(12),//TODO: remove
         new ShooterArmSpeakerAngle(),
         new ShooterSetSpeedForever(shooterConstants.SHOOT_SPEED));
   }

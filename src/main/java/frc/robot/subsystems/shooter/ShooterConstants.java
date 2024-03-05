@@ -27,17 +27,17 @@ public class ShooterConstants {
         public static final int MAX_ERROR = 2;
 
         // PID values for up motor
-        public static final double UP_KP = 0.0575;
+        public static final double UP_KP = 0.056;
         public static final double UP_KD = 0.0;
         public static final double UP_KS = 0.16;
-        public static final double UP_KV = 0.057;
+        public static final double UP_KV = 0.056;
         public static final double UP_KA = 0.0;
 
         // PID values for down motor
-        public static final double DOWN_KP = 0.023;
+        public static final double DOWN_KP = 0.022;
         public static final double DOWN_KD = 0.0;
         public static final double DOWN_KS = 0.2998046875;
-        public static final double DOWN_KV = 0.058;
+        public static final double DOWN_KV = 0.0583;
         public static final double DOWN_KA = 0.079175;
 
         // Interpolation Map
@@ -47,7 +47,7 @@ public class ShooterConstants {
                 .put(3.2, 100);
 
         public static final double SHOOT_BASE_SPEED = 50;
-        public static final double SHOOT_STAGE_SPEED = 3;
+        public static final double SHOOT_STAGE_SPEED = 70;
         public static final double SHOOT_SPEED = 70;
         public static final double AMP_SPEED = 0;
     }

@@ -19,7 +19,9 @@ public class ShooterArmSpeakerAngle extends Command {
   }
 
   @Override
-  public void initialize() {}
+  public void initialize() {
+    SmartDashboard.putNumber("angle", shooterArm.speakerInterpolate());
+    shooterArm.moveArmTo(shooterArm.speakerInterpolate());}
 
 
   @Override

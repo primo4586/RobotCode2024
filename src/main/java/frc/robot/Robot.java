@@ -51,7 +51,9 @@ public class Robot extends TimedRobot {
     ShooterArmConstants.shooterArmConstants.SHOOTER_ANGLE_INTERPOLATION_MAP = new InterpolationMap()
       .put(2.9 + offset, 62)
       .put(2.52 + offset, 55)
-      .put(2.15 + offset, 50);
+      .put(2.15 + offset, 50)
+      .put(3.59 + offset, 63)
+      .put(3.04 + offset, 56);
   }
 
   /**
@@ -74,7 +76,9 @@ public class Robot extends TimedRobot {
     ShooterArmConstants.shooterArmConstants.SHOOTER_ANGLE_INTERPOLATION_MAP = new InterpolationMap()
       .put(2.9 + offset, 62)
       .put(2.52 + offset, 55)
-      .put(2.15 + offset, 50);
+      .put(2.15 + offset, 50)
+      .put(3.59 + offset, 63)
+      .put(3.04 + offset, 56);
     }
   }
 

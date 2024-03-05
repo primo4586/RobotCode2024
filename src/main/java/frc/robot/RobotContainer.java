@@ -16,6 +16,7 @@ import frc.robot.basicCommands.SwerveCommands.*;
 import frc.robot.basicCommands.TakeFeedCommands.CollectUntilNote;
 import frc.robot.basicCommands.TakeFeedCommands.TakeFeedJoystickSetSpeed;
 import frc.robot.basicCommands.TakeFeedCommands.TakeFeedSetSpeed;
+import frc.robot.subsystems.shooter.ShooterConstants;
 import frc.robot.subsystems.shooter.ShooterSubsystem;
 import frc.robot.subsystems.swerve.SwerveSubsystem;
 import frc.robot.subsystems.takeFeed.TakeFeedSubsystem;
@@ -97,12 +98,12 @@ public class RobotContainer {
         driverPovRightTrigger.onTrue(new ZeroShooterArm());
 
         // // Operator Button Bindings
-        operatorRightBumperTrigger.whileTrue(new ShooterSetSpeedForever(23.5));
+        operatorRightBumperTrigger.whileTrue(new ShooterSetSpeedForever(ShooterConstants.shooterConstants.SHOOT_SPEED));
         operatorLeftBumperTrigger.onTrue(new InstantCommand(()->ShooterSubsystem.getInstance().coast()));
         // operatorStart.onTrue(new EStop());
         operatorXTrigger.onTrue(new CollectUntilNote());
         operatorYTrigger.onTrue(new ReadyShootSpeaker());
-        operatorBTrigger.onTrue(new ShooterArmMoveToAngle(53));
+        operatorBTrigger.toggleOnTrue(new AutoAlignToSpeaker());
         // operatorRightBumperTrigger.onTrue(new IntakeArmDown());
         // operatorLeftBumperTrigger.onTrue(new IntakeArmUP());
         // operatorBTrigger.onTrue(

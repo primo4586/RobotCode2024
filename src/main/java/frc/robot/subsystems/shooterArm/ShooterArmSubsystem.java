@@ -136,11 +136,12 @@ public class ShooterArmSubsystem extends SubsystemBase {
   }
 
   public double speakerInterpolate() {
+    double yOffset = Math.abs(swerve.getPose().getY()-FieldConstants.Speaker.centerSpeakerOpening.getY());
     return InterpolateUtil.interpolate(
         shooterArmConstants.SHOOTER_ANGLE_INTERPOLATION_MAP,
         swerve.getPose().getTranslation().getDistance(
             AllianceFlipUtil.apply(FieldConstants.Speaker.centerSpeakerOpening).getTranslation()))
-            -Math.abs(swerve.getPose().getY()-FieldConstants.Speaker.centerSpeakerOpening.getY());
+            - (yOffset>0.8?yOffset:0);
   }
 
   @Override

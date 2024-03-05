@@ -13,7 +13,7 @@ public class TakeFeedConstants {
         public static final int OPTIC_SENSOR_ID = 8;
 
         public static final int SHOOT_SPEED = 11;
-        public static final double COLLECT_SPEED = 7;
+        public static final double COLLECT_SPEED = 9;
         public static final double AT_SHOOTING_SPEED = 0;
         public static final double FEED_SHOOTER_TIME = 1;
     }

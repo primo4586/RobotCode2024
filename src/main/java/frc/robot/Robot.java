@@ -10,6 +10,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.basicCommands.ShooterCommands.ShooterCoast;
+import frc.robot.subsystems.leds.LedsSubsystem;
 import frc.robot.subsystems.shooterArm.ShooterArmConstants;
 import frc.robot.subsystems.shooterArm.ShooterArmSubsystem;
 import frc.robot.subsystems.swerve.SwerveSubsystem;
@@ -47,6 +48,9 @@ public class Robot extends TimedRobot {
     PrimoShuffleboard.getInstance().initDashboard();
     enableLiveWindowInTest(true);
     SmartDashboard.putNumber("offset", offset);
+
+    LedsSubsystem leds = LedsSubsystem.getInstance();
+    leds.GameLeds(15);
 
     ShooterArmConstants.shooterArmConstants.SHOOTER_ANGLE_INTERPOLATION_MAP = new InterpolationMap()
       .put(2.9 + offset, 62)

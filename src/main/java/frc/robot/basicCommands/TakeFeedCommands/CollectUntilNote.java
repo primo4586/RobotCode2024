@@ -27,35 +27,35 @@ public class CollectUntilNote extends Command {
 
   @Override
   public void initialize() {
-    // double robotVelocity = 
-    //   Math.abs(SwerveSubsystem.getInstance().getRobotVelocity().vxMetersPerSecond) 
-    //   + Math.abs(SwerveSubsystem.getInstance().getRobotVelocity().vyMetersPerSecond);
+    double robotVelocity = 
+      Math.abs(SwerveSubsystem.getInstance().getRobotVelocity().vxMetersPerSecond) 
+      + Math.abs(SwerveSubsystem.getInstance().getRobotVelocity().vyMetersPerSecond);
 
-    // if(RobotState.isAutonomous()){
-    //   takeFeed.setSpeed(4);
-    // }
-    // else{
-      // takeFeed.setSpeed(robotVelocity>0.5? takeFeedConstants.COLLECT_SPEED:9);
-    // }
+    if(RobotState.isAutonomous()){
+      takeFeed.setSpeed(4);
+    }
+    else{
+      takeFeed.setSpeed(robotVelocity>0.5? takeFeedConstants.COLLECT_SPEED:9);
+    }
 
-    // collected = false;
-    // finished = false;
-    // timer.reset();
-    // timer.stop();
+    collected = false;
+    finished = false;
+    timer.reset();
+    timer.stop();
     takeFeed.setSpeed(takeFeedConstants.COLLECT_SPEED);
   }
 
   @Override
   public void execute() {
-    // if(!collected&&takeFeed.getOpticSensorValue()){
-    //   takeFeed.setSpeed(-2);
-    //   timer.start();
-    //   collected = true;
-    // }
+    if(!collected&&takeFeed.getOpticSensorValue()){
+      takeFeed.setSpeed(-2);
+      timer.start();
+      collected = true;
+    }
 
-    // if(collected&&timer.hasElapsed(0.05)&&takeFeed.getOpticSensorValue()){
-    //   finished = true;
-    // }
+    if(collected&&timer.hasElapsed(0.05)&&takeFeed.getOpticSensorValue()){
+      finished = true;
+    }
 
   }
   
@@ -66,7 +66,7 @@ public class CollectUntilNote extends Command {
   
   @Override
   public boolean isFinished() {
-    return takeFeed.getOpticSensorValue();
-    // return finished&&!takeFeed.getOpticSensorValue();
+    // return takeFeed.getOpticSensorValue();
+    return finished&&!takeFeed.getOpticSensorValue();
   }
 }

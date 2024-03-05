@@ -12,6 +12,7 @@ import com.ctre.phoenix6.signals.NeutralModeValue;
 
 import static frc.robot.subsystems.shooter.ShooterConstants.shooterConstants;
 
+import edu.wpi.first.wpilibj.RobotState;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
@@ -154,6 +155,11 @@ public class ShooterSubsystem extends SubsystemBase {
     }
 
     public boolean checkIfShooterAtSpeed() {
+
+        if(RobotState.isAutonomous()){
+            return((Math.abs(getUpShooterSpeed() - targetSpeed) < 5)
+                && ((Math.abs(getDownShooterSpeed() - targetSpeed) < 5)));
+        }
         return ((Math.abs(getUpShooterSpeed() - targetSpeed) < shooterConstants.MAX_ERROR)
                 && ((Math.abs(getDownShooterSpeed() - targetSpeed) < shooterConstants.MAX_ERROR)));
     }

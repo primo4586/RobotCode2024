@@ -8,14 +8,13 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.a_robotCommandGroups.ReadyShootSpeaker;
 import frc.robot.a_robotCommandGroups.ShootBase;
 import frc.robot.a_robotCommandGroups.ShootSpeaker;
-import frc.robot.basicCommands.ShooterArmCommands.ShooterArmMoveToAngle;
-import frc.robot.basicCommands.ShooterArmCommands.ShooterArmSetSpeed;
+import frc.robot.a_robotCommandGroups.ShootStage;
 import frc.robot.basicCommands.ShooterArmCommands.ZeroShooterArm;
 import frc.robot.basicCommands.ShooterCommands.ShooterSetSpeedForever;
-import frc.robot.basicCommands.SwerveCommands.*;
+import frc.robot.basicCommands.SwerveCommands.AutoAlignToSpeaker;
+import frc.robot.basicCommands.SwerveCommands.TeleopSwerve;
 import frc.robot.basicCommands.TakeFeedCommands.CollectUntilNote;
 import frc.robot.basicCommands.TakeFeedCommands.TakeFeedJoystickSetSpeed;
-import frc.robot.basicCommands.TakeFeedCommands.TakeFeedSetSpeed;
 import frc.robot.subsystems.shooter.ShooterConstants;
 import frc.robot.subsystems.shooter.ShooterSubsystem;
 import frc.robot.subsystems.swerve.SwerveSubsystem;
@@ -39,6 +38,7 @@ public class RobotContainer {
     // Driver Triggers
     Trigger driverYTrigger = driver.y();
     Trigger driverXTrigger = driver.x();
+    Trigger driverBTrigger = driver.b();
     Trigger driverRightBumperTrigger = driver.rightBumper();
     Trigger driverLeftTriggerToggle = driver.leftTrigger();
     Trigger driverBackTrigger = driver.back();
@@ -88,26 +88,23 @@ public class RobotContainer {
     private void configureButtonBindings() {
 
         // Driver Button Bindings
-        // driverStart.onTrue(new EStop());
+        // pathPlanner.followChoreoPath("2 to 1", false)
+        //driverStart.onTrue(new EStop());
         driverYTrigger.onTrue(new InstantCommand(() -> swerve.zeroGyro()));
         driverXTrigger.onTrue(new ShootBase());
-        driverRightBumperTrigger.whileTrue(new ShootSpeaker()
-        );
-        // driverLeftTriggerToggle.toggleOnTrue(new AlignToSpeaker());
-        // driverBackTrigger.onTrue(swerve.disableHeadingCommand());
+        driverBTrigger.onTrue(new ShootStage());
+        driverRightBumperTrigger.whileTrue(new ShootSpeaker());
+        driverLeftTriggerToggle.toggleOnTrue(new AutoAlignToSpeaker());
+        driverBackTrigger.onTrue(swerve.disableHeadingCommand());
         driverPovRightTrigger.onTrue(new ZeroShooterArm());
 
         // // Operator Button Bindings
-        operatorRightBumperTrigger.whileTrue(new ShooterSetSpeedForever(ShooterConstants.shooterConstants.SHOOT_SPEED));
-        operatorLeftBumperTrigger.onTrue(new InstantCommand(()->ShooterSubsystem.getInstance().coast()));
-        // operatorStart.onTrue(new EStop());
+        // operatorRightBumperTrigger.whileTrue(new ShooterSetSpeedForever(ShooterConstants.shooterConstants.SHOOT_SPEED));
+        // operatorLeftBumperTrigger.onTrue(new InstantCommand(()->ShooterSubsystem.getInstance().coast()));
+        //operatorStart.onTrue(new EStop());
         operatorXTrigger.onTrue(new CollectUntilNote());
         operatorYTrigger.onTrue(new ReadyShootSpeaker());
-        operatorBTrigger.toggleOnTrue(new AutoAlignToSpeaker());
-        // operatorRightBumperTrigger.onTrue(new IntakeArmDown());
-        // operatorLeftBumperTrigger.onTrue(new IntakeArmUP());
-        // operatorBTrigger.onTrue(
-        //         new InstantCommand(() -> ShooterSubsystem.getInstance().coast(), ShooterSubsystem.getInstance()));
-        TakeFeedSubsystem.getInstance().setDefaultCommand(new TakeFeedJoystickSetSpeed(()-> - operator.getHID().getRightY()));
+        operatorBTrigger.onTrue(new InstantCommand(() -> ShooterSubsystem.getInstance().coast(), ShooterSubsystem.getInstance()));
+        TakeFeedSubsystem.getInstance().setDefaultCommand(new TakeFeedJoystickSetSpeed(()-> - operator.getHID().getLeftY()));
     }
 }

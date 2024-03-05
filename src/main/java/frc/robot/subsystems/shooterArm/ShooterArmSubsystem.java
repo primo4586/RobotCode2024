@@ -13,6 +13,7 @@ import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 
 import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.RobotState;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
@@ -102,6 +103,9 @@ public class ShooterArmSubsystem extends SubsystemBase {
 
   // Checking the degree difference conditions
   public boolean isArmReady() {
+    if(RobotState.isAutonomous()){
+      return (Math.abs(getArmPose() - targetPose) < 2);
+    }
     return (Math.abs(getArmPose() - targetPose) < shooterArmConstants.MINIMUM_ERROR);
   }
 
@@ -141,7 +145,7 @@ public class ShooterArmSubsystem extends SubsystemBase {
         shooterArmConstants.SHOOTER_ANGLE_INTERPOLATION_MAP,
         swerve.getPose().getTranslation().getDistance(
             AllianceFlipUtil.apply(FieldConstants.Speaker.centerSpeakerOpening).getTranslation()))
-            - (yOffset>0.8?yOffset:0);
+            - (yOffset>0.5?yOffset*1:0);
   }
 
   @Override

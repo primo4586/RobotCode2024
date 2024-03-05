@@ -11,6 +11,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
+import edu.wpi.first.wpilibj2.command.ParallelRaceGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.a_robotCommandGroups.ReadyShootSpeaker;
 import frc.robot.a_robotCommandGroups.ShootBase;
@@ -67,7 +68,7 @@ public class AutoContainer {
             new AutoAlignToSpeaker().raceWith(new ReadyShootSpeaker()),
             new ShootSpeaker(),
             new ParallelCommandGroup(
-                    pathPlanner.followChoreoPath("1 to 2", false),
+                    pathPlanner.followChoreoPath("2 to 1", false),
                     new CollectUntilNote()),
             new AutoAlignToSpeaker(),
             new ShootSpeaker()));
@@ -83,27 +84,19 @@ public class AutoContainer {
             new ShooterCoast()));
 
         this.autoPaths.put("baseU,1,2", new SequentialCommandGroup(
-            new AutoAlignToSpeaker().raceWith(new ReadyShootSpeaker()),
-            new AutoAlignToSpeaker().raceWith(new ReadyShootSpeaker()),
             new ShootSpeaker(),
-            new ParallelCommandGroup(
+            new ParallelRaceGroup(
                     pathPlanner.followChoreoPath("baseU to 1", false),
                     new CollectUntilNote()),
-            new AutoAlignToSpeaker().raceWith(new ReadyShootSpeaker()),
             new AutoAlignToSpeaker().raceWith(new ReadyShootSpeaker()),
             new ShootSpeaker(),
             new ParallelCommandGroup(
                     pathPlanner.followChoreoPath("1 to 2", false),
                     new CollectUntilNote()),
-            Commands.waitSeconds(0.2),
             new AutoAlignToSpeaker().raceWith(new ReadyShootSpeaker()),
-            Commands.waitSeconds(0.5),
-            new AutoAlignToSpeaker().raceWith(new ReadyShootSpeaker()),
-            new ReadyShootSpeaker().withTimeout(0.5),
             new ShootSpeaker()));
 
         this.autoPaths.put("baseU,1,1m", new SequentialCommandGroup(
-            new AutoAlignToSpeaker().raceWith(new ReadyShootSpeaker()),
             new AutoAlignToSpeaker().raceWith(new ReadyShootSpeaker()),
             new ShootSpeaker(),
             new ParallelCommandGroup(
@@ -149,6 +142,21 @@ public class AutoContainer {
                     new CollectUntilNote()),
             pathPlanner.followChoreoPath("5m shoot", false),
             new AutoAlignToSpeaker(),
+            new ShootSpeaker()));
+
+            
+        this.autoPaths.put("baseD,3,2", new SequentialCommandGroup(
+            new ShootSpeaker(),
+            new ParallelRaceGroup(
+                    pathPlanner.followChoreoPath("baseD to 3", false),
+                    new CollectUntilNote()),
+            new AutoAlignToSpeaker().raceWith(new ReadyShootSpeaker()),
+            new ShootSpeaker(),
+            new ParallelCommandGroup(
+                    pathPlanner.followChoreoPath("3 to 2", false),
+                    new CollectUntilNote()),
+            new AutoAlignToSpeaker().raceWith(new ReadyShootSpeaker()),
+            new AutoAlignToSpeaker().raceWith(new ReadyShootSpeaker()).withTimeout(0.5),
             new ShootSpeaker()));
 
         this.autoSelector = new CommandSelector(autoPaths, PrimoShuffleboard.getInstance().getCompTabTitle());

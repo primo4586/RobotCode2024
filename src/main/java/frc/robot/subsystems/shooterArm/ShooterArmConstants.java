@@ -54,6 +54,6 @@ public class ShooterArmConstants {
 
         public static final double SHOOT_BASE_ANGLE = 26; //6.1064453125
         public static final double SHOOT_STAGE_ANGLE = 56;
-        public static final double AMP_ANGLE = 0;
+        public static final double AMP_ANGLE = 32.4;
     }
 }

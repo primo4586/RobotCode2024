@@ -4,6 +4,7 @@ import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
+import frc.robot.basicCommands.LedsYay;
 import frc.robot.basicCommands.SwerveCommands.*;
 import frc.robot.subsystems.Leds.Leds;
 import frc.robot.subsystems.swerve.SwerveSubsystem;
@@ -81,6 +82,7 @@ public class RobotContainer {
         // Driver Button Bindings
         // driverStart.onTrue(new EStop());
         // driverYTrigger.onTrue(new InstantCommand(() -> swerve.zeroGyro()));
+        driverYTrigger.onTrue(new LedsYay());
         // driverXTrigger.onTrue(new ShootTouchingBase());
         // driverRightBumperTrigger.whileTrue(new FeederSetSpeed(()->1).repeatedly());
         // driverLeftTriggerToggle.toggleOnTrue(new AlignToSpeaker());

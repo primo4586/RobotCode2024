@@ -36,7 +36,7 @@ public class Leds extends SubsystemBase {
     AddressableLED m_led = new AddressableLED(LedsConstants.LedsPort);
     AddressableLEDBuffer m_ledBuffer = new AddressableLEDBuffer(LedsConstants.LedsLength);
 
-    m_led.setLength(m_ledBuffer.getLength());
+    m_led.setLength(LedsConstants.LedsLength);
   }
 
   @Override
@@ -45,7 +45,7 @@ public class Leds extends SubsystemBase {
   }
 
   public void turnOffLed() {
-    for (var i = 0; i < m_ledBuffer.getLength(); i++)
+    for (var i = 0; i < LedsConstants.LedsLength ; i++)
       m_ledBuffer.setRGB(i,0,0,0);
     
     m_led.setData(m_ledBuffer);
@@ -53,7 +53,7 @@ public class Leds extends SubsystemBase {
   }
 
   public void turnLedsByRGB(int red, int green, int blue) {
-    for (var i = 0; i < m_ledBuffer.getLength(); i++)
+    for (var i = 0; i < LedsConstants.LedsLength; i++)
       m_ledBuffer.setRGB(i,red,green,blue);
 
     m_led.setData(m_ledBuffer);

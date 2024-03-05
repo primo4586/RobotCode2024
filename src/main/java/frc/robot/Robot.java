@@ -9,6 +9,7 @@ import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import frc.robot.subsystems.Leds.Leds;
 import frc.robot.subsystems.shooterArm.ShooterArmConstants;
 import frc.robot.subsystems.shooterArm.ShooterArmSubsystem;
 import frc.robot.subsystems.swerve.SwerveSubsystem;
@@ -31,6 +32,7 @@ public class Robot extends TimedRobot {
   private RobotContainer m_robotContainer;
   
   private AutoContainer autoContainer;
+  private Leds leds = Leds.getInstance();
   double offset = -0.6;
 
   /**
@@ -46,6 +48,7 @@ public class Robot extends TimedRobot {
     PrimoShuffleboard.getInstance().initDashboard();
     enableLiveWindowInTest(true);
     SmartDashboard.putNumber("offset", offset);
+
 
     ShooterArmConstants.shooterArmConstants.SHOOTER_ANGLE_INTERPOLATION_MAP = new InterpolationMap()
       .put(2.13 + offset, 20)
@@ -92,7 +95,9 @@ public class Robot extends TimedRobot {
 
   /** This function is called once each time the robot enters Disabled mode. */
   @Override
-  public void disabledInit() {}
+  public void disabledInit() {
+    leds.turnOffLed();
+  }
 
   @Override
   public void disabledPeriodic() {

@@ -4,8 +4,7 @@ import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
-import frc.robot.basicCommands.LedsYay;
-import frc.robot.basicCommands.SwerveCommands.*;
+import frc.robot.basicCommands.LedsCommands.BasicLedsCommand;
 import frc.robot.subsystems.Leds.Leds;
 import frc.robot.subsystems.swerve.SwerveSubsystem;
 import frc.util.PathPlanner.PathPlannerHelper;
@@ -43,9 +42,9 @@ public class RobotContainer {
     Trigger operatorBTrigger = operator.b();
     Trigger operatorStart = operator.start();
 
-    Leds leds = Leds.getInstance();
-
     PathPlannerHelper pathPlannerHelper = PathPlannerHelper.getInstace();
+
+    Leds leds = Leds.getInstance();
 
     /* Subsystems */
     private final SwerveSubsystem swerve = SwerveSubsystem.getInstance();
@@ -54,18 +53,17 @@ public class RobotContainer {
      * The container for the robot. Contains subsystems, OI devices, and commands.
      */
     public RobotContainer() {
-        swerve.setDefaultCommand(
-                new TeleopSwerve(
-                        () -> -driver.getHID().getLeftY(),
-                        () -> -driver.getHID().getLeftX(),
-                        () -> -driver.getHID().getRightX(),
-                        true,
-                        () -> driver.getHID().getRightTriggerAxis() > 0.5));
+        //swerve.setDefaultCommand(
+        //        new TeleopSwerve(
+        //                () -> -driver.getHID().getLeftY(),
+        //                () -> -driver.getHID().getLeftX(),
+        //                () -> -driver.getHID().getRightX(),
+        //                true,
+        //               () -> driver.getHID().getRightTriggerAxis() > 0.5));
 
+        leds.setDefaultCommand(new BasicLedsCommand());
 
         configureButtonBindings();
-
-        leds.turnLedsByRGB(200, 0, 0);
     }
 
     /**
@@ -82,7 +80,6 @@ public class RobotContainer {
         // Driver Button Bindings
         // driverStart.onTrue(new EStop());
         // driverYTrigger.onTrue(new InstantCommand(() -> swerve.zeroGyro()));
-        driverYTrigger.onTrue(new LedsYay());
         // driverXTrigger.onTrue(new ShootTouchingBase());
         // driverRightBumperTrigger.whileTrue(new FeederSetSpeed(()->1).repeatedly());
         // driverLeftTriggerToggle.toggleOnTrue(new AlignToSpeaker());

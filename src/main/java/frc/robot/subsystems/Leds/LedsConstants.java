@@ -7,5 +7,7 @@ package frc.robot.subsystems.Leds;
 /** Add your docs here. */
 public class LedsConstants {
     public static final int LedsPort = 8;
-    public static final int LedsLength = 89;
+    public static final int LedsLength = 88;
+      private final int BLUE = 0x0000FF;
+      private final int ORANGE = 0xFFA500;
 }

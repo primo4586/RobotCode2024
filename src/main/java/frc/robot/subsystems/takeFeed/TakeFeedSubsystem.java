@@ -26,6 +26,8 @@ public class TakeFeedSubsystem extends SubsystemBase {
   private TakeFeedSubsystem() {
     m_motor = new TalonFX(takeFeedConstants.MOTOR_ID, CAN_BUS_NAME);
 
+    m_opticSensor = new DigitalInput(9);
+
 
     TalonFXConfiguration motorConfig = new TalonFXConfiguration();
 

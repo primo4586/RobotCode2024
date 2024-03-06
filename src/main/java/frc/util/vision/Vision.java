@@ -139,7 +139,7 @@ public class Vision {
         if (numTags > 1)
             estStdDevs = kRightMultiTagStdDevs;
         // Increase std devs based on (average) distance
-        if (numTags == 1 && avgDist > 4)
+        if (numTags == 1 && avgDist > 7)//TODO: test on field
             estStdDevs = VecBuilder.fill(Double.MAX_VALUE, Double.MAX_VALUE, Double.MAX_VALUE);
         else
             estStdDevs = estStdDevs.times(1 + (avgDist * avgDist / 30));
@@ -166,7 +166,7 @@ public class Vision {
         if (numTags > 1)
             estStdDevs = kLeftMultiTagStdDevs;
         // Increase std devs based on (average) distance
-        if (numTags == 1 && avgDist > 4)
+        if (numTags == 1 && avgDist >7)//TODO: test on field
             estStdDevs = VecBuilder.fill(Double.MAX_VALUE, Double.MAX_VALUE, Double.MAX_VALUE);
         else
             estStdDevs = estStdDevs.times(1 + (avgDist * avgDist / 30));

@@ -5,6 +5,7 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
+import frc.robot.a_robotCommandGroups.ReadyForAmp;
 import frc.robot.a_robotCommandGroups.ReadyShootSpeaker;
 import frc.robot.a_robotCommandGroups.ShootBase;
 import frc.robot.a_robotCommandGroups.ShootSpeaker;
@@ -100,10 +101,10 @@ public class RobotContainer {
 
         // // Operator Button Bindings
         // operatorRightBumperTrigger.whileTrue(new ShooterSetSpeedForever(ShooterConstants.shooterConstants.SHOOT_SPEED));
-        // operatorLeftBumperTrigger.onTrue(new InstantCommand(()->ShooterSubsystem.getInstance().coast()));
+        operatorLeftBumperTrigger.onTrue(new ReadyForAmp());
         //operatorStart.onTrue(new EStop());
         operatorXTrigger.onTrue(new CollectUntilNote());
-        operatorYTrigger.onTrue(new ReadyShootSpeaker());
+        operatorYTrigger.toggleOnTrue(new ReadyShootSpeaker());
         operatorBTrigger.onTrue(new InstantCommand(() -> ShooterSubsystem.getInstance().coast(), ShooterSubsystem.getInstance()));
         TakeFeedSubsystem.getInstance().setDefaultCommand(new TakeFeedJoystickSetSpeed(()-> - operator.getHID().getLeftY()));
     }

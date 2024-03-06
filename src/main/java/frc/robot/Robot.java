@@ -9,10 +9,12 @@ import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import frc.robot.basicCommands.ShooterArmCommands.ZeroShooterArm;
 import frc.robot.basicCommands.ShooterCommands.ShooterCoast;
 import frc.robot.subsystems.shooterArm.ShooterArmConstants;
 import frc.robot.subsystems.shooterArm.ShooterArmSubsystem;
 import frc.robot.subsystems.swerve.SwerveSubsystem;
+import frc.robot.subsystems.takeFeed.TakeFeedSubsystem;
 import frc.util.interpolation.InterpolationMap;
 import frc.util.shuffleboardAlike.AutoContainer;
 import frc.util.shuffleboardAlike.PrimoShuffleboard;
@@ -80,6 +82,8 @@ public class Robot extends TimedRobot {
       .put(3.59 + offset, 63)
       .put(3.04 + offset, 56);
     }
+
+    SmartDashboard.putNumber("TakeFeedSpeed", TakeFeedSubsystem.getInstance().getSpeed());
   }
 
   /** This function is called once each time the robot enters Disabled mode. */
@@ -98,7 +102,6 @@ public class Robot extends TimedRobot {
   @Override
   public void autonomousInit() {
     m_autonomousCommand = autoContainer.getAutonomousCommand();
-
     // schedule the autonomous command (example)
     if (m_autonomousCommand != null) {
       m_autonomousCommand.andThen(new ShooterCoast()).schedule();

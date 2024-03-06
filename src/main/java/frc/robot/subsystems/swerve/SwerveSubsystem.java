@@ -6,6 +6,7 @@ import frc.robot.subsystems.swerve.SwerveConstants.swerveConstants.Mod0;
 import frc.robot.subsystems.swerve.SwerveConstants.swerveConstants.Mod1;
 import frc.robot.subsystems.swerve.SwerveConstants.swerveConstants.Mod2;
 import frc.robot.subsystems.swerve.SwerveConstants.swerveConstants.Mod3;
+import frc.util.AllianceFlipUtil;
 import frc.util.vision.Vision;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
@@ -20,6 +21,7 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -72,7 +74,7 @@ public class SwerveSubsystem extends SubsystemBase {
         poseEstimation = new SwerveDrivePoseEstimator(swerveConstants.swerveKinematics, getYaw(), getModulePositions(),
                 new Pose2d(0, 0, new Rotation2d(0)));
 
-        odometry = new SwerveDriveOdometry(swerveConstants.swerveKinematics, getYaw(), getModulePositions());
+        odometry = new SwerveDriveOdometry(swerveConstants.swerveKinematics, Rotation2d.fromDegrees(0), getModulePositions());
 
         headingPid.enableContinuousInput(-180, 180);
         headingPid.setTolerance(1);
@@ -116,6 +118,10 @@ public class SwerveSubsystem extends SubsystemBase {
         return poseEstimation.getEstimatedPosition();
     }
 
+    public Pose2d getAutoPose() {
+        return AllianceFlipUtil.apply(poseEstimation.getEstimatedPosition());
+    }
+
     public Command resetPose(Pose2d pose) {
         return runOnce(() -> poseEstimation.resetPosition(getYaw(), getModulePositions(), pose));
     }
@@ -137,6 +143,7 @@ public class SwerveSubsystem extends SubsystemBase {
     }
 
     public SwerveModulePosition[] getModulePositions() {
+        
         SwerveModulePosition[] positions = new SwerveModulePosition[4];
         for (SwerveModule mod : mSwerveMods) {
             positions[mod.moduleNumber] = mod.getPosition();
@@ -145,7 +152,7 @@ public class SwerveSubsystem extends SubsystemBase {
     }
 
     public void zeroGyro() {
-        gyro.setYaw(0);
+        poseEstimation.update(Rotation2d.fromDegrees(0), getModulePositions());
     }
 
     public Rotation2d getYaw() {
@@ -208,8 +215,7 @@ public class SwerveSubsystem extends SubsystemBase {
                     // Change our trust in the measurement based on the tags we can see
                     var estStdDevs = vision.getEstimationStdDevsLeft(estPose);
 
-                    poseEstimation.addVisionMeasurement(
-                            new Pose2d(estPose.getTranslation(), getYaw()), est.timestampSeconds, estStdDevs);
+                    poseEstimation.addVisionMeasurement(estPose, est.timestampSeconds, estStdDevs);
                 });
 
         field2d.setRobotPose(poseEstimation.getEstimatedPosition());

@@ -38,11 +38,11 @@ public final class Constants {
         // The standard deviations of our vision estimated poses, which affect
         // correction rate
         // (Fake values. Experiment and determine estimation noise on an actual robot.)
-        public static final Matrix<N3, N1> kRightSingleTagStdDevs = VecBuilder.fill(1, 1, 2);
-        public static final Matrix<N3, N1> kRightMultiTagStdDevs = VecBuilder.fill(0.5, 0.5, 1);
+        public static final Matrix<N3, N1> kRightSingleTagStdDevs = VecBuilder.fill(1, 1, 0.5);
+        public static final Matrix<N3, N1> kRightMultiTagStdDevs = VecBuilder.fill(0.5, 0.5, 0.5);
 
-        public static final Matrix<N3, N1> kLeftSingleTagStdDevs = VecBuilder.fill(1, 1, 2);
-        public static final Matrix<N3, N1> kLeftMultiTagStdDevs = VecBuilder.fill(0.5, 0.5, 1);
+        public static final Matrix<N3, N1> kLeftSingleTagStdDevs = VecBuilder.fill(1, 1, 0.5);
+        public static final Matrix<N3, N1> kLeftMultiTagStdDevs = VecBuilder.fill(0.5, 0.5, 0.5);
 
         public static final Pose2d target = new Pose2d(1, 1, new Rotation2d(Units.degreesToRadians(0)));
     }

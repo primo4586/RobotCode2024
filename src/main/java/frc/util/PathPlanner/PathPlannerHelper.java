@@ -40,7 +40,7 @@ public class PathPlannerHelper {
         swerve = SwerveSubsystem.getInstance();
 
         AutoBuilder.configureHolonomic(
-                swerve::getPose,
+                swerve::getAutoPose,
                 swerve::resetPose,
                 swerve::getRobotVelocity,
                 swerve::setChassisSpeeds,
@@ -56,10 +56,7 @@ public class PathPlannerHelper {
                     // This will flip the path being followed to the red side of the field.
                     // THE ORIGIN WILL REMAIN ON THE BLUE SIDE
 
-                    var alliance = DriverStation.getAlliance();
-                    if (alliance.isPresent()) {
-                        return alliance.get() == DriverStation.Alliance.Red;
-                    }
+                    
                     return false;
                 },
                 swerve);
@@ -102,7 +99,7 @@ public class PathPlannerHelper {
             // Create a path following command using AutoBuilder. This will also trigger
             // event markers.
             if (resetOdometry) {
-                return swerve.resetOdometry(AllianceFlipUtil.apply(path.getPreviewStartingHolonomicPose()))
+                return swerve.resetPose(AllianceFlipUtil.apply(path.getPreviewStartingHolonomicPose()))
                         .andThen(AutoBuilder.followPath(path));
             }
             return AutoBuilder.followPath(path);

@@ -40,6 +40,9 @@ public class AutoContainer {
 
         this.autoPaths.put("no auto", Commands.none());
 
+        this.autoPaths.put("base", new ShootBase());
+
+
         this.autoPaths.put("base,2", new SequentialCommandGroup(
             new ShootBase(),
             new ParallelCommandGroup(
@@ -84,6 +87,12 @@ public class AutoContainer {
                     new CollectUntilNote()),
             new AutoAlignToSpeaker().raceWith(new ReadyShootSpeaker()),
             new ShootSpeaker()));
+
+
+        
+        this.autoPaths.put("baseU,1,2drive", new SequentialCommandGroup(
+                pathPlanner.followChoreoPath("baseU to 1", true),
+                    pathPlanner.followChoreoPath("1 to 2", false)));
 
         this.autoPaths.put("baseU,1,1m", new SequentialCommandGroup(
             new ShootSpeaker(),
@@ -140,7 +149,7 @@ public class AutoContainer {
         this.autoPaths.put("baseD,5m", new SequentialCommandGroup(
             new ShootSpeaker(),
             new ParallelCommandGroup(
-                    pathPlanner.followChoreoPath("3 to 5m", false),
+                    pathPlanner.followChoreoPath("down to 5m", false),
                     new CollectUntilNote()),
             pathPlanner.followChoreoPath("5m shoot", false),
             new AutoAlignToSpeaker(),

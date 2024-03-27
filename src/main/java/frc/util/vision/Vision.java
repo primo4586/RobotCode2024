@@ -33,6 +33,7 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.units.Angle;
 import frc.robot.subsystems.swerve.SwerveSubsystem;
 
 import java.util.Optional;
@@ -43,6 +44,8 @@ import org.photonvision.PhotonPoseEstimator.PoseStrategy;
 import org.photonvision.PhotonUtils;
 
 public class Vision {
+    private final PhotonCamera noteCamera;
+
     private final PhotonCamera rightCamera;
     private final PhotonPoseEstimator rightPhotonEstimator;
     public double rightLastEstTimestamp = 0;
@@ -62,6 +65,8 @@ public class Vision {
     }
 
     private Vision(){
+        noteCamera = new PhotonCamera(kTestCameraName);
+
         rightCamera = new PhotonCamera(kRightCameraName);
         rightPhotonEstimator =
                 new PhotonPoseEstimator(
@@ -188,5 +193,22 @@ public class Vision {
 
     public Rotation2d GetAngleFromTarget(Pose2d targetPose) {
         return PhotonUtils.getYawToPose(SwerveSubsystem.getInstance().getPose(), targetPose);
+    }
+    
+
+    public double GetAngelFromNote(){
+        var result = noteCamera.getLatestResult();
+        double angle = 0;
+
+        if (result.hasTargets()) { // Check if the camera see the note.
+            angle = result.getBestTarget().getYaw(); // Provides the best angel.
+        }
+        return angle;
+    }
+    
+    // Check if the camera see the note.
+    public boolean seeTarget(){
+        var result = noteCamera.getLatestResult();
+        return result.hasTargets();
     }
 }

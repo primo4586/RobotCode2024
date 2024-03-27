@@ -27,6 +27,8 @@ public class SwerveConstants {
         public static final double minimumErrorAligning = 0; 
         public static final PIDController aligningPID = new PIDController(0.14, 0, 0.0);
 
+        public static final PIDController notePid = new PIDController(0.05, 0, 0);
+
         public static final int pigeonID = 11;
         public static final boolean invertGyro = false; // Always ensure Gyro is CCW+ CW-
 

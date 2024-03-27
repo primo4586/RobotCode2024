@@ -17,6 +17,7 @@ import frc.util.interpolation.InterpolationMap;
 import frc.util.shuffleboardAlike.AutoContainer;
 import frc.util.shuffleboardAlike.PrimoShuffleboard;
 import frc.util.swerve.CTREConfigs;
+import frc.util.vision.Vision;
 
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to
@@ -80,6 +81,9 @@ public class Robot extends TimedRobot {
       .put(3.59 + offset, 63)
       .put(3.04 + offset, 56);
     }
+
+    SmartDashboard.putNumber("ANGLE FROM NOTE", Vision.getInstance().GetAngelFromNote());
+    SmartDashboard.putBoolean("see target?",Vision.getInstance().seeTarget());
   }
 
   /** This function is called once each time the robot enters Disabled mode. */

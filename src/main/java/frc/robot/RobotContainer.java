@@ -13,6 +13,7 @@ import frc.robot.basicCommands.ShooterArmCommands.ZeroShooterArm;
 import frc.robot.basicCommands.ShooterCommands.ShooterSetSpeedForever;
 import frc.robot.basicCommands.SwerveCommands.AutoAlignToSpeaker;
 import frc.robot.basicCommands.SwerveCommands.TeleopSwerve;
+import frc.robot.basicCommands.SwerveCommands.TurnToNote;
 import frc.robot.basicCommands.TakeFeedCommands.CollectUntilNote;
 import frc.robot.basicCommands.TakeFeedCommands.TakeFeedJoystickSetSpeed;
 import frc.robot.subsystems.shooter.ShooterConstants;
@@ -90,6 +91,7 @@ public class RobotContainer {
         // Driver Button Bindings
         // pathPlanner.followChoreoPath("2 to 1", false)
         //driverStart.onTrue(new EStop());
+        //driverYTrigger.onTrue(new TurnToNote());
         driverYTrigger.onTrue(new InstantCommand(() -> swerve.zeroGyro()));
         driverXTrigger.onTrue(new ShootBase());
         driverBTrigger.onTrue(new ShootStage());

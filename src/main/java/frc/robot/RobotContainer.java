@@ -5,6 +5,7 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
+import frc.robot.a_robotCommandGroups.AlignTag;
 import frc.robot.a_robotCommandGroups.ReadyShootSpeaker;
 import frc.robot.a_robotCommandGroups.ShootBase;
 import frc.robot.a_robotCommandGroups.ShootSpeaker;
@@ -20,6 +21,7 @@ import frc.robot.subsystems.shooter.ShooterSubsystem;
 import frc.robot.subsystems.swerve.SwerveSubsystem;
 import frc.robot.subsystems.takeFeed.TakeFeedSubsystem;
 import frc.util.PathPlanner.PathPlannerHelper;
+import frc.robot.basicCommands.SwerveCommands.TurnToNote;
 
 /**
  * This class is where the bulk of the robot should be declared. Since
@@ -34,6 +36,7 @@ public class RobotContainer {
     /* Controllers */
     private final CommandXboxController driver = new CommandXboxController(0);
     private final CommandXboxController operator = new CommandXboxController(1);
+    private final CommandXboxController stalls = new CommandXboxController(2);
 
     // Driver Triggers
     Trigger driverYTrigger = driver.y();
@@ -54,6 +57,11 @@ public class RobotContainer {
     Trigger operatorLeftBumperTrigger = operator.leftBumper();
     Trigger operatorBTrigger = operator.b();
     Trigger operatorStart = operator.start();
+
+    // stalls Triggers
+    Trigger stallsRightBumperTrigger = stalls.rightBumper();
+    Trigger stallsYTrigger = stalls.y();
+
 
     PathPlannerHelper pathPlannerHelper = PathPlannerHelper.getInstace();
 
@@ -106,5 +114,10 @@ public class RobotContainer {
         operatorYTrigger.onTrue(new ReadyShootSpeaker());
         operatorBTrigger.onTrue(new InstantCommand(() -> ShooterSubsystem.getInstance().coast(), ShooterSubsystem.getInstance()));
         TakeFeedSubsystem.getInstance().setDefaultCommand(new TakeFeedJoystickSetSpeed(()-> - operator.getHID().getLeftY()));
+
+        //stalls Buttons
+        stallsRightBumperTrigger.whileTrue(new AlignTag());
+        stallsYTrigger.onTrue(new TurnToNote());
+
     }
 }

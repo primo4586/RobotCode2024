@@ -197,9 +197,9 @@ public class SwerveSubsystem extends SubsystemBase {
                     var estPose = est.estimatedPose.toPose2d();
                     // Change our trust in the measurement based on the tags we can see
                     var estStdDevs = vision.getEstimationStdDevsRight(estPose);
-
+                    
                     poseEstimation.addVisionMeasurement(
-                            new Pose2d(estPose.getTranslation(), getYaw()), est.timestampSeconds, estStdDevs);
+                            estPose, est.timestampSeconds, estStdDevs);
                 });
                 
         vision.getLeftEstimatedGlobalPose().ifPresent(
@@ -209,7 +209,7 @@ public class SwerveSubsystem extends SubsystemBase {
                     var estStdDevs = vision.getEstimationStdDevsLeft(estPose);
 
                     poseEstimation.addVisionMeasurement(
-                            new Pose2d(estPose.getTranslation(), getYaw()), est.timestampSeconds, estStdDevs);
+                            estPose, est.timestampSeconds, estStdDevs);
                 });
 
         field2d.setRobotPose(poseEstimation.getEstimatedPosition());

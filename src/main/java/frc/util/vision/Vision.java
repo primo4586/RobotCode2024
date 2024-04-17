@@ -41,8 +41,10 @@ import org.photonvision.PhotonCamera;
 import org.photonvision.PhotonPoseEstimator;
 import org.photonvision.PhotonPoseEstimator.PoseStrategy;
 import org.photonvision.PhotonUtils;
+import edu.wpi.first.units.Angle;
 
 public class Vision {
+    private final PhotonCamera noteCamera;
     private final PhotonCamera rightCamera;
     private final PhotonPoseEstimator rightPhotonEstimator;
     public double rightLastEstTimestamp = 0;
@@ -62,6 +64,7 @@ public class Vision {
     }
 
     private Vision(){
+        noteCamera = new PhotonCamera(kTestCameraName);
         rightCamera = new PhotonCamera(kRightCameraName);
         rightPhotonEstimator =
                 new PhotonPoseEstimator(
@@ -139,7 +142,7 @@ public class Vision {
         if (numTags > 1)
             estStdDevs = kRightMultiTagStdDevs;
         // Increase std devs based on (average) distance
-        if (numTags == 1 && avgDist > 7)//TODO: test on field
+        if (numTags == 1 && avgDist > 7)
             estStdDevs = VecBuilder.fill(Double.MAX_VALUE, Double.MAX_VALUE, Double.MAX_VALUE);
         else
             estStdDevs = estStdDevs.times(1 + (avgDist * avgDist / 30));
@@ -188,5 +191,29 @@ public class Vision {
 
     public Rotation2d GetAngleFromTarget(Pose2d targetPose) {
         return PhotonUtils.getYawToPose(SwerveSubsystem.getInstance().getPose(), targetPose);
+    }
+    public double GetAngelFromNote(){
+        var result = noteCamera.getLatestResult();
+        double angle = 0;
+
+        if (result.hasTargets()) { // Check if the camera see the note.
+            angle = result.getBestTarget().getYaw(); // Provides the best angel.
+        }
+        return angle;
+    }
+    public double GetAngelFromTag(){
+        var result = leftCamera.getLatestResult();
+        double angle = 0;
+
+        if (result.hasTargets()) { // Check if the camera see the note.
+            angle = result.getBestTarget().getYaw(); // Provides the best angel.
+        }
+        return angle;
+    }
+    
+    // Check if the camera see the note.
+    public boolean seeTarget(){
+        var result = noteCamera.getLatestResult();
+        return result.hasTargets();
     }
 }

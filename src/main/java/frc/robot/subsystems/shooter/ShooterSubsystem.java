@@ -23,21 +23,21 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.MiscConstants;
 
 //TODO: add sysid
-public class Shooter extends SubsystemBase {
+public class ShooterSubsystem extends SubsystemBase {
   private final TalonFX m_UMotor = new TalonFX(UP_MOTOR_SHOOTER_ID, MiscConstants.kCANbusName);
   private final TalonFX m_DMotor = new TalonFX(DOWN_MOTOR_SHOOTER_ID, MiscConstants.kCANbusName);
   private final MotionMagicVelocityTorqueCurrentFOC m_mmReqest = new MotionMagicVelocityTorqueCurrentFOC(0);
 
-  private static Shooter INSTANCE;
+  private static ShooterSubsystem INSTANCE;
 
-  public static Shooter getInstance() {
+  public static ShooterSubsystem getInstance() {
     if (INSTANCE == null) {
-      INSTANCE = new Shooter();
+      INSTANCE = new ShooterSubsystem();
     }
     return INSTANCE;
   }
 
-  private Shooter() {
+  private ShooterSubsystem() {
     applyMotorsConfig();
   }
 

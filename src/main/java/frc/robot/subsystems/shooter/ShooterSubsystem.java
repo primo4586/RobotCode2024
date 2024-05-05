@@ -61,7 +61,7 @@ public class ShooterSubsystem extends SubsystemBase {
   }
 
   // use when running sysid for higher signal rate so better data
-  public void sysidHigherSignalRate() {
+  private void sysidHigherSignalRate() {
 
     /* Speed up signals for better characterization data */
     BaseStatusSignal.setUpdateFrequencyForAll(1000, m_UMotor.getVelocity());
@@ -71,13 +71,12 @@ public class ShooterSubsystem extends SubsystemBase {
     m_DMotor.optimizeBusUtilization();
   }
 
-  public void applyMotorsConfig() {
+  private void applyMotorsConfig() {
     TalonFXConfiguration upCfg = new TalonFXConfiguration();
 
     Slot0Configs upSlot0 = upCfg.Slot0;
     upSlot0.kP = UP_KP;
     upSlot0.kD = UP_KD;
-    upSlot0.kV = UP_KV;
     upSlot0.kS = UP_KS;
     upSlot0.kA = UP_KA;
 
@@ -89,7 +88,7 @@ public class ShooterSubsystem extends SubsystemBase {
     upFdb.SensorToMechanismRatio = SENSOR_TO_MEC_RATIO;
 
     MotorOutputConfigs upMotorOutputConfigs = upCfg.MotorOutput;
-    upMotorOutputConfigs.Inverted = InvertedValue.Clockwise_Positive;
+    upMotorOutputConfigs.Inverted = InvertedValue.Clockwise_Positive;// TODO: constants
     upMotorOutputConfigs.NeutralMode = NeutralModeValue.Coast;
 
     StatusCode status = StatusCode.StatusCodeNotInitialized;
@@ -105,9 +104,8 @@ public class ShooterSubsystem extends SubsystemBase {
     TalonFXConfiguration downCfg = new TalonFXConfiguration();
 
     Slot0Configs downSlot0 = downCfg.Slot0;
-    downSlot0.kP = DOWN_KA;
+    downSlot0.kP = DOWN_KP;
     downSlot0.kD = DOWN_KD;
-    downSlot0.kV = DOWN_KV;
     downSlot0.kS = DOWN_KS;
     downSlot0.kA = DOWN_KA;
 

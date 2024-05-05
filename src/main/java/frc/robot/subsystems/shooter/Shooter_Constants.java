@@ -23,14 +23,12 @@ public interface Shooter_Constants {
     double UP_KP = 0.056;
     double UP_KD = 0.0;
     double UP_KS = 0.16;
-    double UP_KV = 0.056;
     double UP_KA = 0.0;
 
     // PID values for down motor
     double DOWN_KP = 0.022;
     double DOWN_KD = 0.0;
     double DOWN_KS = 0.2998046875;
-    double DOWN_KV = 0.0583;
     double DOWN_KA = 0.079175;
             
     //shooter velocity

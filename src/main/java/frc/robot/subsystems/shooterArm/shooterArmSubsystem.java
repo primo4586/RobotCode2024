@@ -16,19 +16,19 @@ import com.ctre.phoenix6.controls.MotionMagicExpoTorqueCurrentFOC;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
-import edu.wpi.first.math.interpolation.InterpolatingDoubleTreeMap;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.MiscConstants;
 
 import static frc.robot.subsystems.shooterArm.shooterArmConstants.*;
+
 //TODO: add manual home
 //TODO: add speakerInterpolate
+//TODO: add sysid
 public class shooterArmSubsystem extends SubsystemBase {
 
-  private final TalonFX m_Motor = new TalonFX(MOTOR_ID, MiscConstants.kCANbusName);
-  private final InterpolatingDoubleTreeMap shooterAngleInterpolation;
+  private final TalonFX m_Motor = new TalonFX(MOTOR_ID, MiscConstants.CAN_BUS_NAME);
   private final MotionMagicExpoTorqueCurrentFOC mm = new MotionMagicExpoTorqueCurrentFOC(0);
 
   private static shooterArmSubsystem INSTANCE;
@@ -41,22 +41,39 @@ public class shooterArmSubsystem extends SubsystemBase {
   }
 
   private shooterArmSubsystem() {
-    shooterAngleInterpolation = new InterpolatingDoubleTreeMap();
-    setshooterAngleInterpolation();
     applyMotorsConfig();
   }
 
-  public Command moveArmTO(double position) {
-    return runOnce(() -> m_Motor.setControl(mm.withPosition(position)));
+  /**
+   * @param distance distance from speaker
+   */
+  public Command speakerAngle(double distance) {
+    return moveArmTO(SPEAKER_ANGLE_EXTERPOLATION.exterpolate(distance));
   }
 
+  /**
+   * Moves the shooter arm to a specific position. Will only run once.
+   * 
+   * @param position The position to move the arm to
+   */
+  public Command moveArmTO(double position) {
+    return runOnce(
+        // Set the control mode to position
+        // And set the target position to the one passed in
+        () -> m_Motor.setControl(mm.withPosition(position)));
+
+  }
+
+  /**
+   * homes the arms and zero the encoder
+   */
   public Command homeArm() {
     return prepareHome().andThen(
         runEnd(() -> {
           if (!getReverseLimit()) {
             m_Motor.set(shooterArmConstants.RESET_SPEED);
           }
-        }, ()-> m_Motor.set(0)).withTimeout(10));
+        }, () -> m_Motor.set(0)).withTimeout(10));
   }
 
   public Command prepareHome() {
@@ -131,13 +148,5 @@ public class shooterArmSubsystem extends SubsystemBase {
     if (!status.isOK()) {
       System.out.println("Could not configure shooter Angle motor. Error: " + status.toString());
     }
-  }
-
-  private void setshooterAngleInterpolation() {
-    shooterAngleInterpolation.put(2.9, 62.0);
-    shooterAngleInterpolation.put(2.52, 55.0);
-    shooterAngleInterpolation.put(2.15, 50.0);
-    shooterAngleInterpolation.put(3.59, 63.0);
-    shooterAngleInterpolation.put(3.04, 56.0);
   }
 }

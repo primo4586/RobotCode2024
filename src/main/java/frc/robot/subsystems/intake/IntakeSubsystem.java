@@ -18,7 +18,7 @@ import frc.robot.MiscConstants;
 import static frc.robot.subsystems.intake.intakeConstants.*;
 
 public class IntakeSubsystem extends SubsystemBase {
-  private TalonFX m_motor = new TalonFX(MOTOR_ID, MiscConstants.kCANbusName);
+  private TalonFX m_motor = new TalonFX(MOTOR_ID, MiscConstants.CAN_BUS_NAME);
   private DigitalInput m_opticSensor = new DigitalInput(OPTIC_SENSOR_ID);
   private TorqueCurrentFOC currentFOC = new TorqueCurrentFOC(0);
 

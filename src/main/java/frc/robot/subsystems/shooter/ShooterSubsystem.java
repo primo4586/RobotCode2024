@@ -24,8 +24,8 @@ import frc.robot.MiscConstants;
 
 //TODO: add sysid
 public class ShooterSubsystem extends SubsystemBase {
-  private final TalonFX m_UMotor = new TalonFX(UP_MOTOR_SHOOTER_ID, MiscConstants.kCANbusName);
-  private final TalonFX m_DMotor = new TalonFX(DOWN_MOTOR_SHOOTER_ID, MiscConstants.kCANbusName);
+  private final TalonFX m_UMotor = new TalonFX(UP_MOTOR_SHOOTER_ID, MiscConstants.CAN_BUS_NAME);
+  private final TalonFX m_DMotor = new TalonFX(DOWN_MOTOR_SHOOTER_ID, MiscConstants.CAN_BUS_NAME);
   private final MotionMagicVelocityTorqueCurrentFOC m_mmReqest = new MotionMagicVelocityTorqueCurrentFOC(0);
 
   private static ShooterSubsystem INSTANCE;

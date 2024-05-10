@@ -24,7 +24,6 @@ import frc.robot.MiscConstants;
 import static frc.robot.subsystems.shooterArm.shooterArmConstants.*;
 
 //TODO: add manual home
-//TODO: add speakerInterpolate
 //TODO: add sysid
 public class shooterArmSubsystem extends SubsystemBase {
 
@@ -33,6 +32,11 @@ public class shooterArmSubsystem extends SubsystemBase {
 
   private static shooterArmSubsystem INSTANCE;
 
+  /**
+   * Get an instance of the shooter arm subsystem
+   * 
+   * @return The instance of the shooter arm subsystem
+   */
   public static shooterArmSubsystem getInstance() {
     if (INSTANCE == null) {
       INSTANCE = new shooterArmSubsystem();
@@ -40,23 +44,30 @@ public class shooterArmSubsystem extends SubsystemBase {
     return INSTANCE;
   }
 
+  /**
+   * Constructor that sets the motors config
+   */
   private shooterArmSubsystem() {
     applyMotorsConfig();
   }
 
   /**
-   * @param distance distance from speaker
+   * Create a command that will move the shooter arm to a specific angle based on the distance from the speaker
+   * 
+   * @param distance The distance from the speaker
+   * @return The command
    */
-  public Command speakerAngle(double distance) {
-    return moveArmTO(SPEAKER_ANGLE_EXTERPOLATION.exterpolate(distance));
+  public Command speakerAngleEterapolateCommand(double distance) {
+    return moveArmTOcCommand(SPEAKER_ANGLE_EXTERPOLATION.exterpolate(distance));
   }
 
   /**
-   * Moves the shooter arm to a specific position. Will only run once.
+   * Create a command that will move the shooter arm to a specific position. Will only run once.
    * 
    * @param position The position to move the arm to
+   * @return The command
    */
-  public Command moveArmTO(double position) {
+  public Command moveArmTOcCommand(double position) {
     return runOnce(
         // Set the control mode to position
         // And set the target position to the one passed in
@@ -65,10 +76,12 @@ public class shooterArmSubsystem extends SubsystemBase {
   }
 
   /**
-   * homes the arms and zero the encoder
+   * Create a command that will home the shooter arm and set the encoder to 0.
+   * 
+   * @return The command
    */
-  public Command homeArm() {
-    return prepareHome().andThen(
+  public Command homeArmcCommand() {
+    return prepareHomeCommand().andThen(
         runEnd(() -> {
           if (!getReverseLimit()) {
             m_Motor.set(shooterArmConstants.RESET_SPEED);
@@ -76,30 +89,57 @@ public class shooterArmSubsystem extends SubsystemBase {
         }, () -> m_Motor.set(0)).withTimeout(10));
   }
 
-  public Command prepareHome() {
+  /**
+   * Prepare the home command, if the reverse limit switch is pressed, do
+   * nothing, otherwise move the motor to the reverse limit switch position
+   * at a high speed and wait for the switch to be pressed
+   * 
+   * @return The command
+   */
+  private Command prepareHomeCommand() {
     return getReverseLimit()
         ? Commands.none()
         : (runOnce(() -> m_Motor.set(-RESET_SPEED * 3)).andThen(Commands.waitUntil(() -> !getReverseLimit())))
             .withTimeout(3);
   }
 
+  /**
+   * Get the current position of the shooter arm
+   * 
+   * @return The position of the shooter arm
+   */
   public double getArmPose() {
     return m_Motor.getPosition().getValue();
   }
 
-  // Checking the degree difference conditions
+  /**
+   * Check if the shooter arm is ready to fire based on the degree difference
+   * 
+   * @return True if the shooter arm is ready
+   */
   public boolean isArmReady() {
     return (Math.abs(getArmPose() - mm.Position) < shooterArmConstants.MINIMUM_ERROR);
   }
 
-  public void coast() {
+  /**
+   * Set the motor to coast mode
+   */
+  public void motorCoast() {
     m_Motor.setNeutralMode(NeutralModeValue.Coast);
   }
 
-  public void breakMode() {
+  /**
+   * Set the motor to brake mode
+   */
+  public void motorBreak() {
     m_Motor.setNeutralMode(NeutralModeValue.Brake);
   }
 
+  /**
+   * Get the state of the reverse limit switch
+   * 
+   * @return The state of the reverse limit switch
+   */
   public boolean getReverseLimit() {
     return m_Motor.getReverseLimit().getValue() == lIMIT_SWITCH_TRUE_VALUE;
   }
@@ -109,6 +149,9 @@ public class shooterArmSubsystem extends SubsystemBase {
     // This method will be called once per scheduler run
   }
 
+  /**
+   * Apply the motors config
+   */
   private void applyMotorsConfig() {
     TalonFXConfiguration shooterAngleCfg = new TalonFXConfiguration();
 
@@ -150,3 +193,4 @@ public class shooterArmSubsystem extends SubsystemBase {
     }
   }
 }
+

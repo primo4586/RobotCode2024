@@ -23,6 +23,9 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.MiscConstants;
 
 //TODO: add sysid
+/**
+ * Shooter subsystem, controls two TalonFX motors to spin the shooter wheels
+ */
 public class ShooterSubsystem extends SubsystemBase {
   private final TalonFX m_UMotor = new TalonFX(UP_MOTOR_SHOOTER_ID, MiscConstants.CAN_BUS_NAME);
   private final TalonFX m_DMotor = new TalonFX(DOWN_MOTOR_SHOOTER_ID, MiscConstants.CAN_BUS_NAME);
@@ -30,6 +33,11 @@ public class ShooterSubsystem extends SubsystemBase {
 
   private static ShooterSubsystem INSTANCE;
 
+  /**
+   * Returns the instance of this subsystem
+   * 
+   * @return The instance of this subsystem
+   */
   public static ShooterSubsystem getInstance() {
     if (INSTANCE == null) {
       INSTANCE = new ShooterSubsystem();
@@ -37,20 +45,39 @@ public class ShooterSubsystem extends SubsystemBase {
     return INSTANCE;
   }
 
+  /**
+   * Creates a new ShooterSubsystem. This class is a singleton so it should only be
+   * constructed once
+   */
   private ShooterSubsystem() {
     applyMotorsConfig();
   }
 
+  /**
+   * Sets the velocity of the shooter motors
+   * 
+   * @param velocity The velocity to set the shooter motors to
+   * @return A command to set the velocity of the shooter motors
+   */
   public Command setShooterVel(double velocity) {
     return this.runOnce(() -> m_UMotor.setControl(m_mmReqest.withVelocity(velocity)));
   }
 
-  // added for ease of use
+  /**
+   * Sets the velocity of the shooter motors to the default speekr velocity
+   * 
+   * @return A command to set the velocity of the shooter motors to the default
+   *         speekr velocity
+   */
   public Command setSpeakerVel() {
     return setShooterVel(SPEAKR_VELOCITY);
   }
 
-  // checkes if the motors are at the requested velocity
+  /**
+   * Checks if the shooter motors are at the requested velocity
+   * 
+   * @return True if the shooter motors are at the requested velocity
+   */
   public boolean isMotorsAtVel() {
     return Math.abs(m_UMotor.getVelocity().getValue() - m_mmReqest.Velocity) < MAX_VEL_ERROR
         && Math.abs(m_DMotor.getVelocity().getValue() - m_mmReqest.Velocity) < MAX_VEL_ERROR;
@@ -58,9 +85,13 @@ public class ShooterSubsystem extends SubsystemBase {
 
   @Override
   public void periodic() {
+    // This method will be called once per scheduler run
   }
 
-  // use when running sysid for higher signal rate so better data
+  /**
+   * Sets the signal update frequency for the shooter motors to 1000 Hz for
+   * characterization
+   */
   private void sysidHigherSignalRate() {
 
     /* Speed up signals for better characterization data */
@@ -71,6 +102,9 @@ public class ShooterSubsystem extends SubsystemBase {
     m_DMotor.optimizeBusUtilization();
   }
 
+  /**
+   * Configures the shooter motors with the PID constants and other settings
+   */
   private void applyMotorsConfig() {
     TalonFXConfiguration upCfg = new TalonFXConfiguration();
 

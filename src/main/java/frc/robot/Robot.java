@@ -9,7 +9,7 @@ import com.ctre.phoenix6.SignalLogger;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
-import frc.robot.subsystems.shooterArm.shooterArmSubsystem;
+import frc.robot.subsystems.shooterArm.ShooterArmSubsystem;
 
 public class Robot extends TimedRobot {
   private Command m_autonomousCommand;
@@ -20,7 +20,7 @@ public class Robot extends TimedRobot {
   public void robotInit() {
     m_robotContainer = new RobotContainer();
 
-    m_robotContainer.drivetrain.getDaqThread().setThreadPriority(99);
+    m_robotContainer.swerve.getDaqThread().setThreadPriority(99);
 
     // Set the logger to log to the first flashdrive plugged in
     SignalLogger.setPath("/media/sda1/");
@@ -39,8 +39,8 @@ public class Robot extends TimedRobot {
   public void disabledPeriodic() {}
 
   @Override
-  public void disabledExit() {//TODO: make sure it is right
-    shooterArmSubsystem.getInstance().motorBreak();
+  public void disabledExit() {
+    ShooterArmSubsystem.getInstance().motorBreak();
     SignalLogger.start();
   }
 

@@ -141,7 +141,6 @@ public class Vision {
         if (numTags == 1 && avgDist > 4)
             estStdDevs = VecBuilder.fill(Double.MAX_VALUE, Double.MAX_VALUE, Double.MAX_VALUE);
         else estStdDevs = estStdDevs.times(1 + (avgDist * avgDist / 30));
-
         return estStdDevs;
     }
 
@@ -158,7 +157,8 @@ public class Vision {
 
     /** A Field2d for visualizing our robot and objects on the field. */
     public Field2d getSimDebugField() {
-        if (!Robot.isSimulation()) return null;
+        if (!Robot.isSimulation())
+            return null;
         return visionSim.getDebugField();
     }
 }

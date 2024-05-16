@@ -25,21 +25,21 @@ import static frc.robot.subsystems.shooterArm.shooterArmConstants.*;
 
 //TODO: add manual home
 //TODO: add sysid
-public class shooterArmSubsystem extends SubsystemBase {
+public class ShooterArmSubsystem extends SubsystemBase {
 
   private final TalonFX m_Motor = new TalonFX(MOTOR_ID, MiscConstants.CAN_BUS_NAME);
   private final MotionMagicExpoTorqueCurrentFOC mm = new MotionMagicExpoTorqueCurrentFOC(0);
 
-  private static shooterArmSubsystem INSTANCE;
+  private static ShooterArmSubsystem INSTANCE;
 
   /**
    * Get an instance of the shooter arm subsystem
    * 
    * @return The instance of the shooter arm subsystem
    */
-  public static shooterArmSubsystem getInstance() {
+  public static ShooterArmSubsystem getInstance() {
     if (INSTANCE == null) {
-      INSTANCE = new shooterArmSubsystem();
+      INSTANCE = new ShooterArmSubsystem();
     }
     return INSTANCE;
   }
@@ -47,7 +47,7 @@ public class shooterArmSubsystem extends SubsystemBase {
   /**
    * Constructor that sets the motors config
    */
-  private shooterArmSubsystem() {
+  private ShooterArmSubsystem() {
     applyMotorsConfig();
   }
 
@@ -58,7 +58,7 @@ public class shooterArmSubsystem extends SubsystemBase {
    * @return The command
    */
   public Command speakerAngleEterapolateCommand(double distance) {
-    return moveArmTOcCommand(SPEAKER_ANGLE_EXTERPOLATION.exterpolate(distance));
+    return moveArmToCommand(SPEAKER_ANGLE_EXTERPOLATION.exterpolate(distance));
   }
 
   /**
@@ -67,12 +67,11 @@ public class shooterArmSubsystem extends SubsystemBase {
    * @param position The position to move the arm to
    * @return The command
    */
-  public Command moveArmTOcCommand(double position) {
+  public Command moveArmToCommand(double position) {
     return runOnce(
         // Set the control mode to position
         // And set the target position to the one passed in
         () -> m_Motor.setControl(mm.withPosition(position)));
-
   }
 
   /**

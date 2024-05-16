@@ -97,7 +97,8 @@ public class shooterArmSubsystem extends SubsystemBase {
    * @return The command
    */
   private Command prepareHomeCommand() {
-    return getReverseLimit()
+
+    return !getReverseLimit()
         ? Commands.none()
         : (runOnce(() -> m_Motor.set(-RESET_SPEED * 3)).andThen(Commands.waitUntil(() -> !getReverseLimit())))
             .withTimeout(3);

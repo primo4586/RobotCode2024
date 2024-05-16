@@ -19,6 +19,8 @@ import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.MiscConstants;
 
@@ -60,7 +62,11 @@ public class ShooterSubsystem extends SubsystemBase {
    * @return A command to set the velocity of the shooter motors
    */
   public Command setShooterVel(double velocity) {
-    return this.runOnce(() -> m_UMotor.setControl(m_mmReqest.withVelocity(velocity)));
+    return this.runOnce(()-> {
+      m_UMotor.setControl(m_mmReqest.withVelocity(velocity));
+      m_DMotor.setControl(m_mmReqest.withVelocity(velocity));
+    });
+
   }
 
   /**

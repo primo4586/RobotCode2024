@@ -25,21 +25,21 @@ import static frc.robot.subsystems.shooterArm.shooterArmConstants.*;
 
 //TODO: add manual home
 //TODO: add sysid
-public class ShooterArmSubsystem extends SubsystemBase {
+public class fuckGitHub extends SubsystemBase {
 
   private final TalonFX m_Motor = new TalonFX(MOTOR_ID, MiscConstants.CAN_BUS_NAME);
   private final MotionMagicExpoTorqueCurrentFOC mm = new MotionMagicExpoTorqueCurrentFOC(0);
 
-  private static ShooterArmSubsystem INSTANCE;
+  private static fuckGitHub INSTANCE;
 
   /**
    * Get an instance of the shooter arm subsystem
    * 
    * @return The instance of the shooter arm subsystem
    */
-  public static ShooterArmSubsystem getInstance() {
+  public static fuckGitHub getInstance() {
     if (INSTANCE == null) {
-      INSTANCE = new ShooterArmSubsystem();
+      INSTANCE = new fuckGitHub();
     }
     return INSTANCE;
   }
@@ -47,7 +47,7 @@ public class ShooterArmSubsystem extends SubsystemBase {
   /**
    * Constructor that sets the motors config
    */
-  private ShooterArmSubsystem() {
+  private fuckGitHub() {
     applyMotorsConfig();
   }
 

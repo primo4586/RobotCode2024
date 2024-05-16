@@ -19,7 +19,7 @@ import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
 import frc.robot.subsystems.climb.ClimbSubsystem;
 import frc.robot.subsystems.intake.IntakeSubsystem;
 import frc.robot.subsystems.shooter.ShooterSubsystem;
-import frc.robot.subsystems.shooterArm.ShooterArmSubsystem;
+import frc.robot.subsystems.shooterArm.fuckGitHub;
 import frc.robot.subsystems.swerve.CommandSwerveDrivetrain;
 import frc.robot.subsystems.swerve.Telemetry;
 import frc.robot.subsystems.swerve.TunerConstants;
@@ -31,7 +31,7 @@ public class RobotContainer {
 
   public final CommandSwerveDrivetrain swerve = TunerConstants.DriveTrain; // My drivetrain
   public final ShooterSubsystem shooter = ShooterSubsystem.getInstance();
-  public final ShooterArmSubsystem shooterArmSubsystem = ShooterArmSubsystem.getInstance();
+  public final fuckGitHub shooterArmSubsystem = fuckGitHub.getInstance();
   public final IntakeSubsystem intake = IntakeSubsystem.getInstance();
   public final ClimbSubsystem climb = ClimbSubsystem.getInstance();
 

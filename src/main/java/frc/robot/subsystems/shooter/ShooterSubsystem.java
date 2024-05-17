@@ -4,7 +4,7 @@
 
 package frc.robot.subsystems.shooter;
 
-import static frc.robot.subsystems.shooter.Shooter_Constants.*;
+import static frc.robot.subsystems.shooter.ShooterConstants.*;
 
 import com.ctre.phoenix6.BaseStatusSignal;
 import com.ctre.phoenix6.StatusCode;
@@ -95,6 +95,7 @@ public class ShooterSubsystem extends SubsystemBase {
    * Sets the signal update frequency for the shooter motors to 1000 Hz for
    * characterization
    */
+   @SuppressWarnings("unused")
   private void sysidHigherSignalRate() {
 
     /* Speed up signals for better characterization data */

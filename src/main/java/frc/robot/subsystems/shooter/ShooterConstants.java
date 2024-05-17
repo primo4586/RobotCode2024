@@ -5,7 +5,7 @@
 package frc.robot.subsystems.shooter;
 
 /** Add your docs here. */
-public class Shooter_Constants {
+public class ShooterConstants {
 
     // Shooter Motor IDs
     public static final int UP_MOTOR_SHOOTER_ID = 6;
@@ -34,4 +34,5 @@ public class Shooter_Constants {
     //shooter velocity
     public static final double SPEAKR_VELOCITY = 60;
     public static final double AMP_VELOCITY = 23;
+    public static final double IDLE_VELOCITY = 23;
 }

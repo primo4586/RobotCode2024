@@ -50,31 +50,24 @@ public class ClimbSubsystem extends SubsystemBase {
    * @return the command
    */
   public Command moveClimb(DoubleSupplier speed) {
-    return run(() ->{
+    return run(() -> {
       m_RightSparkMax.set(speed.getAsDouble());
       m_LeftSparkMax.set(speed.getAsDouble());
     });
   }
-
+  
   /**
-   * Creates a command that makes the right climb motor move.
-   * 
-   * @param speed the speed to move the motor at
-   * @return the command
+   * Creates a command that makes the climb motors move with custom left and right speeds.
+   *
+   * @param  leftSpeed  a DoubleSupplier that provides the speed for the left motor
+   * @param  rightSpeed a DoubleSupplier that provides the speed for the right motor
+   * @return            a Command that moves the climb motors with the provided speeds
    */
-  public Command moveRightClimb(DoubleSupplier speed) {
-    return run(() -> m_RightSparkMax.set(speed.getAsDouble()));
-  }
-
-  /**
-   * Creates a command that makes the left climb motor move.
-   * 
-   * @param speed the speed to move the motor at
-   * @return the command
-   */
-  public Command moveLeftClimb(DoubleSupplier speed) {
-    // Moves the left climb motor at the given speed
-    return run(() -> m_LeftSparkMax.set(speed.getAsDouble()));
+  public Command moveClimb(DoubleSupplier leftSpeed, DoubleSupplier rightSpeed) {
+    return run(() -> {
+      m_RightSparkMax.set(leftSpeed.getAsDouble());
+      m_LeftSparkMax.set(rightSpeed.getAsDouble());
+    });
   }
 
   @Override

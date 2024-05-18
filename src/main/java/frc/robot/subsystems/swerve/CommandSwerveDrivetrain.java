@@ -36,6 +36,20 @@ public class CommandSwerveDrivetrain extends SwerveDrivetrain implements Subsyst
     private Notifier m_simNotifier = null;
     private double m_lastSimTime;
 
+    private static CommandSwerveDrivetrain INSTANCE;
+
+    /**
+     * Returns the instance of this subsystem.
+     *
+     * @return The instance of this subsystem
+     */
+    public static CommandSwerveDrivetrain getInstance() {
+        if (INSTANCE == null) {
+            INSTANCE = TunerConstants.Swerve;
+        }
+        return INSTANCE;
+    }
+
     private Vision vision = new Vision();
 
     /* Blue alliance sees forward as 0 degrees (toward red alliance wall) */

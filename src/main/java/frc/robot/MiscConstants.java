@@ -4,9 +4,8 @@
 
 package frc.robot;
 
-
 /** Add your docs here. */
 public interface MiscConstants {
-    
+
     String CAN_BUS_NAME = "CANBUS";
 }

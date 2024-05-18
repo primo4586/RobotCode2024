@@ -24,6 +24,7 @@ import frc.robot.subsystems.intake.IntakeSubsystem;
 import frc.robot.subsystems.shooter.ShooterConstants;
 import frc.robot.subsystems.shooter.ShooterSubsystem;
 import frc.robot.subsystems.shooterArm.ShooterArmSubsystem;
+import frc.robot.subsystems.shooterArm.shooterArmConstants;
 import frc.robot.subsystems.swerve.CommandSwerveDrivetrain;
 import frc.robot.subsystems.swerve.Telemetry;
 import frc.robot.subsystems.swerve.TunerConstants;
@@ -34,31 +35,45 @@ public class RobotContainer {
   private final CommandXboxController driverJoystick = new CommandXboxController(0);
   private final CommandXboxController operatorJoystick = new CommandXboxController(0);
 
-  public final CommandSwerveDrivetrain swerve = TunerConstants.DriveTrain; // My drivetrain
-  public final ShooterSubsystem shooter = ShooterSubsystem.getInstance();
-  public final ShooterArmSubsystem shooterArm = ShooterArmSubsystem.getInstance();
-  public final IntakeSubsystem intake = IntakeSubsystem.getInstance();
-  public final ClimbSubsystem climb = ClimbSubsystem.getInstance();
+  public final CommandSwerveDrivetrain swerve = TunerConstants.Swerve; // My drivetrain
+  private final ShooterSubsystem shooter = ShooterSubsystem.getInstance();
+  private final ShooterArmSubsystem shooterArm = ShooterArmSubsystem.getInstance();
+  private final IntakeSubsystem intake = IntakeSubsystem.getInstance();
+  private final ClimbSubsystem climb = ClimbSubsystem.getInstance();
+
+  private boolean climbing = false;// are we climbing or intaking
 
   /* Path follower */
   private Command runAuto = swerve.getAutoPath("Tests");
 
-  // TODO: ShootBase
-  // TODO: ShootStage
-  // TODO: Intake
-  // TODO: Climb
   private void configureBindings() {
     Translation2d speakerPoseBlue = new Translation2d(Units.inchesToMeters(-1.5), Units.inchesToMeters(218.42));
     Translation2d speakerPoseRed = new Translation2d(Units.inchesToMeters(-1.5), Units.inchesToMeters(652.73));
-    DoubleSupplier distanceFromSpeaker = ()-> swerve.getState().Pose.getTranslation().getDistance(
-      DriverStation.getAlliance().orElse(Alliance.Blue) == Alliance.Blue ? speakerPoseBlue : speakerPoseRed);
+    DoubleSupplier distanceFromSpeaker = () -> swerve.getState().Pose.getTranslation().getDistance(
+        DriverStation.getAlliance().orElse(Alliance.Blue) == Alliance.Blue ? speakerPoseBlue : speakerPoseRed);
+
+    // DRIVER
+    // controls---------------------------------------------------------------------------------------
 
     // shoot speaker
     driverJoystick.rightBumper().whileTrue(new ParallelDeadlineGroup(
-        Commands.waitUntil(() -> (shooterArm.isArmReady() && shooter.isMotorsAtVel()))
-            .andThen(intake.feedShooterCommand()),
+        Commands.waitSeconds(0.02).andThen(// wait 1 rio cycle,
+            Commands.waitUntil(() -> (shooterArm.isArmReady() && shooter.isMotorsAtVel()))// wait until ready too shoot,
+                .andThen(intake.feedShooterCommand())), // finally shoot
+
         new InstantCommand(() -> swerve.setDefaultCommand(driveAlignedToSpeakerCommand)),
-        shooterArm.speakerAngleEterapolateCommand(distanceFromSpeaker.getAsDouble()).repeatedly(),
+        shooterArm.speakerAngleEterapolateCommand(distanceFromSpeaker.getAsDouble()).repeatedly(), // repeatedly so it
+                                                                                                   // will check if we
+                                                                                                   // moved
+        shooter.setSpeakerVel()));
+
+    // shoot speaker
+    driverJoystick.rightBumper().whileTrue(new ParallelDeadlineGroup(
+        Commands.waitSeconds(0.02).andThen(// wait 1 rio cycle,
+            Commands.waitUntil(() -> (shooterArm.isArmReady() && shooter.isMotorsAtVel()))// wait until ready too shoot,
+                .andThen(intake.feedShooterCommand())), // finally shoot
+
+        shooterArm.moveArmToCommand(shooterArmConstants.SHOOT_BASE_ANGLE).repeatedly(),
         shooter.setSpeakerVel().repeatedly()));
 
     // zero swerve rotation
@@ -81,12 +96,30 @@ public class RobotContainer {
 
     }));
 
+    // OPERATOR
+    // controls---------------------------------------------------------------------------------------
+
     // Ready Shoot Speaker
     operatorJoystick.y().toggleOnTrue(new ParallelCommandGroup(
         shooterArm.speakerAngleEterapolateCommand(distanceFromSpeaker.getAsDouble()).repeatedly(),
         Commands.waitUntil(() -> (shooterArm.isArmReady() && shooter.isMotorsAtVel()))
             .andThen(intake.feedShooterCommand()))
         .repeatedly());
+
+    // switch between manual intake and climb
+    operatorJoystick.a().onTrue(new InstantCommand(() -> {
+      if (climbing) {
+        climb.removeDefaultCommand();
+        intake.setDefaultCommand(intake.setSpeedCommand(operatorJoystick.getLeftY()));
+        climbing = false;
+      } else {
+        climb.setDefaultCommand(climb.moveClimb(() -> operatorJoystick.getLeftY(), () -> operatorJoystick.getRightY()));
+        intake.removeDefaultCommand();
+        climbing = true;
+      }
+    }));
+
+    operatorJoystick.b().onTrue(intake.intakeuntilNoteCommand());
 
     intake.setDefaultCommand(intake.setSpeedCommand(operatorJoystick.getLeftY()));
     shooter.setDefaultCommand(shooter.setShooterVel(ShooterConstants.IDLE_VELOCITY));
@@ -95,7 +128,7 @@ public class RobotContainer {
     swerve.registerTelemetry(logger::telemeterize);
   }
 
-  public void configureBindingsSysid() {
+  private void configureBindingsSysid() {
 
     // uncomment the corresponding subsystem to sysid
 
@@ -118,6 +151,7 @@ public class RobotContainer {
 
   public RobotContainer() {
     configureBindings();
+    configureBindingsSysid();
   }
 
   double MaxSpeed = TunerConstants.kSpeedAt12VoltsMps; // kSpeedAt12VoltsMps desired top speed

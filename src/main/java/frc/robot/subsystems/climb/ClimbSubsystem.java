@@ -5,6 +5,7 @@
 package frc.robot.subsystems.climb;
 
 import com.revrobotics.CANSparkMax;
+import com.revrobotics.CANSparkBase.IdleMode;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 
 import edu.wpi.first.wpilibj2.command.Command;
@@ -40,7 +41,11 @@ public class ClimbSubsystem extends SubsystemBase {
    * Creates a new ClimbSubsystem.
    */
   private ClimbSubsystem() {
-    m_LeftSparkMax.follow(m_RightSparkMax, true);
+    m_RightSparkMax.setSmartCurrentLimit(CURRENT_LIMIT);
+    m_LeftSparkMax.setSmartCurrentLimit(CURRENT_LIMIT);
+
+    m_RightSparkMax.setIdleMode(IdleMode.kBrake);
+    m_LeftSparkMax.setIdleMode(IdleMode.kBrake);
   }
 
   /**

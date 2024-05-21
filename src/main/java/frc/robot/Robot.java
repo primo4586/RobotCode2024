@@ -13,78 +13,86 @@ import frc.robot.subsystems.shooterArm.ShooterArmSubsystem;
 
 //TODO: autos
 public class Robot extends TimedRobot {
-  private Command m_autonomousCommand;
+    private Command m_autonomousCommand;
 
-  private RobotContainer m_robotContainer;
+    private RobotContainer m_robotContainer;
 
-  @Override
-  public void robotInit() {
-    m_robotContainer = new RobotContainer();
+    @Override
+    public void robotInit() {
+        m_robotContainer = new RobotContainer();
 
-    m_robotContainer.swerve.getDaqThread().setThreadPriority(99);
+        m_robotContainer.swerve.getDaqThread().setThreadPriority(99);
 
-    // Set the logger to log to the first flashdrive plugged in
-    SignalLogger.setPath("/media/sda1/");
-    SignalLogger.start();
-  }
-  @Override
-  public void robotPeriodic() {
-    CommandScheduler.getInstance().run();
-  }
-
-  @Override
-  public void disabledInit() {
-  }
-
-  @Override
-  public void disabledPeriodic() {}
-
-  @Override
-  public void disabledExit() {
-    ShooterArmSubsystem.getInstance().motorBreak();
-    SignalLogger.start();
-  }
-
-  @Override
-  public void autonomousInit() {
-    m_autonomousCommand = m_robotContainer.getAutonomousCommand();
-
-    if (m_autonomousCommand != null) {
-      m_autonomousCommand.schedule();
+        // Set the logger to log to the first flashdrive plugged in
+        SignalLogger.setPath("/media/sda1/");
+        SignalLogger.start();
     }
-  }
 
-  @Override
-  public void autonomousPeriodic() {}
-
-  @Override
-  public void autonomousExit() {}
-
-  @Override
-  public void teleopInit() {
-    if (m_autonomousCommand != null) {
-      m_autonomousCommand.cancel();
+    @Override
+    public void robotPeriodic() {
+        CommandScheduler.getInstance().run();
     }
-  }
 
-  @Override
-  public void teleopPeriodic() {}
+    @Override
+    public void disabledInit() {
+    }
 
-  @Override
-  public void teleopExit() {
-  }
+    @Override
+    public void disabledPeriodic() {
+    }
 
-  @Override
-  public void testInit() {
-    CommandScheduler.getInstance().cancelAll();
-  }
+    @Override
+    public void disabledExit() {
+        ShooterArmSubsystem.getInstance().motorBreak();
+        SignalLogger.start();
+    }
 
-  @Override
-  public void testPeriodic() {}
+    @Override
+    public void autonomousInit() {
+        m_autonomousCommand = m_robotContainer.getAutonomousCommand();
 
-  @Override
-  public void testExit() {}
+        if (m_autonomousCommand != null) {
+            m_autonomousCommand.schedule();
+        }
+    }
 
-  @Override
-  public void simulationPeriodic() {}
+    @Override
+    public void autonomousPeriodic() {
+    }
+
+    @Override
+    public void autonomousExit() {
+    }
+
+    @Override
+    public void teleopInit() {
+        if (m_autonomousCommand != null) {
+            m_autonomousCommand.cancel();
+        }
+    }
+
+    @Override
+    public void teleopPeriodic() {
+    }
+
+    @Override
+    public void teleopExit() {
+    }
+
+    @Override
+    public void testInit() {
+        CommandScheduler.getInstance().cancelAll();
+    }
+
+    @Override
+    public void testPeriodic() {
+    }
+
+    @Override
+    public void testExit() {
+    }
+
+    @Override
+    public void simulationPeriodic() {
+    }
 }

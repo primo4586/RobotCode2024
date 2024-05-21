@@ -45,7 +45,8 @@ public class ShooterSubsystem extends SubsystemBase {
   }
 
   /**
-   * Creates a new ShooterSubsystem. This class is a singleton so it should only be
+   * Creates a new ShooterSubsystem. This class is a singleton so it should only
+   * be
    * constructed once
    */
   private ShooterSubsystem() {
@@ -59,7 +60,7 @@ public class ShooterSubsystem extends SubsystemBase {
    * @return A command to set the velocity of the shooter motors
    */
   public Command setShooterVel(double velocity) {
-    return this.runOnce(()-> {
+    return this.runOnce(() -> {
       m_UMotor.setControl(m_mmReqest.withVelocity(velocity));
       m_DMotor.setControl(m_mmReqest.withVelocity(velocity));
     });
@@ -95,7 +96,7 @@ public class ShooterSubsystem extends SubsystemBase {
    * Sets the signal update frequency for the shooter motors to 1000 Hz for
    * characterization
    */
-   @SuppressWarnings("unused")
+  @SuppressWarnings("unused")
   private void sysidHigherSignalRate() {
 
     /* Speed up signals for better characterization data */

@@ -13,12 +13,14 @@ import edu.wpi.first.math.numbers.N3;
 public interface Vision_Constants {
 
     String K_CAMERA_NAME = "YOUR CAMERA NAME";
-    // Cam mounted facing forward, half a meter forward of center, half a meter up from center.
+    // Cam mounted facing forward, half a meter forward of center, half a meter up
+    // from center.
     Transform3d K_ROBOT_TO_CAM = new Transform3d(new Translation3d(0.5, 0.0, 0.5),
             new Rotation3d(0, 0, 0));
     // The layout of the AprilTags on the field
     AprilTagFieldLayout K_TAG_LAYOUT = AprilTagFields.kDefaultField.loadAprilTagLayoutField();
-    // The standard deviations of our vision estimated poses, which affect correction rate
+    // The standard deviations of our vision estimated poses, which affect
+    // correction rate
     // (Fake values. Experiment and determine estimation noise on an actual robot.)
     Matrix<N3, N1> K_SINGLE_TAG_STD_DEVS = VecBuilder.fill(4, 4, 8);
     Matrix<N3, N1> K_MULTI_TAG_STD_DEVS = VecBuilder.fill(0.5, 0.5, 1);

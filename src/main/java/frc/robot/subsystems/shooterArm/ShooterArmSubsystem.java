@@ -52,7 +52,8 @@ public class ShooterArmSubsystem extends SubsystemBase {
   }
 
   /**
-   * Create a command that will move the shooter arm to a specific angle based on the distance from the speaker
+   * Create a command that will move the shooter arm to a specific angle based on
+   * the distance from the speaker
    * 
    * @param distance The distance from the speaker
    * @return The command
@@ -62,7 +63,8 @@ public class ShooterArmSubsystem extends SubsystemBase {
   }
 
   /**
-   * Create a command that will move the shooter arm to a specific position. Will only run once.
+   * Create a command that will move the shooter arm to a specific position. Will
+   * only run once.
    * 
    * @param position The position to move the arm to
    * @return The command
@@ -193,4 +195,3 @@ public class ShooterArmSubsystem extends SubsystemBase {
     }
   }
 }
-

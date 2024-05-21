@@ -11,7 +11,8 @@ public class PrimoTab {
     private String title;
     private Map<String, GenericEntry> entryMap;
     private ShuffleboardTab tab;
-    public PrimoTab(String title){
+
+    public PrimoTab(String title) {
         this.title = title;
         entryMap = new HashMap<>();
         tab = Shuffleboard.getTab(title);
@@ -30,8 +31,9 @@ public class PrimoTab {
         entryMap.put(name, entry);
         return entry;
     }
+
     public String getTitle() {
         return title;
     }
-    
+
 }

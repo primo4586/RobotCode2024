@@ -19,7 +19,8 @@ public class ExterpolationMap {
      * 
      * @param x
      * @param value
-     * @return this ExterpolationMap thus making chaining possible .put().put().put()...;
+     * @return this ExterpolationMap thus making chaining possible
+     *         .put().put().put()...;
      */
     public ExterpolationMap put(double x, double value) {
         dataPoints.put(x, value);

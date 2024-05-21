@@ -6,7 +6,7 @@ import java.util.Map;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 
-public class PrimoShuffleboard {//TODO: make it more understandable and easier to use
+public class PrimoShuffleboard {// TODO: make it more understandable and easier to use
 
     private Map<String, PrimoTab> tabs;
     private static PrimoShuffleboard instance;

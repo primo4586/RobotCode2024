@@ -8,7 +8,6 @@ import java.util.function.DoubleSupplier;
 
 import com.ctre.phoenix6.mechanisms.swerve.SwerveModule.DriveRequestType;
 import com.ctre.phoenix6.mechanisms.swerve.SwerveRequest;
-
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DriverStation;
@@ -50,7 +49,8 @@ public class CommandGroupsFactory {
         return new ParallelDeadlineGroup(
                 Commands.waitSeconds(0.02).andThen(// wait 1 rio cycle,
                         // wait until ready too shoot,
-                        Commands.waitUntil(() -> (shooterArm.isArmReady() && shooter.isMotorsAtVel()))
+                        Commands.waitUntil(() -> (shooterArm.isArmReady()
+                                && shooter.isMotorsAtVel()))
                                 .andThen(intake.feedShooterCommand())), // finally shoot
 
                 new InstantCommand(() -> swerve.setDefaultCommand(getDriveAlignedToSpeakerCommand())),
@@ -63,7 +63,8 @@ public class CommandGroupsFactory {
         return new ParallelDeadlineGroup(
                 Commands.waitSeconds(0.02).andThen(// wait 1 rio cycle,
                         // wait until ready too shoot,
-                        Commands.waitUntil(() -> (shooterArm.isArmReady() && shooter.isMotorsAtVel()))
+                        Commands.waitUntil(() -> (shooterArm.isArmReady()
+                                && shooter.isMotorsAtVel()))
                                 .andThen(intake.feedShooterCommand())), // finally shoot
                 shooterArm.moveArmToCommand(shooterArmConstants.SHOOT_BASE_ANGLE).repeatedly(),
                 shooter.setSpeakerVel().repeatedly());

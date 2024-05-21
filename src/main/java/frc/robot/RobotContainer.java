@@ -5,6 +5,8 @@
 package frc.robot;
 
 import com.ctre.phoenix6.mechanisms.swerve.SwerveRequest;
+import com.pathplanner.lib.auto.NamedCommands;
+
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.subsystems.intake.IntakeSubsystem;
@@ -53,8 +55,6 @@ public class RobotContainer {
 		// switch swerve drive mode
 		driverJoystick.leftBumper().onTrue(CommandGroupsFactory.getSwitchDriveModeCommand());
 
-
-
 		// OPERATOR
 		// controls---------------------------------------------------------------------------------------
 
@@ -65,7 +65,7 @@ public class RobotContainer {
 		operatorJoystick.a().onTrue(CommandGroupsFactory.getSwitchIntakeClimbCommand());
 
 		// intake until note has been detected
-		operatorJoystick.b().onTrue(intake.intakeuntilNoteCommand());
+		operatorJoystick.b().onTrue(intake.intakeUntilNoteCommand());
 
 		intake.setDefaultCommand(intake.setSpeedCommand(operatorJoystick.getLeftY()));
 		shooter.setDefaultCommand(shooter.setShooterVel(ShooterConstants.IDLE_VELOCITY));
@@ -95,6 +95,9 @@ public class RobotContainer {
 	}
 
 	public RobotContainer() {
+		NamedCommands.registerCommand("shoot speaker", CommandGroupsFactory.getShootSpeakerCommand());
+		NamedCommands.registerCommand("shoot base", CommandGroupsFactory.getShootBaseCommand());
+		NamedCommands.registerCommand("intake", intake.intakeUntilNoteCommand());
 		configureBindings();
 		configureBindingsSysid();
 	}

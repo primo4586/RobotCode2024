@@ -16,21 +16,28 @@
           "data": {
             "commands": [
               {
-                "type": "named",
-                "data": {
-                  "name": null
-                }
-              },
-              {
                 "type": "path",
                 "data": {
                   "pathName": "Mbase2"
                 }
               },
               {
-                "type": "named",
+                "type": "sequential",
                 "data": {
-                  "name": null
+                  "commands": [
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "shoot speaker"
+                      }
+                    },
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "intake"
+                      }
+                    }
+                  ]
                 }
               }
             ]
@@ -39,7 +46,7 @@
         {
           "type": "named",
           "data": {
-            "name": null
+            "name": "shoot speaker"
           }
         },
         {
@@ -49,16 +56,59 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "21"
+                  "pathName": "2M1"
                 }
               },
               {
                 "type": "named",
                 "data": {
-                  "name": null
+                  "name": "intake"
                 }
               }
             ]
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "M1Shoot"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "shoot speaker"
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "M1shootM2.1"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "intake"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "M2shoot"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "shoot speaker"
           }
         }
       ]

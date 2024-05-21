@@ -11,7 +11,9 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.subsystems.shooterArm.ShooterArmSubsystem;
 
-//TODO: autos
+// general todo list:
+// TODO: autos
+// TODO: better trj names
 public class Robot extends TimedRobot {
     private Command m_autonomousCommand;
 

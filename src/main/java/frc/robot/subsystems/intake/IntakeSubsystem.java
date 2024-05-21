@@ -77,7 +77,7 @@ public class IntakeSubsystem extends SubsystemBase {
    *
    * @return A command to intake the ball
    */
-  public Command intakeuntilNoteCommand() {
+  public Command intakeUntilNoteCommand() {
     return this.runEnd(() -> setCurrent(INTAKE_CURRENT), () -> m_motor.stopMotor())
         .until(() -> getOpticSensorValue());
   }

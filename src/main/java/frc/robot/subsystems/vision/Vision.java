@@ -24,7 +24,6 @@
 
 package frc.robot.subsystems.vision;
 
-import static frc.robot.subsystems.vision.Vision_Constants.*;
 
 import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.VecBuilder;
@@ -45,7 +44,7 @@ import org.photonvision.simulation.SimCameraProperties;
 import org.photonvision.simulation.VisionSystemSim;
 import org.photonvision.targeting.PhotonPipelineResult;
 
-public class Vision {
+public class Vision implements Vision_Constants{
     private final PhotonCamera camera;
     private final PhotonPoseEstimator photonEstimator;
     private double lastEstTimestamp = 0;

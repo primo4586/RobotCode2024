@@ -30,7 +30,7 @@ public class RobotContainer {
 	Telemetry logger = new Telemetry(TunerConstants.kSpeedAt12VoltsMps);
 
 	/* Path follower */
-	private Command runAuto = swerve.getAutoPath("Tests");
+	private Command runAuto = swerve.getAutoPath("New Auto");
 
 	private void configureBindings() {
 		// DRIVER
@@ -96,8 +96,10 @@ public class RobotContainer {
 
 	public RobotContainer() {
 		NamedCommands.registerCommand("shoot speaker", CommandGroupsFactory.getShootSpeakerCommand());
+		NamedCommands.registerCommand("shoot no align", AutoCommandFactory.getShootNoAlignCommand());
 		NamedCommands.registerCommand("shoot base", CommandGroupsFactory.getShootBaseCommand());
 		NamedCommands.registerCommand("intake", intake.intakeUntilNoteCommand());
+		NamedCommands.registerCommand("missed note", AutoCommandFactory.driveToMidlineNoteForAuto());
 		configureBindings();
 		configureBindingsSysid();
 	}

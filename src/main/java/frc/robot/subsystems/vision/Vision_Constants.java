@@ -12,11 +12,17 @@ import edu.wpi.first.math.numbers.N3;
 
 public interface Vision_Constants {
 
-    String K_CAMERA_NAME = "YOUR CAMERA NAME";
-    // Cam mounted facing forward, half a meter forward of center, half a meter up
-    // from center.
-    Transform3d K_ROBOT_TO_CAM = new Transform3d(new Translation3d(0.5, 0.0, 0.5),
+    String K_RIGHT_CAMERA_NAME = "YOUR CAMERA NAME";
+    String K_LEFT_CAMERA_NAME = "YOUR CAMERA NAME";
+    String K_NOTE_CAMERA_NAME = "YOUR CAMERA NAME";
+
+    Transform3d K_RIGHT_ROBOT_TO_CAM = new Transform3d(new Translation3d(0.5, 0.0, 0.5),
             new Rotation3d(0, 0, 0));
+
+    Transform3d K_LEFT_ROBOT_TO_CAM = new Transform3d(new Translation3d(0.5, 0.0, 0.5),
+            new Rotation3d(0, 0, 0));
+
+
     // The layout of the AprilTags on the field
     AprilTagFieldLayout K_TAG_LAYOUT = AprilTagFields.kDefaultField.loadAprilTagLayoutField();
     // The standard deviations of our vision estimated poses, which affect

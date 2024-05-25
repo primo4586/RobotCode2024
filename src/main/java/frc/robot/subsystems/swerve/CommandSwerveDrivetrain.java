@@ -3,6 +3,7 @@ package frc.robot.subsystems.swerve;
 import static edu.wpi.first.units.Units.Volts;
 
 import java.util.function.Supplier;
+import java.util.Optional;
 
 import com.ctre.phoenix6.SignalLogger;
 import com.ctre.phoenix6.Utils;
@@ -12,11 +13,13 @@ import com.ctre.phoenix6.mechanisms.swerve.SwerveModuleConstants;
 import com.ctre.phoenix6.mechanisms.swerve.SwerveRequest;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.commands.PathPlannerAuto;
+import com.pathplanner.lib.controllers.PPHolonomicDriveController;
 import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
-import com.pathplanner.lib.util.PIDConstants;
 import com.pathplanner.lib.util.ReplanningConfig;
 
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Notifier;
@@ -25,7 +28,10 @@ import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Subsystem;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
-import frc.robot.subsystems.vision.Vision;
+import frc.robot.Misc;
+import frc.robot.subsystems.intake.IntakeSubsystem;
+import frc.robot.subsystems.vision.AprilTagCamera;
+import frc.robot.subsystems.vision.Vision_Constants;
 
 /**
  * Class that extends the Phoenix SwerveDrivetrain class and implements
@@ -50,7 +56,8 @@ public class CommandSwerveDrivetrain extends SwerveDrivetrain implements Subsyst
         return INSTANCE;
     }
 
-    private Vision vision = new Vision();
+    private AprilTagCamera rightAprilTagCamera = new AprilTagCamera(Vision_Constants.K_RIGHT_CAMERA_NAME);
+    private AprilTagCamera leftAprilTagCamera = new AprilTagCamera(Vision_Constants.K_LEFT_CAMERA_NAME);
 
     /* Blue alliance sees forward as 0 degrees (toward red alliance wall) */
     private final Rotation2d BlueAlliancePerspectiveRotation = Rotation2d.fromDegrees(0);
@@ -128,13 +135,13 @@ public class CommandSwerveDrivetrain extends SwerveDrivetrain implements Subsyst
         }
 
         AutoBuilder.configureHolonomic(
-                () -> this.getState().Pose, // Supplier of current robot pose
+                () -> this.getPose(), // Supplier of current robot pose
                 this::seedFieldRelative, // Consumer for seeding pose against auto
                 this::getCurrentRobotChassisSpeeds,
                 (speeds) -> this.setControl(AutoRequest.withSpeeds(speeds)), // Consumer of ChassisSpeeds to drive the
                                                                              // robot
-                new HolonomicPathFollowerConfig(new PIDConstants(10, 0, 0),
-                        new PIDConstants(10, 0, 0),
+                new HolonomicPathFollowerConfig(TunerConstants.TRANSLATION_PID_CONSTANTS,
+                        TunerConstants.ROTATION_PID_CONSTANTS,
                         TunerConstants.kSpeedAt12VoltsMps,
                         driveBaseRadius,
                         new ReplanningConfig()),
@@ -142,6 +149,8 @@ public class CommandSwerveDrivetrain extends SwerveDrivetrain implements Subsyst
                                                                                          // flipped for Red vs Blue,
                                                                                          // this is normally the case
                 this); // Subsystem for requirements
+
+        PPHolonomicDriveController.setRotationTargetOverride(null);
     }
 
     public Command applyRequest(Supplier<SwerveRequest> requestSupplier) {
@@ -150,6 +159,10 @@ public class CommandSwerveDrivetrain extends SwerveDrivetrain implements Subsyst
 
     public Command getAutoPath(String pathName) {
         return new PathPlannerAuto(pathName);
+    }
+
+    public Pose2d getPose() {
+        return getState().Pose;
     }
 
     /*
@@ -183,6 +196,18 @@ public class CommandSwerveDrivetrain extends SwerveDrivetrain implements Subsyst
         m_simNotifier.startPeriodic(kSimLoopPeriod);
     }
 
+    public Optional<Rotation2d> getAngleToSpeakerIfHasNote() {
+
+        Translation2d speakerPose = DriverStation.getAlliance().orElse(Alliance.Blue) == Alliance.Red
+                ? Misc.speakerPoseBlue
+                : Misc.speakerPoseRed;
+
+        if (IntakeSubsystem.getInstance().getHasNote()) {
+            return Optional.of(getPose().getTranslation().minus(speakerPose).getAngle());
+        } else
+            return Optional.empty();
+    }
+
     @Override
     public void periodic() {
         /* Periodically try to apply the operator perspective */
@@ -212,17 +237,35 @@ public class CommandSwerveDrivetrain extends SwerveDrivetrain implements Subsyst
         }
 
         // Correct pose estimate with vision measurements
-        var visionEst = vision.getEstimatedGlobalPose();
-        visionEst.ifPresent(
-                est -> {
-                    var estPose = est.estimatedPose.toPose2d();
-                    // Change our trust in the measurement based on the tags we can see
-                    var estStdDevs = vision.getEstimationStdDevs(estPose);
+        var rightVisionEst = rightAprilTagCamera.getEstimatedGlobalPose();
+        rightVisionEst.ifPresent(
+                rightEst -> {
+                    var estPose = rightEst.estimatedPose.toPose2d();
 
-                    this.addVisionMeasurement(
-                            est.estimatedPose.toPose2d(), est.timestampSeconds, estStdDevs);
+                    SignalLogger.writeDoubleArray("right camera pose",
+                            new double[] { estPose.getX(), estPose.getY(), estPose.getRotation().getDegrees() });
+
+                    // Change our trust in the measurement based on the tags we can see
+                    var estStdDevs = rightAprilTagCamera.getEstimationStdDevs(estPose);
+                    this.addVisionMeasurement(rightEst.estimatedPose.toPose2d(), rightEst.timestampSeconds, estStdDevs);
                 });
 
-        vision.simulationPeriodic(this.getState().Pose);
+        var leftVisionEst = leftAprilTagCamera.getEstimatedGlobalPose();
+        leftVisionEst.ifPresent(
+                leftEst -> {
+                    var estPose = leftEst.estimatedPose.toPose2d();
+
+                    SignalLogger.writeDoubleArray("left camera pose",
+                            new double[] { estPose.getX(), estPose.getY(), estPose.getRotation().getDegrees() });
+
+                    // Change our trust in the measurement based on the tags we can see
+                    var estStdDevs = leftAprilTagCamera.getEstimationStdDevs(estPose);
+
+                    this.addVisionMeasurement(leftEst.estimatedPose.toPose2d(), leftEst.timestampSeconds, estStdDevs);
+                });
+
+        leftAprilTagCamera.simulationPeriodic(this.getPose());
+
+        rightAprilTagCamera.simulationPeriodic(this.getPose());
     }
 }

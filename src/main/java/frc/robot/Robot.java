@@ -14,6 +14,9 @@ import frc.robot.subsystems.shooterArm.ShooterArmSubsystem;
 // general todo list:
 // TODO: autos
 // TODO: better trj names
+// TODO: add driveToNote
+// TODO: add driveToNoteForAuto
+// TODO: shoot on the move during autonomous
 public class Robot extends TimedRobot {
     private Command m_autonomousCommand;
 

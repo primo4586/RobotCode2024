@@ -13,17 +13,18 @@ import com.ctre.phoenix6.signals.NeutralModeValue;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.MiscConstants;
-
+import frc.robot.Misc;
 
 /**
  * The IntakeSubsystem is a class that controls the TalonFX motor for the
  * intake subsystem.
  */
-public class IntakeSubsystem extends SubsystemBase implements IntakeConstants{
-  private TalonFX m_motor = new TalonFX(MOTOR_ID, MiscConstants.CAN_BUS_NAME);
+public class IntakeSubsystem extends SubsystemBase implements IntakeConstants {
+  private TalonFX m_motor = new TalonFX(MOTOR_ID, Misc.CAN_BUS_NAME);
   private DigitalInput m_opticSensor = new DigitalInput(OPTIC_SENSOR_ID);
   private TorqueCurrentFOC currentFOC = new TorqueCurrentFOC(0);
+
+  private boolean hasNote = true;
 
   private static IntakeSubsystem INSTANCE;
 
@@ -72,12 +73,16 @@ public class IntakeSubsystem extends SubsystemBase implements IntakeConstants{
   }
 
   /**
-   * Command to intake the ball.
+   * Command to intake the note.
    *
-   * @return A command to intake the ball
+   * @return A command to intake the note
    */
   public Command intakeUntilNoteCommand() {
-    return this.runEnd(() -> setCurrent(INTAKE_CURRENT), () -> m_motor.stopMotor())
+    return this.runEnd(() -> setCurrent(INTAKE_CURRENT), // run
+        () -> {// end
+          m_motor.stopMotor();
+          hasNote = getOpticSensorValue();
+        })
         .until(() -> getOpticSensorValue());
   }
 
@@ -87,6 +92,7 @@ public class IntakeSubsystem extends SubsystemBase implements IntakeConstants{
    * @return A command to feed the shooter
    */
   public Command feedShooterCommand() {
+    hasNote = false;
     return this.runEnd(() -> setCurrent(FEED_SHOOTER_CURRENT), () -> m_motor.stopMotor())
         .withTimeout(FEED_SHOOTER_TIME);
   }
@@ -108,6 +114,16 @@ public class IntakeSubsystem extends SubsystemBase implements IntakeConstants{
    */
   public boolean getOpticSensorValue() {
     return m_opticSensor.get();
+  }
+
+  /**
+   * do not trust this to check if the note left the shooter only if a note has
+   * entered
+   *
+   * @return Whether or not the intake has a note
+   */
+  public boolean getHasNote() {
+    return hasNote;
   }
 
   @Override

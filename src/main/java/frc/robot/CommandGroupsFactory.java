@@ -4,14 +4,8 @@
 
 package frc.robot;
 
-import java.util.function.DoubleSupplier;
-
 import com.ctre.phoenix6.mechanisms.swerve.SwerveModule.DriveRequestType;
 import com.ctre.phoenix6.mechanisms.swerve.SwerveRequest;
-import edu.wpi.first.math.geometry.Translation2d;
-import edu.wpi.first.math.util.Units;
-import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
@@ -27,24 +21,29 @@ import frc.robot.subsystems.swerve.CommandSwerveDrivetrain;
 import frc.robot.subsystems.swerve.TunerConstants;
 
 public class CommandGroupsFactory {
-    private final static CommandXboxController driverJoystick = RobotContainer.driverJoystick;
-    private final static CommandXboxController operatorJoystick = RobotContainer.operatorJoystick;
+    private static final CommandXboxController driverJoystick = RobotContainer.driverJoystick;
+    private static final CommandXboxController operatorJoystick = RobotContainer.operatorJoystick;
 
     private static final CommandSwerveDrivetrain swerve = TunerConstants.Swerve; // My drivetrain
     private static final ShooterSubsystem shooter = ShooterSubsystem.getInstance();
     private static final ShooterArmSubsystem shooterArm = ShooterArmSubsystem.getInstance();
     private static final IntakeSubsystem intake = IntakeSubsystem.getInstance();
     private static final ClimbSubsystem climb = ClimbSubsystem.getInstance();
-    private static Translation2d speakerPoseBlue = new Translation2d(Units.inchesToMeters(-1.5),
-            Units.inchesToMeters(218.42));
-    private static Translation2d speakerPoseRed = new Translation2d(Units.inchesToMeters(-1.5),
-            Units.inchesToMeters(652.73));
-    private static DoubleSupplier distanceFromSpeaker = () -> swerve.getState().Pose.getTranslation().getDistance(
-            DriverStation.getAlliance().orElse(Alliance.Blue) == Alliance.Blue ? speakerPoseBlue
-                    : speakerPoseRed);
+
+    static double MaxSpeed = TunerConstants.kSpeedAt12VoltsMps; // kSpeedAt12VoltsMps desired top speed
+    static double MaxAngularRate = 1.5 * Math.PI; // 3/4 of a rotation per second max angular velocity
+
+    public static SwerveRequest.FieldCentric teleopDrive = new SwerveRequest.FieldCentric()
+            .withDeadband(MaxSpeed * 0.1).withRotationalDeadband(MaxAngularRate * 0.1) // Add a 10% deadband
+            .withDriveRequestType(DriveRequestType.OpenLoopVoltage); // I want field-centric driving in closed loop
+
+    public static SwerveRequest.FieldCentricFacingAngle driveAlignedToSpeaker = new SwerveRequest.FieldCentricFacingAngle()
+            .withDeadband(MaxSpeed * 0.1).withRotationalDeadband(MaxAngularRate * 0.1) // Add a 10% deadband
+            .withDriveRequestType(DriveRequestType.Velocity); // I want field-centric driving in open loop
 
     private static boolean climbing = false;// are we climbing or intaking
 
+    
     public static Command getShootSpeakerCommand() {
         return new ParallelDeadlineGroup(
                 Commands.waitSeconds(0.02).andThen(// wait 1 rio cycle,
@@ -54,7 +53,7 @@ public class CommandGroupsFactory {
                                 .andThen(intake.feedShooterCommand())), // finally shoot
 
                 new InstantCommand(() -> swerve.setDefaultCommand(getDriveAlignedToSpeakerCommand())),
-                shooterArm.speakerAngleEterapolateCommand(distanceFromSpeaker.getAsDouble())
+                shooterArm.speakerAngleEterapolateCommand(Misc.distanceFromSpeaker.getAsDouble())
                         .repeatedly(), // repeatedly so it will update if we moved
                 shooter.setSpeakerVel());
     }
@@ -83,11 +82,9 @@ public class CommandGroupsFactory {
 
     public static Command getReadyShootSpeakerCommand() {
         return new ParallelCommandGroup(
-                shooterArm.speakerAngleEterapolateCommand(distanceFromSpeaker.getAsDouble())
+                shooterArm.speakerAngleEterapolateCommand(Misc.distanceFromSpeaker.getAsDouble())
                         .repeatedly(),
-                Commands.waitUntil(() -> (shooterArm.isArmReady() && shooter.isMotorsAtVel()))
-                        .andThen(intake.feedShooterCommand()))
-                .repeatedly();
+                shooter.setSpeakerVel());
     }
 
     public static Command getSwitchIntakeClimbCommand() {
@@ -117,20 +114,17 @@ public class CommandGroupsFactory {
         return swerve
                 .applyRequest(() -> driveAlignedToSpeaker
                         .withVelocityX(-driverJoystick.getLeftY() * MaxSpeed)
-                        .withVelocityY(-driverJoystick.getLeftX() * MaxSpeed))
+                        .withVelocityY(-driverJoystick.getLeftX() * MaxSpeed)
+                        .withTargetDirection(null))
                 .ignoringDisable(true);
     }
 
-    static double MaxSpeed = TunerConstants.kSpeedAt12VoltsMps; // kSpeedAt12VoltsMps desired top speed
-    static double MaxAngularRate = 1.5 * Math.PI; // 3/4 of a rotation per second max angular velocity
-
-    public static SwerveRequest.FieldCentric teleopDrive = new SwerveRequest.FieldCentric()
-            .withDeadband(MaxSpeed * 0.1).withRotationalDeadband(MaxAngularRate * 0.1) // Add a 10% deadband
-            .withDriveRequestType(DriveRequestType.OpenLoopVoltage); // I want field-centric driving in
-                                                                     // closed loop
-
-    public static SwerveRequest.FieldCentricFacingAngle driveAlignedToSpeaker = new SwerveRequest.FieldCentricFacingAngle()
-            .withDeadband(MaxSpeed * 0.1).withRotationalDeadband(MaxAngularRate * 0.1) // Add a 10% deadband
-            .withDriveRequestType(DriveRequestType.OpenLoopVoltage); // I want field-centric driving in open
-                                                                     // loop
+    public static Command getDriveToNoteCommand() {
+        return swerve
+                .applyRequest(() -> teleopDrive
+                        .withVelocityX(-driverJoystick.getLeftY() * MaxSpeed)
+                        .withVelocityY(-driverJoystick.getLeftX() * MaxSpeed)
+                        .withRotationalRate(-driverJoystick.getRightX() * MaxAngularRate))
+                .ignoringDisable(true);
+    }
 }

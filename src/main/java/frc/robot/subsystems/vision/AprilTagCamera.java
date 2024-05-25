@@ -24,7 +24,6 @@
 
 package frc.robot.subsystems.vision;
 
-
 import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.geometry.Pose2d;
@@ -44,7 +43,7 @@ import org.photonvision.simulation.SimCameraProperties;
 import org.photonvision.simulation.VisionSystemSim;
 import org.photonvision.targeting.PhotonPipelineResult;
 
-public class Vision implements Vision_Constants{
+public class AprilTagCamera implements Vision_Constants {
     private final PhotonCamera camera;
     private final PhotonPoseEstimator photonEstimator;
     private double lastEstTimestamp = 0;
@@ -53,11 +52,11 @@ public class Vision implements Vision_Constants{
     private PhotonCameraSim cameraSim;
     private VisionSystemSim visionSim;
 
-    public Vision() {
-        camera = new PhotonCamera(K_CAMERA_NAME);
+    public AprilTagCamera(String cameraName) {
+        camera = new PhotonCamera(cameraName);
 
         photonEstimator = new PhotonPoseEstimator(
-                K_TAG_LAYOUT, PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR, camera, K_ROBOT_TO_CAM);
+                K_TAG_LAYOUT, PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR, camera, K_RIGHT_ROBOT_TO_CAM);
         photonEstimator.setMultiTagFallbackStrategy(PoseStrategy.LOWEST_AMBIGUITY);
 
         // ----- Simulation
@@ -73,7 +72,7 @@ public class Vision implements Vision_Constants{
             var cameraProp = new SimCameraProperties();
             cameraProp.setCalibration(960, 720, Rotation2d.fromDegrees(90));
             cameraProp.setCalibError(0.35, 0.10);
-            cameraProp.setFPS(15);
+            cameraProp.setFPS(30);
             cameraProp.setAvgLatencyMs(50);
             cameraProp.setLatencyStdDevMs(15);
             // Create a PhotonCameraSim which will update the linked PhotonCamera's values
@@ -81,7 +80,7 @@ public class Vision implements Vision_Constants{
             // targets.
             cameraSim = new PhotonCameraSim(camera, cameraProp);
             // Add the simulated camera to view the targets on this simulated field.
-            visionSim.addCamera(cameraSim, K_ROBOT_TO_CAM);
+            visionSim.addCamera(cameraSim, K_RIGHT_ROBOT_TO_CAM);
 
             cameraSim.enableDrawWireframe(true);
         }
@@ -147,7 +146,7 @@ public class Vision implements Vision_Constants{
         if (numTags > 1)
             estStdDevs = K_MULTI_TAG_STD_DEVS;
         // Increase std devs based on (average) distance
-        if (numTags == 1 && avgDist > 4)
+        if (numTags == 1 && avgDist > 7)
             estStdDevs = VecBuilder.fill(Double.MAX_VALUE, Double.MAX_VALUE, Double.MAX_VALUE);
         else
             estStdDevs = estStdDevs.times(1 + (avgDist * avgDist / 30));

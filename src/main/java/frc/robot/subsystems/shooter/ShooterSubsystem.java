@@ -4,8 +4,6 @@
 
 package frc.robot.subsystems.shooter;
 
-import static frc.robot.subsystems.shooter.ShooterConstants.*;
-
 import com.ctre.phoenix6.BaseStatusSignal;
 import com.ctre.phoenix6.StatusCode;
 import com.ctre.phoenix6.configs.FeedbackConfigs;
@@ -25,7 +23,7 @@ import frc.robot.MiscConstants;
 /**
  * Shooter subsystem, controls two TalonFX motors to spin the shooter wheels
  */
-public class ShooterSubsystem extends SubsystemBase {
+public class ShooterSubsystem extends SubsystemBase implements ShooterConstants{
   private final TalonFX m_UMotor = new TalonFX(UP_MOTOR_SHOOTER_ID, MiscConstants.CAN_BUS_NAME);
   private final TalonFX m_DMotor = new TalonFX(DOWN_MOTOR_SHOOTER_ID, MiscConstants.CAN_BUS_NAME);
   private final MotionMagicVelocityTorqueCurrentFOC m_mmReqest = new MotionMagicVelocityTorqueCurrentFOC(0);

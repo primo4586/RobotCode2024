@@ -1,6 +1,6 @@
 package frc.robot.subsystems.intake;
 
-public interface intakeConstants {
+public interface IntakeConstants {
     int MOTOR_ID = 8;
     int OPTIC_SENSOR_ID = 8;
     int FEED_SHOOTER_CURRENT = 11;

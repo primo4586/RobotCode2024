@@ -10,7 +10,6 @@ import com.revrobotics.CANSparkLowLevel.MotorType;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import static frc.robot.subsystems.climb.climbConstants.*;
 
 import java.util.function.DoubleSupplier;
 
@@ -18,7 +17,7 @@ import java.util.function.DoubleSupplier;
  * The ClimbSubsystem is a class that controls the two motors on the
  * climb subsystem.
  */
-public class ClimbSubsystem extends SubsystemBase {
+public class ClimbSubsystem extends SubsystemBase implements ClimbConstants{
     private final CANSparkMax m_RightSparkMax = new CANSparkMax(M_CLIMB_RIGHT_MOTOR_ID, MotorType.kBrushless);
     private final CANSparkMax m_LeftSparkMax = new CANSparkMax(M_CLIMB_LEFT_MOTOR_ID, MotorType.kBrushless);
 

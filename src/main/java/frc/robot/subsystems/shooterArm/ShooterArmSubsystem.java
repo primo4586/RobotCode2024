@@ -21,11 +21,10 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.MiscConstants;
 
-import static frc.robot.subsystems.shooterArm.shooterArmConstants.*;
 
 //TODO: add manual home
 //TODO: add sysid
-public class ShooterArmSubsystem extends SubsystemBase {
+public class ShooterArmSubsystem extends SubsystemBase implements ShooterArmConstants {
 
   private final TalonFX m_Motor = new TalonFX(MOTOR_ID, MiscConstants.CAN_BUS_NAME);
   private final MotionMagicExpoTorqueCurrentFOC mm = new MotionMagicExpoTorqueCurrentFOC(0);
@@ -85,7 +84,7 @@ public class ShooterArmSubsystem extends SubsystemBase {
     return prepareHomeCommand().andThen(
         runEnd(() -> {
           if (!getReverseLimit()) {
-            m_Motor.set(shooterArmConstants.RESET_SPEED);
+            m_Motor.set(ShooterArmConstants.RESET_SPEED);
           }
         }, () -> m_Motor.set(0)).withTimeout(10));
   }
@@ -120,7 +119,7 @@ public class ShooterArmSubsystem extends SubsystemBase {
    * @return True if the shooter arm is ready
    */
   public boolean isArmReady() {
-    return (Math.abs(getArmPose() - mm.Position) < shooterArmConstants.MINIMUM_ERROR);
+    return (Math.abs(getArmPose() - mm.Position) < ShooterArmConstants.MINIMUM_ERROR);
   }
 
   /**

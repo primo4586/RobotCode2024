@@ -15,13 +15,12 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.MiscConstants;
 
-import static frc.robot.subsystems.intake.intakeConstants.*;
 
 /**
  * The IntakeSubsystem is a class that controls the TalonFX motor for the
  * intake subsystem.
  */
-public class IntakeSubsystem extends SubsystemBase {
+public class IntakeSubsystem extends SubsystemBase implements IntakeConstants{
   private TalonFX m_motor = new TalonFX(MOTOR_ID, MiscConstants.CAN_BUS_NAME);
   private DigitalInput m_opticSensor = new DigitalInput(OPTIC_SENSOR_ID);
   private TorqueCurrentFOC currentFOC = new TorqueCurrentFOC(0);

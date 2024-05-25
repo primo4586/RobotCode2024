@@ -22,7 +22,7 @@ import frc.robot.subsystems.climb.ClimbSubsystem;
 import frc.robot.subsystems.intake.IntakeSubsystem;
 import frc.robot.subsystems.shooter.ShooterSubsystem;
 import frc.robot.subsystems.shooterArm.ShooterArmSubsystem;
-import frc.robot.subsystems.shooterArm.shooterArmConstants;
+import frc.robot.subsystems.shooterArm.ShooterArmConstants;
 import frc.robot.subsystems.swerve.CommandSwerveDrivetrain;
 import frc.robot.subsystems.swerve.TunerConstants;
 
@@ -66,7 +66,7 @@ public class CommandGroupsFactory {
                         Commands.waitUntil(() -> (shooterArm.isArmReady()
                                 && shooter.isMotorsAtVel()))
                                 .andThen(intake.feedShooterCommand())), // finally shoot
-                shooterArm.moveArmToCommand(shooterArmConstants.SHOOT_BASE_ANGLE).repeatedly(),
+                shooterArm.moveArmToCommand(ShooterArmConstants.SHOOT_BASE_ANGLE).repeatedly(),
                 shooter.setSpeakerVel().repeatedly());
     }
 

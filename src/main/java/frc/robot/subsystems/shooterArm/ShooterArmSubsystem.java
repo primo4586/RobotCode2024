@@ -58,7 +58,7 @@ public class ShooterArmSubsystem extends SubsystemBase implements ShooterArmCons
    * @return The command
    */
   public Command speakerAngleEterapolateCommand(double distance) {
-    return moveArmToCommand(SPEAKER_ANGLE_EXTERPOLATION.exterpolate(distance));
+    return run(() -> moveArmToCommand(SPEAKER_ANGLE_EXTERPOLATION.exterpolate(distance)));
   }
 
   /**

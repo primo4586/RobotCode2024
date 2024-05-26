@@ -13,6 +13,7 @@ import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.MotionMagicVelocityTorqueCurrentFOC;
 import com.ctre.phoenix6.hardware.TalonFX;
+import com.ctre.phoenix6.mechanisms.swerve.SwerveRequest.Idle;
 import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -23,7 +24,7 @@ import frc.robot.Misc;
 /**
  * Shooter subsystem, controls two TalonFX motors to spin the shooter wheels
  */
-public class ShooterSubsystem extends SubsystemBase implements ShooterConstants{
+public class ShooterSubsystem extends SubsystemBase implements ShooterConstants {
   private final TalonFX m_UMotor = new TalonFX(UP_MOTOR_SHOOTER_ID, Misc.CAN_BUS_NAME);
   private final TalonFX m_DMotor = new TalonFX(DOWN_MOTOR_SHOOTER_ID, Misc.CAN_BUS_NAME);
   private final MotionMagicVelocityTorqueCurrentFOC m_mmReqest = new MotionMagicVelocityTorqueCurrentFOC(0);
@@ -72,7 +73,7 @@ public class ShooterSubsystem extends SubsystemBase implements ShooterConstants{
    *         speekr velocity
    */
   public Command setSpeakerVel() {
-    return setShooterVel(SPEAKR_VELOCITY);
+    return runEnd(() -> setShooterVel(SPEAKR_VELOCITY), () -> setShooterVel(IDLE_VELOCITY));
   }
 
   /**

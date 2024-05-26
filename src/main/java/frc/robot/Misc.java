@@ -5,6 +5,7 @@
 package frc.robot;
 
 import java.util.function.DoubleSupplier;
+import java.util.function.BooleanSupplier;
 
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.DriverStation;
@@ -26,4 +27,6 @@ public interface Misc {
                     : Misc.speakerPoseRed);
 
     ObjectDetectionCamera objectDetectionCamera = new ObjectDetectionCamera(Vision_Constants.K_NOTE_CAMERA_NAME);
+
+    BooleanSupplier isWithinShootingRange = () -> distanceFromSpeaker.getAsDouble() <= 5;
 }

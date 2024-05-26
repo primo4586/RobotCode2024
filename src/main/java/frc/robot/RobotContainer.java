@@ -69,6 +69,9 @@ public class RobotContainer {
 
 		intake.setDefaultCommand(intake.setSpeedCommand(operatorJoystick.getLeftY()));
 		shooter.setDefaultCommand(shooter.setShooterVel(ShooterConstants.IDLE_VELOCITY));
+		shooterArm.setDefaultCommand(
+				shooterArm.speakerAngleEterapolateCommand(Misc.distanceFromSpeaker.getAsDouble()));
+
 		swerve.setDefaultCommand(CommandGroupsFactory.getTeleopDriveCommand());
 		swerve.registerTelemetry(logger::telemeterize);
 	}
@@ -98,8 +101,9 @@ public class RobotContainer {
 		NamedCommands.registerCommand("shoot speaker", CommandGroupsFactory.getShootSpeakerCommand());
 		NamedCommands.registerCommand("shoot no align", AutoCommandFactory.getShootNoAlignCommand());
 		NamedCommands.registerCommand("shoot base", CommandGroupsFactory.getShootBaseCommand());
-		NamedCommands.registerCommand("intake", intake.intakeUntilNoteCommand());
+		NamedCommands.registerCommand("intake", intake.intakeUntilNoteCommand().withTimeout(3));
 		NamedCommands.registerCommand("missed note", AutoCommandFactory.driveToMidlineNoteForAuto());
+		NamedCommands.registerCommand("shoot if has note", AutoCommandFactory.getShootIfHasNote());
 		configureBindings();
 		configureBindingsSysid();
 	}

@@ -53,8 +53,7 @@ public class CommandGroupsFactory {
                                 .andThen(intake.feedShooterCommand())), // finally shoot
 
                 new InstantCommand(() -> swerve.setDefaultCommand(getDriveAlignedToSpeakerCommand())),
-                shooterArm.speakerAngleEterapolateCommand(Misc.distanceFromSpeaker.getAsDouble())
-                        .repeatedly(), // repeatedly so it will update if we moved
+                shooterArm.speakerAngleEterapolateCommand(Misc.distanceFromSpeaker.getAsDouble()),
                 shooter.setSpeakerVel());
     }
 
@@ -65,8 +64,8 @@ public class CommandGroupsFactory {
                         Commands.waitUntil(() -> (shooterArm.isArmReady()
                                 && shooter.isMotorsAtVel()))
                                 .andThen(intake.feedShooterCommand())), // finally shoot
-                shooterArm.moveArmToCommand(ShooterArmConstants.SHOOT_BASE_ANGLE).repeatedly(),
-                shooter.setSpeakerVel().repeatedly());
+                shooterArm.moveArmToCommand(ShooterArmConstants.SHOOT_BASE_ANGLE),
+                shooter.setSpeakerVel());
     }
 
     public static Command getSwitchDriveModeCommand() {
@@ -82,8 +81,7 @@ public class CommandGroupsFactory {
 
     public static Command getReadyShootSpeakerCommand() {
         return new ParallelCommandGroup(
-                shooterArm.speakerAngleEterapolateCommand(Misc.distanceFromSpeaker.getAsDouble())
-                        .repeatedly(),
+                shooterArm.speakerAngleEterapolateCommand(Misc.distanceFromSpeaker.getAsDouble()),
                 shooter.setSpeakerVel());
     }
 

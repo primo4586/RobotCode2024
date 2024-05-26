@@ -4,15 +4,11 @@
 
 package frc.robot;
 
-import java.util.function.DoubleSupplier;
-
 import com.ctre.phoenix6.mechanisms.swerve.SwerveModule.DriveRequestType;
 import com.ctre.phoenix6.mechanisms.swerve.SwerveRequest;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.subsystems.intake.IntakeSubsystem;
@@ -73,19 +69,22 @@ public class AutoCommandFactory {
      * Command to shoot with no alignment.
      */
     public static Command getShootNoAlignCommand() {
-        DoubleSupplier distanceFromSpeaker = () -> swerve.getState().Pose.getTranslation().getDistance(
-                DriverStation.getAlliance().orElse(Alliance.Blue) == Alliance.Blue ? Misc.speakerPoseBlue
-                        : Misc.speakerPoseRed);
+        return Commands.waitUntil(Misc.isWithinShootingRange).andThen(
+                new ParallelDeadlineGroup(
+                        Commands.waitSeconds(0.02).andThen(// wait 1 rio cycle,
+                                // wait until ready too shoot,
+                                Commands.waitUntil(() -> (shooterArm.isArmReady()
+                                        && shooter.isMotorsAtVel()))
+                                        .andThen(intake.feedShooterCommand())), // finally shoot
 
-        return new ParallelDeadlineGroup(
-                Commands.waitSeconds(0.02).andThen(// wait 1 rio cycle,
-                        // wait until ready too shoot,
-                        Commands.waitUntil(() -> (shooterArm.isArmReady()
-                                && shooter.isMotorsAtVel()))
-                                .andThen(intake.feedShooterCommand())), // finally shoot
+                        shooterArm.speakerAngleEterapolateCommand(Misc.distanceFromSpeaker.getAsDouble()),
+                        shooter.setSpeakerVel()));
+    }
 
-                shooterArm.speakerAngleEterapolateCommand(distanceFromSpeaker.getAsDouble())
-                        .repeatedly(), // repeatedly so it will update if we moved
-                shooter.setSpeakerVel());
+    public static Command getShootIfHasNote() {
+        if (intake.getHasNote())
+            return CommandGroupsFactory.getShootSpeakerCommand();
+
+        return Commands.none();
     }
 }

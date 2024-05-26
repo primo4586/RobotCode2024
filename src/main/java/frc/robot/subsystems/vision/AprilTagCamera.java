@@ -43,6 +43,8 @@ import org.photonvision.simulation.SimCameraProperties;
 import org.photonvision.simulation.VisionSystemSim;
 import org.photonvision.targeting.PhotonPipelineResult;
 
+
+//TODO: fix sim
 public class AprilTagCamera implements Vision_Constants {
     private final PhotonCamera camera;
     private final PhotonPoseEstimator photonEstimator;

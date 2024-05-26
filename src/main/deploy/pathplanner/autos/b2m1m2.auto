@@ -44,12 +44,6 @@
           }
         },
         {
-          "type": "named",
-          "data": {
-            "name": "shoot speaker"
-          }
-        },
-        {
           "type": "race",
           "data": {
             "commands": [
@@ -60,9 +54,22 @@
                 }
               },
               {
-                "type": "named",
+                "type": "sequential",
                 "data": {
-                  "name": "intake"
+                  "commands": [
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "shoot no align"
+                      }
+                    },
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "intake"
+                      }
+                    }
+                  ]
                 }
               }
             ]
@@ -75,15 +82,28 @@
           }
         },
         {
-          "type": "path",
+          "type": "race",
           "data": {
-            "pathName": "M1Shoot"
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "M1Shoot"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "shoot no align"
+                }
+              }
+            ]
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "shoot speaker"
+            "name": "shoot if has note"
           }
         },
         {
@@ -93,7 +113,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "M1shootM2.1"
+                  "pathName": "M1shootM2"
                 }
               },
               {
@@ -112,15 +132,28 @@
           }
         },
         {
-          "type": "path",
+          "type": "race",
           "data": {
-            "pathName": "M2shoot"
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "M2shoot"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "shoot no align"
+                }
+              }
+            ]
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "shoot speaker"
+            "name": "shoot if has note"
           }
         }
       ]

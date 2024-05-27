@@ -8,7 +8,6 @@ import com.ctre.phoenix6.signals.ReverseLimitValue;
 
 import frc.robot.util.exterpolation.ExterpolationMap;
 
-
 /**
  * Constants for the Shooter Arm Subsystem.
  */
@@ -26,8 +25,11 @@ public interface ShooterArmConstants {
     double SENSOR_TO_MEC_RATIO = GEAR_RATIO / 360.0;
 
     // Condition Constants
-    /** The minimum position error to consider the shooter arm at the correct position. */
-    double MINIMUM_ERROR = 2;
+    /**
+     * The minimum position error to consider the shooter arm at the correct
+     * position.
+     */
+    double TOLLERANCE = 2;
 
     // MotionMagic Constants
     /** The cruise velocity of the shooter arm. */
@@ -63,15 +65,15 @@ public interface ShooterArmConstants {
     /** The angle of the amp when shooting. */
     double AMP_ANGLE = 32.4;
 
+    double YEET_ANGLE = 10.0;
+
     /** The value of the limit switch when it is closed. */
     ReverseLimitValue lIMIT_SWITCH_TRUE_VALUE = ReverseLimitValue.ClosedToGround;
 
     /** A map of speaker angles to the corresponding shooter arm angle. */
-    ExterpolationMap SPEAKER_ANGLE_EXTERPOLATION = 
-    new ExterpolationMap().put(2.9, 62.0)
-    .put(2.52, 55.0)
-    .put(2.15, 50.0)
-    .put(3.59, 63.0)
-    .put(3.04, 56.0);
+    ExterpolationMap SPEAKER_ANGLE_EXTERPOLATION = new ExterpolationMap().put(2.9, 62.0)
+            .put(2.52, 55.0)
+            .put(2.15, 50.0)
+            .put(3.59, 63.0)
+            .put(3.04, 56.0);
 }
-

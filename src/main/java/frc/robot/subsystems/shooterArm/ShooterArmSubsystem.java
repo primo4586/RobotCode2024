@@ -21,7 +21,6 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Misc;
 
-
 //TODO: add manual home
 //TODO: add sysid
 public class ShooterArmSubsystem extends SubsystemBase implements ShooterArmConstants {
@@ -119,7 +118,7 @@ public class ShooterArmSubsystem extends SubsystemBase implements ShooterArmCons
    * @return True if the shooter arm is ready
    */
   public boolean isArmReady() {
-    return (Math.abs(getArmPose() - mm.Position) < ShooterArmConstants.MINIMUM_ERROR);
+    return (Math.abs(getArmPose() - mm.Position) < ShooterArmConstants.TOLLERANCE);
   }
 
   /**

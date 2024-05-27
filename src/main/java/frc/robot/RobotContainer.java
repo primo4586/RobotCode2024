@@ -104,6 +104,7 @@ public class RobotContainer {
 		NamedCommands.registerCommand("intake", intake.intakeUntilNoteCommand().withTimeout(3));
 		NamedCommands.registerCommand("missed note", AutoCommandFactory.driveToMidlineNoteForAuto());
 		NamedCommands.registerCommand("shoot if has note", AutoCommandFactory.getShootIfHasNote());
+		NamedCommands.registerCommand("yeet", CommandGroupsFactory.getYeetCommand());
 		configureBindings();
 		configureBindingsSysid();
 	}
@@ -113,3 +114,4 @@ public class RobotContainer {
 		return runAuto;
 	}
 }
+	

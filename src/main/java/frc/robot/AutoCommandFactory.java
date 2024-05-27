@@ -68,7 +68,7 @@ public class AutoCommandFactory {
     /**
      * Command to shoot with no alignment.
      */
-    public static Command getShootNoAlignCommand() {
+    private static Command shootNoAlignCommand() {// TODO: handle out of range
         return Commands.waitUntil(Misc.isWithinShootingRange).andThen(
                 new ParallelDeadlineGroup(
                         Commands.waitSeconds(0.02).andThen(// wait 1 rio cycle,
@@ -78,7 +78,17 @@ public class AutoCommandFactory {
                                         .andThen(intake.feedShooterCommand())), // finally shoot
 
                         shooterArm.speakerAngleEterapolateCommand(Misc.distanceFromSpeaker.getAsDouble()),
-                        shooter.setSpeakerVel()));
+                        shooter.setSpeakerVel()))
+                .withTimeout(1.5);
+    }
+
+    public static Command getShootNoAlignCommand() {// TODO: handle out of range
+        if (Misc.isWithinShootingRange.getAsBoolean()) {
+            return shootNoAlignCommand().until(() -> !Misc.isWithinShootingRange.getAsBoolean())
+                    .andThen(CommandGroupsFactory.getYeetCommand());
+        }
+
+        return shootNoAlignCommand();
     }
 
     public static Command getShootIfHasNote() {

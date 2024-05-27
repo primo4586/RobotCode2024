@@ -125,4 +125,15 @@ public class CommandGroupsFactory {
                         .withRotationalRate(-driverJoystick.getRightX() * MaxAngularRate))
                 .ignoringDisable(true);
     }
+
+    public static Command getYeetCommand() {
+        return new ParallelDeadlineGroup(
+                Commands.waitSeconds(0.02).andThen(// wait 1 rio cycle,
+                        // wait until ready too shoot,
+                        Commands.waitUntil(() -> (shooterArm.isArmReady()
+                                && shooter.isMotorsAtVel()))
+                                .andThen(intake.feedShooterCommand())), // finally shoot
+                shooterArm.moveArmToCommand(ShooterArmConstants.YEET_ANGLE),
+                shooter.setSpeakerVel());
+    }
 }

@@ -9,6 +9,8 @@ import com.pathplanner.lib.auto.NamedCommands;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import frc.robot.Commands.AutoCommandFactory;
+import frc.robot.Commands.CommandGroupsFactory;
 import frc.robot.subsystems.intake.IntakeSubsystem;
 import frc.robot.subsystems.shooter.ShooterConstants;
 import frc.robot.subsystems.shooter.ShooterSubsystem;
@@ -30,7 +32,7 @@ public class RobotContainer {
 	Telemetry logger = new Telemetry(TunerConstants.kSpeedAt12VoltsMps);
 
 	/* Path follower */
-	private Command runAuto = swerve.getAutoPath("New Auto");
+	private Command runAuto = swerve.getAutoPath("b21m1m2");
 
 	private void configureBindings() {
 		// DRIVER

@@ -24,6 +24,8 @@ public interface ShooterArmConstants {
     /** The ratio of sensor units to mechanical units. */
     double SENSOR_TO_MEC_RATIO = GEAR_RATIO / 360.0;
 
+    int LIMIT_SWITCH_ID = 0;
+
     // Condition Constants
     /**
      * The minimum position error to consider the shooter arm at the correct

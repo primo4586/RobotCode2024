@@ -46,6 +46,7 @@ public class PrimoShuffleboard {// TODO: make it more understandable and easier 
         PrimoTab tab = getCompetitonBoard();
 
         try {
+
             // if (camera != null) {
             // tab.getTab().add("POV: You are Itzik", camera).withPosition(2, 0).withSize(7,
             // 4);

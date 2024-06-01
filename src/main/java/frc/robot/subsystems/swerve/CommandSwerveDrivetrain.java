@@ -150,7 +150,7 @@ public class CommandSwerveDrivetrain extends SwerveDrivetrain implements Subsyst
                                                                                          // this is normally the case
                 this); // Subsystem for requirements
 
-        PPHolonomicDriveController.setRotationTargetOverride(null);
+        PPHolonomicDriveController.setRotationTargetOverride(() -> getAngleToSpeakerIfHasNote());
     }
 
     public Command applyRequest(Supplier<SwerveRequest> requestSupplier) {

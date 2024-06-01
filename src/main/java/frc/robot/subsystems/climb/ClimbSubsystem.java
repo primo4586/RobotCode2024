@@ -40,6 +40,10 @@ public class ClimbSubsystem extends SubsystemBase implements ClimbConstants{
      * Creates a new ClimbSubsystem.
      */
     private ClimbSubsystem() {
+
+        m_RightSparkMax.setInverted(false);
+        m_LeftSparkMax.setInverted(true);
+
         m_RightSparkMax.setSmartCurrentLimit(CURRENT_LIMIT);
         m_LeftSparkMax.setSmartCurrentLimit(CURRENT_LIMIT);
 
@@ -71,8 +75,8 @@ public class ClimbSubsystem extends SubsystemBase implements ClimbConstants{
      */
     public Command moveClimb(DoubleSupplier leftSpeed, DoubleSupplier rightSpeed) {
         return run(() -> {
-            m_RightSparkMax.set(leftSpeed.getAsDouble());
-            m_LeftSparkMax.set(rightSpeed.getAsDouble());
+            m_RightSparkMax.set(rightSpeed.getAsDouble());
+            m_LeftSparkMax.set(leftSpeed.getAsDouble());
         });
     }
 

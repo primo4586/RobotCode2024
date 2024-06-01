@@ -16,6 +16,8 @@ import com.ctre.phoenix6.controls.MotionMagicExpoTorqueCurrentFOC;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
+
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -27,6 +29,8 @@ public class ShooterArmSubsystem extends SubsystemBase implements ShooterArmCons
 
   private final TalonFX m_Motor = new TalonFX(MOTOR_ID, Misc.CAN_BUS_NAME);
   private final MotionMagicExpoTorqueCurrentFOC mm = new MotionMagicExpoTorqueCurrentFOC(0);
+
+  private final DigitalInput m_limitSwitch = new DigitalInput(LIMIT_SWITCH_ID);
 
   private static ShooterArmSubsystem INSTANCE;
 
@@ -140,8 +144,8 @@ public class ShooterArmSubsystem extends SubsystemBase implements ShooterArmCons
    * 
    * @return The state of the reverse limit switch
    */
-  public boolean getReverseLimit() {
-    return m_Motor.getReverseLimit().getValue() == lIMIT_SWITCH_TRUE_VALUE;
+  public boolean getReverseLimit() {//TODO: change irl to make this correct
+    return !m_limitSwitch.get();//m_Motor.getReverseLimit().getValue() == lIMIT_SWITCH_TRUE_VALUE;
   }
 
   @Override

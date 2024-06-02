@@ -36,12 +36,12 @@ public class CommandGroupsFactory {
     static double MaxAngularRate = 1.5 * Math.PI; // 3/4 of a rotation per second max angular velocity
 
     public static SwerveRequest.FieldCentric teleopDrive = new SwerveRequest.FieldCentric()
-            .withDeadband(MaxSpeed * 0.1).withRotationalDeadband(MaxAngularRate * 0.1) // Add a 10% deadband
-            .withDriveRequestType(DriveRequestType.OpenLoopVoltage); // I want field-centric driving in closed loop
+            .withDeadband(MaxSpeed * 0.1).withRotationalDeadband(MaxAngularRate * 0.1)
+            .withDriveRequestType(DriveRequestType.OpenLoopVoltage); 
 
     public static SwerveRequest.FieldCentricFacingAngle driveAlignedToSpeaker = new SwerveRequest.FieldCentricFacingAngle()
-            .withDeadband(MaxSpeed * 0.1).withRotationalDeadband(MaxAngularRate * 0.1) // Add a 10% deadband
-            .withDriveRequestType(DriveRequestType.Velocity); // I want field-centric driving in open loop
+            .withDeadband(MaxSpeed * 0.1).withRotationalDeadband(MaxAngularRate * 0.1) 
+            .withDriveRequestType(DriveRequestType.Velocity);
 
     private static boolean climbing = false;// are we climbing or intaking
 
@@ -57,7 +57,7 @@ public class CommandGroupsFactory {
                 new InstantCommand(() -> swerve.setDefaultCommand(getDriveAlignedToSpeakerCommand())),
                 shooterArm.speakerAngleEterapolateCommand(Misc.distanceFromSpeaker.getAsDouble()),
                 shooter.setSpeakerVel());
-    }
+    } 
 
     public static Command getShootBaseCommand() {
         return new ParallelDeadlineGroup(
@@ -110,7 +110,7 @@ public class CommandGroupsFactory {
                 .ignoringDisable(true);
     }
 
-    public static Command getDriveAlignedToSpeakerCommand() {
+    public static Command getDriveAlignedToSpeakerCommand() {//TODO: target direction
         return swerve
                 .applyRequest(() -> driveAlignedToSpeaker
                         .withVelocityX(-driverJoystick.getLeftY() * MaxSpeed)

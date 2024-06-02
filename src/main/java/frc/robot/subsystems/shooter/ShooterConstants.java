@@ -8,8 +8,9 @@ package frc.robot.subsystems.shooter;
 public interface ShooterConstants {
 
     // Shooter Motor IDs
-    int UP_MOTOR_SHOOTER_ID = 6;
-    int DOWN_MOTOR_SHOOTER_ID = 7;
+    public static final int UP_MOTOR_SHOOTER_ID = 60;
+    public static final int DOWN_MOTOR_SHOOTER_ID = 59;
+
 
     // Motion Magic Values
     int MOTION_MAGIC_ACCELERATION = 300;

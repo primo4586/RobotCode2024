@@ -22,9 +22,9 @@ public interface Misc {
     Translation2d speakerPoseBlue = new Translation2d(0, 5.54);
     Translation2d speakerPoseRed = new Translation2d(16.39, 5.54);
 
-    DoubleSupplier distanceFromSpeaker = () -> TunerConstants.Swerve.getState().Pose.getTranslation().getDistance(
-            DriverStation.getAlliance().orElse(Alliance.Blue) == Alliance.Blue ? Misc.speakerPoseBlue
-                    : Misc.speakerPoseRed);
+    DoubleSupplier distanceFromSpeaker = () -> TunerConstants.Swerve.getPose().getTranslation().getDistance(
+            DriverStation.getAlliance().orElse(Alliance.Blue) == Alliance.Blue ? speakerPoseBlue
+                    : speakerPoseRed);
 
     ObjectDetectionCamera objectDetectionCamera = new ObjectDetectionCamera(Vision_Constants.K_NOTE_CAMERA_NAME);
 

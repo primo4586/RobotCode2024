@@ -18,13 +18,14 @@ public interface ShooterArmConstants {
 
     // Technical Constants
     /** The ID of the TalonFX motor controlling the shooter arm. */
-    int MOTOR_ID = 5;
+    int MOTOR_ID = 57;
+
+    int LIMIT_SWITCH_ID = 0;
+
     /** The gear ratio of the shooter arm. */
     double GEAR_RATIO = 100.0 / 22.0 * 100.0;
     /** The ratio of sensor units to mechanical units. */
     double SENSOR_TO_MEC_RATIO = GEAR_RATIO / 360.0;
-
-    int LIMIT_SWITCH_ID = 0;
 
     // Condition Constants
     /**

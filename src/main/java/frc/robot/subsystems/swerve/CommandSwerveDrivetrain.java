@@ -263,9 +263,5 @@ public class CommandSwerveDrivetrain extends SwerveDrivetrain implements Subsyst
 
                     this.addVisionMeasurement(leftEst.estimatedPose.toPose2d(), leftEst.timestampSeconds, estStdDevs);
                 });
-
-        leftAprilTagCamera.simulationPeriodic(this.getPose());
-
-        rightAprilTagCamera.simulationPeriodic(this.getPose());
     }
 }

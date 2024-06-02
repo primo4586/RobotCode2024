@@ -42,9 +42,11 @@ public class TunerConstants {
                         .withKP(3).withKI(0).withKD(0)
                         .withKS(0).withKV(0).withKA(0);
 
+
+        //TODO: change to TorqueCurrentFOC and than change the gains
         // The closed-loop output type to use for the steer motors;
         // This affects the PID/FF gains for the steer motors
-        private static final ClosedLoopOutputType steerClosedLoopOutput = ClosedLoopOutputType.TorqueCurrentFOC;
+        private static final ClosedLoopOutputType steerClosedLoopOutput = ClosedLoopOutputType.Voltage;
         // The closed-loop output type to use for the drive motors;
         // This affects the PID/FF gains for the drive motors
         private static final ClosedLoopOutputType driveClosedLoopOutput = ClosedLoopOutputType.Voltage;

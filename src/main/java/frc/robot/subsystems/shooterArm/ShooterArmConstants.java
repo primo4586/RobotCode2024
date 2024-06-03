@@ -4,56 +4,79 @@
 
 package frc.robot.subsystems.shooterArm;
 
-import frc.util.interpolation.InterpolationMap;
+import com.ctre.phoenix6.signals.ReverseLimitValue;
 
-public class ShooterArmConstants {
+import frc.robot.util.exterpolation.ExterpolationMap;
 
-    public static class shooterArmConstants {
+/**
+ * Constants for the Shooter Arm Subsystem.
+ */
+/**
+ * Constants for the Shooter Arm Subsystem.
+ */
+public interface ShooterArmConstants {
 
-        // Technical Constants
-        public static final int SHOOTER_ARM_ID = 5;
-        public static final int SWITCH_ID = 9;
-        public static final int ENCODER_COUNTS_PER_REVOLUTION = 1;
-        public static final double GEAR_RATIO = 100.0 / 22.0 * 100.0;
-        public static final double TICKS_PER_DEGREE = ENCODER_COUNTS_PER_REVOLUTION * GEAR_RATIO / 360.0;
+    // Technical Constants
+    /** The ID of the TalonFX motor controlling the shooter arm. */
+    int MOTOR_ID = 57;
 
-        // Condition Constants
-        public static final double MINIMUM_ERROR = 1;
+    int LIMIT_SWITCH_ID = 0;
 
-        // MotionMagic Constants
-        public static final double MM_CRUISE = 80;
-        public static final double MM_ACCELERATION = 300;
-        public static final double MM_JERK = 1600;
+    /** The gear ratio of the shooter arm. */
+    double GEAR_RATIO = 100.0 / 22.0 * 100.0;
+    /** The ratio of sensor units to mechanical units. */
+    double SENSOR_TO_MEC_RATIO = GEAR_RATIO / 360.0;
 
-        public static final double KP = 0.1;
-        public static final double KD = 0.0;
-        public static final double KS = 0.032658;
-        public static final double KA = 0.001121;
-        public static final double KV = 0.13707;
+    // Condition Constants
+    /**
+     * The minimum position error to consider the shooter arm at the correct
+     * position.
+     */
+    double TOLLERANCE = 2;
 
-        // MaxVol Constant
-        public static final double PEEK_REVERSE_VOLTAGE = -11.5;
-        public static final double PEEK_FORWARD_VOLTAGE = 11.5;
+    // MotionMagic Constants
+    /** The cruise velocity of the shooter arm. */
+    double MM_CRUISE = 80;
+    /** The acceleration of the shooter arm. */
+    double MM_ACCELERATION = 300;
+    /** The jerk of the shooter arm. */
+    double MM_JERK = 1600;
 
-        // Constant Limit Values
-        public static final double FORWARD_LIMIT = 80;
-        public static final double BACKWARD_LIMIT = -1;
+    /** The PIDF gains of the shooter arm. */
+    double KP = 0.1;
+    double KD = 0.0;
+    double KS = 0.032658;
+    double KA = 0.001121;
+    double KV = 0.13707;
 
-        // ArmPoseReset Constant
-        public static final double RESET_POSE = 0.0;
-        public static final double RESET_SPEED = -0.1;
+    // Constant Limit Values
+    /** The forward limit of the shooter arm. */
+    double FORWARD_LIMIT = 80;
+    /** The backward limit of the shooter arm. */
+    double BACKWARD_LIMIT = -1;
 
-        public static final double SHOOTER_ARM_START_POSE = 0;
+    // ArmPoseReset Constant
+    /** The position to reset the shooter arm to. */
+    double RESET_POSE = 0.0;
+    /** The speed to move the shooter arm when resetting. */
+    double RESET_SPEED = -0.1;
 
-        public static InterpolationMap SHOOTER_ANGLE_INTERPOLATION_MAP = new InterpolationMap()
-        .put(2.9, 62)
-        .put(2.52 , 55)
-        .put(2.15 , 50)
-        .put(3.59, 63)
-        .put(3.04, 56);
+    /** The base angle of the shooter arm when shooting. */
+    double SHOOT_BASE_ANGLE = 26;
+    /** The stage angle of the shooter arm when shooting. */
+    double SHOOT_STAGE_ANGLE = 56;
+    /** The angle of the amp when shooting. */
+    double AMP_ANGLE = 32.4;
 
-        public static final double SHOOT_BASE_ANGLE = 26; //6.1064453125
-        public static final double SHOOT_STAGE_ANGLE = 56;
-        public static final double AMP_ANGLE = 32.4;
-    }
+    double YEET_ANGLE = 10.0;
+
+    /** The value of the limit switch when it is closed. */
+    ReverseLimitValue lIMIT_SWITCH_TRUE_VALUE = ReverseLimitValue.ClosedToGround;
+
+    /** A map of speaker angles to the corresponding shooter arm angle. */
+    ExterpolationMap SPEAKER_ANGLE_EXTERPOLATION = new ExterpolationMap().put(2.9, 62.0)
+            .put(2.52, 55.0)
+            .put(2.15, 50.0)
+            .put(3.59, 63.0)
+            .put(3.04, 56.0);
 }

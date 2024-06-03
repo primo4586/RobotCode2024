@@ -1,110 +1,119 @@
+// Copyright (c) FIRST and other WPILib contributors.
+// Open Source Software; you can modify and/or share it under the terms of
+// the WPILib BSD license file in the root directory of this project.
+
 package frc.robot;
 
-import edu.wpi.first.wpilibj.GenericHID;
-import edu.wpi.first.wpilibj.XboxController;
-import edu.wpi.first.wpilibj2.command.InstantCommand;
+import com.ctre.phoenix6.mechanisms.swerve.SwerveRequest;
+import com.pathplanner.lib.auto.NamedCommands;
+
+import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
-import edu.wpi.first.wpilibj2.command.button.Trigger;
-import frc.robot.a_robotCommandGroups.ReadyShootSpeaker;
-import frc.robot.a_robotCommandGroups.ShootBase;
-import frc.robot.a_robotCommandGroups.ShootSpeaker;
-import frc.robot.a_robotCommandGroups.ShootStage;
-import frc.robot.basicCommands.ShooterArmCommands.ZeroShooterArm;
-import frc.robot.basicCommands.ShooterCommands.ShooterSetSpeedForever;
-import frc.robot.basicCommands.SwerveCommands.AutoAlignToSpeaker;
-import frc.robot.basicCommands.SwerveCommands.TeleopSwerve;
-import frc.robot.basicCommands.TakeFeedCommands.CollectUntilNote;
-import frc.robot.basicCommands.TakeFeedCommands.TakeFeedJoystickSetSpeed;
+import frc.robot.Commands.AutoCommandFactory;
+import frc.robot.Commands.CommandGroupsFactory;
+import frc.robot.subsystems.intake.IntakeSubsystem;
 import frc.robot.subsystems.shooter.ShooterConstants;
 import frc.robot.subsystems.shooter.ShooterSubsystem;
-import frc.robot.subsystems.swerve.SwerveSubsystem;
-import frc.robot.subsystems.takeFeed.TakeFeedSubsystem;
-import frc.util.PathPlanner.PathPlannerHelper;
+import frc.robot.subsystems.shooterArm.ShooterArmSubsystem;
+import frc.robot.subsystems.swerve.CommandSwerveDrivetrain;
+import frc.robot.subsystems.swerve.Telemetry;
+import frc.robot.subsystems.swerve.TunerConstants;
 
-/**
- * This class is where the bulk of the robot should be declared. Since
- * Command-based is a
- * "declarative" paradigm, very little robot logic should actually be handled in
- * the {@link Robot}
- * periodic methods (other than the scheduler calls). Instead, the structure of
- * the robot (including
- * subsystems, commands, and button mappings) should be declared here.
- */
 public class RobotContainer {
-    /* Controllers */
-    private final CommandXboxController driver = new CommandXboxController(0);
-    private final CommandXboxController operator = new CommandXboxController(1);
 
-    // Driver Triggers
-    Trigger driverYTrigger = driver.y();
-    Trigger driverXTrigger = driver.x();
-    Trigger driverBTrigger = driver.b();
-    Trigger driverRightBumperTrigger = driver.rightBumper();
-    Trigger driverLeftTriggerToggle = driver.leftTrigger();
-    Trigger driverBackTrigger = driver.back();
-    Trigger driverPovLeftTrigger = driver.povLeft();
-    Trigger driverPovRightTrigger = driver.povRight();
-    Trigger driverStart = driver.start();
+	/* Setting up bindings for necessary control of the swerve drive platform */
+	public static final CommandXboxController driverJoystick = new CommandXboxController(0);
+	public static final CommandXboxController operatorJoystick = new CommandXboxController(0);
 
-    // Operator Triggers
-    Trigger operatorXTrigger = operator.x();
-    Trigger operatorYTrigger = operator.y();
-    Trigger operatorATrigger = operator.a();
-    Trigger operatorRightBumperTrigger = operator.rightBumper();
-    Trigger operatorLeftBumperTrigger = operator.leftBumper();
-    Trigger operatorBTrigger = operator.b();
-    Trigger operatorStart = operator.start();
+	public final CommandSwerveDrivetrain swerve = TunerConstants.Swerve; // My drivetrain
+	private final ShooterSubsystem shooter = ShooterSubsystem.getInstance();
+	private final ShooterArmSubsystem shooterArm = ShooterArmSubsystem.getInstance();
+	private final IntakeSubsystem intake = IntakeSubsystem.getInstance();
+	Telemetry logger = new Telemetry(TunerConstants.kSpeedAt12VoltsMps);
 
-    PathPlannerHelper pathPlannerHelper = PathPlannerHelper.getInstace();
+	/* Path follower */
+	private Command runAuto = swerve.getAutoPath("b21m1m2");
 
-    /* Subsystems */
-    private final SwerveSubsystem swerve = SwerveSubsystem.getInstance();
+	private void configureBindings() {
+		// DRIVER
+		// controls---------------------------------------------------------------------------------------
 
-    /**
-     * The container for the robot. Contains subsystems, OI devices, and commands.
-     */
-    public RobotContainer() {
-        swerve.setDefaultCommand(
-                new TeleopSwerve(
-                        () -> -driver.getHID().getLeftY(),
-                        () -> -driver.getHID().getLeftX(),
-                        () -> -driver.getHID().getRightX(),
-                        true,
-                        () -> driver.getHID().getRightTriggerAxis() > 0.5));
+		// shoot speaker
+		driverJoystick.rightBumper().whileTrue(CommandGroupsFactory.getShootSpeakerCommand());
 
+		// shoot base
+		driverJoystick.rightBumper().whileTrue(CommandGroupsFactory.getShootBaseCommand());
 
-        configureButtonBindings();
-    }
+		// zero swerve rotation
+		driverJoystick.y().onTrue(swerve.runOnce(() -> swerve.seedFieldRelative()));
 
-    /**
-     * Use this method to define your button->command mappings. Buttons can be
-     * created by
-     * 
-     * instantiating a {@link GenericHID} or one of its subclasses ({@link
-     * edu.wpi.first.wpilibj.Joystick} or {@link XboxController}), and then passing
-     * it to a {@link
-     * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
-     */
-    private void configureButtonBindings() {
+		// brake
+		SwerveRequest.SwerveDriveBrake brake = new SwerveRequest.SwerveDriveBrake();
+		driverJoystick.a().whileTrue(swerve.applyRequest(() -> brake));
 
-        // Driver Button Bindings
-        // pathPlanner.followChoreoPath("2 to 1", false)
-        //driverStart.onTrue(new EStop());
-        driverYTrigger.onTrue(new InstantCommand(() -> swerve.zeroGyro()));
-        driverXTrigger.onTrue(new ShootBase());
-        driverBTrigger.onTrue(new ShootStage());
-        driverRightBumperTrigger.whileTrue(new ShootSpeaker());
-        driverLeftTriggerToggle.toggleOnTrue(new AutoAlignToSpeaker());
-        driverBackTrigger.onTrue(swerve.disableHeadingCommand());
-        driverPovRightTrigger.onTrue(new ZeroShooterArm());
+		// home shooter arm
+		driverJoystick.povRight().onTrue(shooterArm.homeArmcCommand());
 
-        // // Operator Button Bindings
-        // operatorRightBumperTrigger.whileTrue(new ShooterSetSpeedForever(ShooterConstants.shooterConstants.SHOOT_SPEED));
-        // operatorLeftBumperTrigger.onTrue(new InstantCommand(()->ShooterSubsystem.getInstance().coast()));
-        //operatorStart.onTrue(new EStop());
-        operatorXTrigger.onTrue(new CollectUntilNote());
-        operatorYTrigger.onTrue(new ReadyShootSpeaker());
-        operatorBTrigger.onTrue(new InstantCommand(() -> ShooterSubsystem.getInstance().coast(), ShooterSubsystem.getInstance()));
-        TakeFeedSubsystem.getInstance().setDefaultCommand(new TakeFeedJoystickSetSpeed(()-> - operator.getHID().getLeftY()));
-    }
+		// switch swerve drive mode
+		driverJoystick.leftBumper().onTrue(CommandGroupsFactory.getSwitchDriveModeCommand());
+
+		// OPERATOR
+		// controls---------------------------------------------------------------------------------------
+
+		// Ready Shoot Speaker
+		operatorJoystick.y().toggleOnTrue(CommandGroupsFactory.getReadyShootSpeakerCommand());
+
+		// switch between manual intake and climb
+		operatorJoystick.a().onTrue(CommandGroupsFactory.getSwitchIntakeClimbCommand());
+
+		// intake until note has been detected
+		operatorJoystick.b().onTrue(intake.intakeUntilNoteCommand());
+
+		intake.setDefaultCommand(intake.setSpeedCommand(operatorJoystick.getLeftY()));
+		shooter.setDefaultCommand(shooter.setShooterVel(ShooterConstants.IDLE_VELOCITY));
+		shooterArm.setDefaultCommand(
+				shooterArm.speakerAngleEterapolateCommand(Misc.distanceFromSpeaker.getAsDouble()));
+
+		swerve.setDefaultCommand(CommandGroupsFactory.getTeleopDriveCommand());
+		swerve.registerTelemetry(logger::telemeterize);
+	}
+
+	private void configureBindingsSysid() {
+
+		// uncomment the corresponding subsystem to sysid
+
+		// driverJoystick.back().and(driverJoystick.y()).whileTrue(swerve.sysIdDynamic(Direction.kForward));
+		// driverJoystick.back().and(driverJoystick.x()).whileTrue(swerve.sysIdDynamic(Direction.kReverse));
+		// driverJoystick.start().and(driverJoystick.y()).whileTrue(swerve.sysIdQuasistatic(Direction.kForward));
+		// driverJoystick.start().and(driverJoystick.x()).whileTrue(swerve.sysIdQuasistatic(Direction.kReverse));
+
+		// driverJoystick.back().and(driverJoystick.y()).whileTrue(shooter.sysIdDynamic(Direction.kForward));
+		// driverJoystick.back().and(driverJoystick.x()).whileTrue(shooter.sysIdDynamic(Direction.kReverse));
+		// driverJoystick.start().and(driverJoystick.y()).whileTrue(shooter.sysIdQuasistatic(Direction.kForward));
+		// driverJoystick.start().and(driverJoystick.x()).whileTrue(shooter.sysIdQuasistatic(Direction.kReverse));
+
+		// driverJoystick.back().and(driverJoystick.y()).whileTrue(shooterArm.sysIdDynamic(Direction.kForward));
+		// driverJoystick.back().and(driverJoystick.x()).whileTrue(shooterArm.sysIdDynamic(Direction.kReverse));
+		// driverJoystick.start().and(driverJoystick.y()).whileTrue(shooterArm.sysIdQuasistatic(Direction.kForward));
+		// driverJoystick.start().and(driverJoystick.x()).whileTrue(shooterArm.sysIdQuasistatic(Direction.kReverse));
+
+	}
+
+	public RobotContainer() {
+		NamedCommands.registerCommand("shoot speaker", CommandGroupsFactory.getShootSpeakerCommand());
+		NamedCommands.registerCommand("shoot no align", AutoCommandFactory.getShootNoAlignCommand());
+		NamedCommands.registerCommand("shoot base", CommandGroupsFactory.getShootBaseCommand());
+		NamedCommands.registerCommand("intake", intake.intakeUntilNoteCommand().withTimeout(3));
+		NamedCommands.registerCommand("missed note", AutoCommandFactory.driveToMidlineNoteForAuto());
+		NamedCommands.registerCommand("shoot if has note", AutoCommandFactory.getShootIfHasNote());
+		NamedCommands.registerCommand("yeet", CommandGroupsFactory.getYeetCommand());
+		configureBindings();
+		configureBindingsSysid();
+	}
+
+	public Command getAutonomousCommand() {
+		/* First put the drivetrain into auto run mode, then run the auto */
+		return runAuto;
+	}
 }
+	

@@ -2,14 +2,15 @@
   "NTProvider": {
     "types": {
       "/FMSInfo": "FMSInfo",
-      "/Shuffleboard/Competition Dashboard/SendableChooser[0]": "String Chooser",
-      "/SmartDashboard/field": "Field2d"
+      "/Pose": "Field2d",
+      "/SmartDashboard/Module 0": "Mechanism2d",
+      "/SmartDashboard/Module 1": "Mechanism2d",
+      "/SmartDashboard/Module 2": "Mechanism2d",
+      "/SmartDashboard/Module 3": "Mechanism2d",
+      "/SmartDashboard/VisionSystemSim-main/Sim Field": "Field2d"
     },
     "windows": {
-      "/SmartDashboard/field": {
-        "Robot": {
-          "style": "Box/Image"
-        },
+      "/Pose": {
         "bottom": 1476,
         "height": 8.210550308227539,
         "left": 150,
@@ -24,25 +25,13 @@
   },
   "NetworkTables": {
     "transitory": {
-      "Shuffleboard": {
-        "Competition Dashboard": {
-          "SendableChooser[0]": {
-            "open": true,
-            "string[]##v_/Shuffleboard/Competition Dashboard/SendableChooser[0]/options": {
-              "open": true
-            }
-          },
-          "open": true
-        },
+      "CameraPublisher": {
+        "open": true
+      },
+      "Pose": {
         "open": true
       },
       "SmartDashboard": {
-        "field": {
-          "double[]##v_/SmartDashboard/field/Robot": {
-            "open": true
-          },
-          "open": true
-        },
         "open": true
       }
     }

@@ -1,194 +1,170 @@
+// Copyright (c) FIRST and other WPILib contributors.
+// Open Source Software; you can modify and/or share it under the terms of
+// the WPILib BSD license file in the root directory of this project.
+
 package frc.robot.subsystems.shooter;
 
 import com.ctre.phoenix6.BaseStatusSignal;
 import com.ctre.phoenix6.StatusCode;
+import com.ctre.phoenix6.configs.FeedbackConfigs;
 import com.ctre.phoenix6.configs.MotionMagicConfigs;
+import com.ctre.phoenix6.configs.MotorOutputConfigs;
+import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
-import com.ctre.phoenix6.controls.MotionMagicVelocityVoltage;
-import com.ctre.phoenix6.controls.NeutralOut;
+import com.ctre.phoenix6.controls.MotionMagicVelocityTorqueCurrentFOC;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
-
-import static frc.robot.subsystems.shooter.ShooterConstants.shooterConstants;
-
-import edu.wpi.first.wpilibj.RobotState;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.Constants;
-import frc.robot.FieldConstants;
-import frc.robot.subsystems.swerve.SwerveSubsystem;
-import frc.util.AllianceFlipUtil;
-import frc.util.interpolation.InterpolateUtil;
+import frc.robot.Misc;
 
-public class ShooterSubsystem extends SubsystemBase {
-    private TalonFX m_upShooterMotor;
-    private TalonFX m_downShooterMotor;
-    private double targetSpeed;
-    private final SwerveSubsystem swerve = SwerveSubsystem.getInstance();
+//TODO: add sysid
+/**
+ * Shooter subsystem, controls two TalonFX motors to spin the shooter wheels
+ */
+public class ShooterSubsystem extends SubsystemBase implements ShooterConstants {
+  private final TalonFX m_UMotor = new TalonFX(UP_MOTOR_SHOOTER_ID, Misc.CAN_BUS_NAME);
+  private final TalonFX m_DMotor = new TalonFX(DOWN_MOTOR_SHOOTER_ID, Misc.CAN_BUS_NAME);
+  private final MotionMagicVelocityTorqueCurrentFOC m_mmReqest = new MotionMagicVelocityTorqueCurrentFOC(0);
 
-    private final MotionMagicVelocityVoltage motionMagic = new MotionMagicVelocityVoltage(0,
-            shooterConstants.MOTION_MAGIC_ACCELERATION,
-            false, 0.0, 0, false, false, false);
+  private static ShooterSubsystem INSTANCE;
 
-    private static ShooterSubsystem instance;
+  /**
+   * Returns the instance of this subsystem
+   * 
+   * @return The instance of this subsystem
+   */
+  public static ShooterSubsystem getInstance() {
+    if (INSTANCE == null) {
+      INSTANCE = new ShooterSubsystem();
+    }
+    return INSTANCE;
+  }
 
-    NeutralOut neutralOut = new NeutralOut();
+  /**
+   * Creates a new ShooterSubsystem. This class is a singleton so it should only
+   * be
+   * constructed once
+   */
+  private ShooterSubsystem() {
+    applyMotorsConfig();
+  }
 
-    public static ShooterSubsystem getInstance() {
-        if (instance == null) {
-            instance = new ShooterSubsystem();
-        }
-        return instance;
+  /**
+   * Sets the velocity of the shooter motors
+   * 
+   * @param velocity The velocity to set the shooter motors to
+   * @return A command to set the velocity of the shooter motors
+   */
+  public Command setShooterVel(double velocity) {
+    return this.runOnce(() -> {
+      m_UMotor.setControl(m_mmReqest.withVelocity(velocity));
+      m_DMotor.setControl(m_mmReqest.withVelocity(velocity));
+    });
+
+  }
+
+  /**
+   * Sets the velocity of the shooter motors to the default speekr velocity
+   * 
+   * @return A command to set the velocity of the shooter motors to the default
+   *         speekr velocity
+   */
+  public Command setSpeakerVel() {
+    return runEnd(() -> setShooterVel(SPEAKR_VELOCITY), () -> setShooterVel(IDLE_VELOCITY));
+  }
+
+  /**
+   * Checks if the shooter motors are at the requested velocity
+   * 
+   * @return True if the shooter motors are at the requested velocity
+   */
+  public boolean isMotorsAtVel() {
+    return Math.abs(m_UMotor.getVelocity().getValue() - m_mmReqest.Velocity) < MAX_VEL_ERROR
+        && Math.abs(m_DMotor.getVelocity().getValue() - m_mmReqest.Velocity) < MAX_VEL_ERROR;
+  }
+
+  @Override
+  public void periodic() {
+    // This method will be called once per scheduler run
+  }
+
+  /**
+   * Sets the signal update frequency for the shooter motors to 1000 Hz for
+   * characterization
+   */
+  @SuppressWarnings("unused")
+  private void sysidHigherSignalRate() {
+
+    /* Speed up signals for better characterization data */
+    BaseStatusSignal.setUpdateFrequencyForAll(1000, m_UMotor.getVelocity());
+    BaseStatusSignal.setUpdateFrequencyForAll(1000, m_DMotor.getVelocity());
+
+    m_UMotor.optimizeBusUtilization();
+    m_DMotor.optimizeBusUtilization();
+  }
+
+  /**
+   * Configures the shooter motors with the PID constants and other settings
+   */
+  private void applyMotorsConfig() {
+    TalonFXConfiguration upCfg = new TalonFXConfiguration();
+
+    Slot0Configs upSlot0 = upCfg.Slot0;
+    upSlot0.kP = UP_KP;
+    upSlot0.kD = UP_KD;
+    upSlot0.kS = UP_KS;
+    upSlot0.kA = UP_KA;
+
+    MotionMagicConfigs upMM = upCfg.MotionMagic;
+    upMM.MotionMagicAcceleration = MOTION_MAGIC_ACCELERATION;
+    upMM.MotionMagicJerk = MOTION_MAGIC_JERK;
+
+    FeedbackConfigs upFdb = upCfg.Feedback;
+    upFdb.SensorToMechanismRatio = SENSOR_TO_MEC_RATIO;
+
+    MotorOutputConfigs upMotorOutputConfigs = upCfg.MotorOutput;
+    upMotorOutputConfigs.Inverted = InvertedValue.Clockwise_Positive;// TODO: constants
+    upMotorOutputConfigs.NeutralMode = NeutralModeValue.Coast;
+
+    StatusCode status = StatusCode.StatusCodeNotInitialized;
+    for (int i = 0; i < 5; ++i) {
+      status = m_UMotor.getConfigurator().apply(upCfg);
+      if (status.isOK())
+        break;
+    }
+    if (!status.isOK()) {
+      System.out.println("Could not configure up motor. Error: " + status.toString());
     }
 
-    /** Creates a new ShooterSubsystem. */
-    private ShooterSubsystem() {
-        // giving values to the motors
-        this.m_upShooterMotor = new TalonFX(shooterConstants.UP_MOTOR_SHOOTER_ID, Constants.CAN_BUS_NAME);
-        this.m_downShooterMotor = new TalonFX(shooterConstants.DOWN_MOTOR_SHOOTER_ID, Constants.CAN_BUS_NAME);
+    TalonFXConfiguration downCfg = new TalonFXConfiguration();
 
-        // declaring Configs
-        TalonFXConfiguration upConfigs = new TalonFXConfiguration();
-        TalonFXConfiguration downConfigs = new TalonFXConfiguration();
-        MotionMagicConfigs shooterMM = new MotionMagicConfigs();
+    Slot0Configs downSlot0 = downCfg.Slot0;
+    downSlot0.kP = DOWN_KP;
+    downSlot0.kD = DOWN_KD;
+    downSlot0.kS = DOWN_KS;
+    downSlot0.kA = DOWN_KA;
 
-        // giving motion magic values
-        shooterMM.MotionMagicCruiseVelocity = shooterConstants.MOTION_MAGIC_CRUISE_VELOCITY;
-        shooterMM.MotionMagicAcceleration = shooterConstants.MOTION_MAGIC_ACCELERATION;
-        shooterMM.MotionMagicJerk = shooterConstants.MOTION_MAGIC_JERK;
-        upConfigs.MotionMagic = shooterMM;
-        downConfigs.MotionMagic = shooterMM;
+    MotionMagicConfigs downMM = downCfg.MotionMagic;
+    downMM.MotionMagicAcceleration = MOTION_MAGIC_ACCELERATION;
+    downMM.MotionMagicJerk = MOTION_MAGIC_JERK;
 
-        // giving PID values
-        upConfigs.Slot0.kP = shooterConstants.UP_KP;
-        upConfigs.Slot0.kD = shooterConstants.UP_KD;
-        upConfigs.Slot0.kS = shooterConstants.UP_KS;
-        upConfigs.Slot0.kV = shooterConstants.UP_KV;
-        upConfigs.Slot0.kA = shooterConstants.UP_KA;
+    FeedbackConfigs downFdb = downCfg.Feedback;
+    downFdb.SensorToMechanismRatio = SENSOR_TO_MEC_RATIO;
 
-        downConfigs.Slot0.kP = shooterConstants.DOWN_KP;
-        downConfigs.Slot0.kD = shooterConstants.DOWN_KD;
-        downConfigs.Slot0.kS = shooterConstants.DOWN_KS;
-        downConfigs.Slot0.kV = shooterConstants.DOWN_KV;
-        downConfigs.Slot0.kA = shooterConstants.DOWN_KA;
+    MotorOutputConfigs downMotorOutputConfigs = downCfg.MotorOutput;
+    downMotorOutputConfigs.Inverted = InvertedValue.Clockwise_Positive;
+    downMotorOutputConfigs.NeutralMode = NeutralModeValue.Coast;
 
-        // max voltage for m_shooterMotor
-        upConfigs.Voltage.PeakForwardVoltage = shooterConstants.PEAK_FORWARD_VOLTAGE;
-        upConfigs.Voltage.PeakReverseVoltage = shooterConstants.PEAK_REVERSE_VOLTAGE;
-
-        downConfigs.Voltage.PeakForwardVoltage = shooterConstants.PEAK_FORWARD_VOLTAGE;
-        downConfigs.Voltage.PeakReverseVoltage = shooterConstants.PEAK_REVERSE_VOLTAGE;
-
-        upConfigs.Feedback.SensorToMechanismRatio = shooterConstants.GEAR_RATIO;
-        downConfigs.Feedback.SensorToMechanismRatio = shooterConstants.GEAR_RATIO;
-
-        upConfigs.CurrentLimits.SupplyCurrentLimit = 40;
-        upConfigs.CurrentLimits.SupplyCurrentThreshold = 50;
-        upConfigs.CurrentLimits.SupplyTimeThreshold = 0.1;
-        upConfigs.CurrentLimits.SupplyCurrentLimitEnable = true;
-
-        downConfigs.CurrentLimits.SupplyCurrentLimit = 40;
-        downConfigs.CurrentLimits.SupplyCurrentThreshold = 50;
-        downConfigs.CurrentLimits.SupplyTimeThreshold = 0.1;
-        downConfigs.CurrentLimits.SupplyCurrentLimitEnable = true;
-
-        m_upShooterMotor.setNeutralMode(NeutralModeValue.Coast);
-        m_downShooterMotor.setNeutralMode(NeutralModeValue.Coast);
-
-        upConfigs.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
-        downConfigs.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
-
-        /* Speed up signals for better characterization data */
-        BaseStatusSignal.setUpdateFrequencyForAll(1000, m_upShooterMotor.getVelocity());
-        BaseStatusSignal.setUpdateFrequencyForAll(1000, m_downShooterMotor.getVelocity());
-
-        m_upShooterMotor.optimizeBusUtilization();
-        m_downShooterMotor.optimizeBusUtilization();
-
-        // Checking if m_upShooterMotor apply configs
-        StatusCode status = StatusCode.StatusCodeNotInitialized;
-        for (int i = 0; i < 5; ++i) {
-            status = m_upShooterMotor.getConfigurator().apply(upConfigs);
-            if (status.isOK())
-                break;
-        }
-        if (!status.isOK()) {
-            System.out.println("Shooter UP could not apply upConfigs, error code " + status.toString());
-        }
-
-        // Checking if m_downShooterMotor apply configs
-        for (int i = 0; i < 5; ++i) {
-            status = m_downShooterMotor.getConfigurator().apply(downConfigs);
-            if (status.isOK())
-                break;
-        }
-        if (!status.isOK()) {
-            System.out.println("Shooter could not apply downConfigs, error code " + status.toString());
-        }
+    status = StatusCode.StatusCodeNotInitialized;
+    for (int i = 0; i < 5; ++i) {
+      status = m_DMotor.getConfigurator().apply(downCfg);
+      if (status.isOK())
+        break;
     }
-
-    // set (active) Shooter motors speed
-    public void setShooterSpeed(double upSpeed, double downSpeed) {
-        this.targetSpeed = upSpeed;
-        this.m_upShooterMotor.setControl(motionMagic.withVelocity(upSpeed));
-        this.m_downShooterMotor.setControl(motionMagic.withVelocity(downSpeed));
+    if (!status.isOK()) {
+      System.out.println("Could not configure down motor. Error: " + status.toString());
     }
-
-    // set (active) Shooter motors speed
-    public void setShooterSpeed(double speed) {
-        this.targetSpeed = speed;
-        setShooterSpeed(speed, speed);
-    }
-
-    public void manualSetShooterSpeed(double speed) {
-        this.m_upShooterMotor.set(speed);
-        this.m_downShooterMotor.set(speed);
-    }
-
-    public double getUpShooterSpeed() {
-        return m_upShooterMotor.getVelocity().getValue();
-    }
-
-    public double getDownShooterSpeed() {
-        return m_downShooterMotor.getVelocity().getValue();
-    }
-
-    public boolean checkIfShooterAtSpeed() {
-
-        if(RobotState.isAutonomous()){
-            return((Math.abs(getUpShooterSpeed() - targetSpeed) < 5)
-                && ((Math.abs(getDownShooterSpeed() - targetSpeed) < 5)));
-        }
-        return ((Math.abs(getUpShooterSpeed() - targetSpeed) < shooterConstants.MAX_ERROR)
-                && ((Math.abs(getDownShooterSpeed() - targetSpeed) < shooterConstants.MAX_ERROR)));
-    }
-
-    public double speakerInterpolate() {
-        return InterpolateUtil.interpolate(
-                shooterConstants.SHOOTER_INTERPOLATION,
-                swerve.getPose().getTranslation().getDistance(
-                        AllianceFlipUtil.apply(FieldConstants.Speaker.centerSpeakerOpening).getTranslation()));
-    }
-
-    public void coast() {
-        m_upShooterMotor.setControl(neutralOut);
-        m_downShooterMotor.setControl(neutralOut);
-    }
-
-    @Override
-    public void periodic() {
-        // This method will be called once per scheduler run
-        // SmartDashboard.putNumber("uper shooter heat", m_upShooterMotor.getDeviceTemp().getValueAsDouble());
-        // SmartDashboard.putNumber("lower shooter heat", m_downShooterMotor.getDeviceTemp().getValueAsDouble());
-        // SmartDashboard.putNumber("uper shooter current", m_upShooterMotor.getSupplyCurrent().getValueAsDouble());
-        // SmartDashboard.putNumber("lower shooter current", m_downShooterMotor.getSupplyCurrent().getValueAsDouble());
-        SmartDashboard.putNumber("lower shooter Speed", getDownShooterSpeed());
-        SmartDashboard.putNumber("upper shooter Speed", getUpShooterSpeed());
-
-        SmartDashboard.putNumber("up error", getUpShooterSpeed()-70);
-        SmartDashboard.putNumber("down error", getDownShooterSpeed()-70);
-
-        SmartDashboard.putBoolean("shooter ready", Math.abs(getDownShooterSpeed()-getUpShooterSpeed())<0.3);
-    }
+  }
 }

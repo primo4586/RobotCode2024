@@ -5,160 +5,195 @@
 package frc.robot.subsystems.shooterArm;
 
 import com.ctre.phoenix6.StatusCode;
+import com.ctre.phoenix6.configs.FeedbackConfigs;
+import com.ctre.phoenix6.configs.HardwareLimitSwitchConfigs;
 import com.ctre.phoenix6.configs.MotionMagicConfigs;
+import com.ctre.phoenix6.configs.MotorOutputConfigs;
+import com.ctre.phoenix6.configs.Slot0Configs;
+import com.ctre.phoenix6.configs.SoftwareLimitSwitchConfigs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
-import com.ctre.phoenix6.controls.MotionMagicVoltage;
+import com.ctre.phoenix6.controls.MotionMagicExpoTorqueCurrentFOC;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 
 import edu.wpi.first.wpilibj.DigitalInput;
-import edu.wpi.first.wpilibj.RobotState;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.Constants;
-import frc.robot.FieldConstants;
-import frc.robot.subsystems.shooterArm.ShooterArmConstants.shooterArmConstants;
-import frc.robot.subsystems.swerve.SwerveSubsystem;
-import frc.util.AllianceFlipUtil;
-import frc.util.interpolation.InterpolateUtil;
+import frc.robot.Misc;
 
-public class ShooterArmSubsystem extends SubsystemBase {
+//TODO: add manual home
+//TODO: add sysid
+public class ShooterArmSubsystem extends SubsystemBase implements ShooterArmConstants {
 
-  private final SwerveSubsystem swerve = SwerveSubsystem.getInstance();
-  private TalonFX m_shooterArmMotor;
-  DigitalInput limitSwitch = new DigitalInput(shooterArmConstants.SWITCH_ID);
-  private final MotionMagicVoltage motionMagic = new MotionMagicVoltage(0,
-      false,
-      0.0,
-      0,
-      true,
-      false,
-      false);
+  private final TalonFX m_Motor = new TalonFX(MOTOR_ID, Misc.CAN_BUS_NAME);
+  private final MotionMagicExpoTorqueCurrentFOC mm = new MotionMagicExpoTorqueCurrentFOC(0);
 
-  double targetPose = 0;
+  private final DigitalInput m_limitSwitch = new DigitalInput(LIMIT_SWITCH_ID);
 
+  private static ShooterArmSubsystem INSTANCE;
+
+  /**
+   * Get an instance of the shooter arm subsystem
+   * 
+   * @return The instance of the shooter arm subsystem
+   */
+  public static ShooterArmSubsystem getInstance() {
+    if (INSTANCE == null) {
+      INSTANCE = new ShooterArmSubsystem();
+    }
+    return INSTANCE;
+  }
+
+  /**
+   * Constructor that sets the motors config
+   */
   private ShooterArmSubsystem() {
-
-    this.m_shooterArmMotor = new TalonFX(shooterArmConstants.SHOOTER_ARM_ID, Constants.CAN_BUS_NAME);
-
-    // create the full MotionMagic
-    TalonFXConfiguration configuration = new TalonFXConfiguration();
-    MotionMagicConfigs mm = new MotionMagicConfigs();
-
-    mm.MotionMagicCruiseVelocity = shooterArmConstants.MM_CRUISE;
-    mm.MotionMagicAcceleration = shooterArmConstants.MM_ACCELERATION;
-    mm.MotionMagicJerk = shooterArmConstants.MM_JERK;
-    configuration.MotionMagic = mm;
-
-    configuration.Slot0.kP = shooterArmConstants.KP;
-    configuration.Slot0.kD = shooterArmConstants.KD;
-    configuration.Slot0.kV = shooterArmConstants.KV;
-    configuration.Slot0.kS = shooterArmConstants.KS;
-
-    configuration.Voltage.PeakForwardVoltage = shooterArmConstants.PEEK_FORWARD_VOLTAGE;
-    configuration.Voltage.PeakReverseVoltage = shooterArmConstants.PEEK_REVERSE_VOLTAGE;
-
-    // forward and backward limits
-    configuration.SoftwareLimitSwitch.ForwardSoftLimitEnable = false;
-    configuration.SoftwareLimitSwitch.ReverseSoftLimitEnable = false;
-    configuration.SoftwareLimitSwitch.ForwardSoftLimitThreshold = shooterArmConstants.FORWARD_LIMIT;
-    configuration.SoftwareLimitSwitch.ReverseSoftLimitThreshold = shooterArmConstants.BACKWARD_LIMIT;
-
-    configuration.Feedback.SensorToMechanismRatio = shooterArmConstants.TICKS_PER_DEGREE;
-
-    configuration.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
-
-    StatusCode statusCode = StatusCode.StatusCodeNotInitialized;
-
-    for (int i = 0; i < 5; i++) {
-      statusCode = m_shooterArmMotor.getConfigurator().apply(configuration);
-      if (statusCode.isOK())
-        break;
-    }
-    if (!statusCode.isOK())
-      System.out.println("Shooter Arm could not apply config, error code:" + statusCode.toString());
-
-    m_shooterArmMotor.setPosition(shooterArmConstants.SHOOTER_ARM_START_POSE);
-
+    applyMotorsConfig();
   }
 
-  // set the position of the arm
-  public void setPosition(double pose) {
-    m_shooterArmMotor.setPosition(pose);
+  /**
+   * Create a command that will move the shooter arm to a specific angle based on
+   * the distance from the speaker
+   * 
+   * @param distance The distance from the speaker
+   * @return The command
+   */
+  public Command speakerAngleEterapolateCommand(double distance) {
+    return run(() -> moveArmToCommand(SPEAKER_ANGLE_EXTERPOLATION.exterpolate(distance)));
   }
 
-  // moving function for the Arm
-  public void moveArmTo(double degrees) {
-    degrees = degrees<0?0:degrees;
-    degrees = degrees>80?80:degrees;
-    targetPose = degrees;
-    m_shooterArmMotor.setControl(motionMagic.withPosition(degrees));
+  /**
+   * Create a command that will move the shooter arm to a specific position. Will
+   * only run once.
+   * 
+   * @param position The position to move the arm to
+   * @return The command
+   */
+  public Command moveArmToCommand(double position) {
+    return runOnce(
+        // Set the control mode to position
+        // And set the target position to the one passed in
+        () -> m_Motor.setControl(mm.withPosition(position)));
   }
 
-  // get function for the Arm pose
+  /**
+   * Create a command that will home the shooter arm and set the encoder to 0.
+   * 
+   * @return The command
+   */
+  public Command homeArmcCommand() {
+    return prepareHomeCommand().andThen(
+        runEnd(() -> {
+          if (!getReverseLimit()) {
+            m_Motor.set(ShooterArmConstants.RESET_SPEED);
+          }
+        }, () -> m_Motor.set(0)).withTimeout(10));
+  }
+
+  /**
+   * Prepare the home command, if the reverse limit switch is pressed, do
+   * nothing, otherwise move the motor to the reverse limit switch position
+   * at a high speed and wait for the switch to be pressed
+   * 
+   * @return The command
+   */
+  private Command prepareHomeCommand() {
+
+    return !getReverseLimit()
+        ? Commands.none()
+        : (runOnce(() -> m_Motor.set(-RESET_SPEED * 3)).andThen(Commands.waitUntil(() -> !getReverseLimit())))
+            .withTimeout(3);
+  }
+
+  /**
+   * Get the current position of the shooter arm
+   * 
+   * @return The position of the shooter arm
+   */
   public double getArmPose() {
-    return m_shooterArmMotor.getPosition().getValue();
+    return m_Motor.getPosition().getValue();
   }
 
-  // Checking the degree difference conditions
+  /**
+   * Check if the shooter arm is ready to fire based on the degree difference
+   * 
+   * @return True if the shooter arm is ready
+   */
   public boolean isArmReady() {
-    if(RobotState.isAutonomous()){
-      return (Math.abs(getArmPose() - targetPose) < 2);
-    }
-    return (Math.abs(getArmPose() - targetPose) < shooterArmConstants.MINIMUM_ERROR);
+    return (Math.abs(getArmPose() - mm.Position) < ShooterArmConstants.TOLLERANCE);
   }
 
-  // geting if the switch is open
-  public boolean getSwitch() {
-    return !this.limitSwitch.get();
+  /**
+   * Set the motor to coast mode
+   */
+  public void motorCoast() {
+    m_Motor.setNeutralMode(NeutralModeValue.Coast);
   }
 
-  public void setSpeed(double speed) {
-    m_shooterArmMotor.set(speed);
+  /**
+   * Set the motor to brake mode
+   */
+  public void motorBreak() {
+    m_Motor.setNeutralMode(NeutralModeValue.Brake);
   }
 
-  public void coast() {
-    m_shooterArmMotor.setNeutralMode(NeutralModeValue.Coast);
-  }
-
-  public void breakMode() {
-    m_shooterArmMotor.setNeutralMode(NeutralModeValue.Brake);
-  }
-
-  public void manualZeroShooterArm() {
-    coast();
-    if (getSwitch()) {
-      while (getSwitch()) {
-      }
-    }
-    while (!getSwitch()) {
-    }
-    SmartDashboard.putBoolean("zerod out shooter", true);
-    setPosition(0);
-    breakMode();
-  }
-
-  public double speakerInterpolate() {
-    double yOffset = Math.abs(swerve.getPose().getY()-FieldConstants.Speaker.centerSpeakerOpening.getY());
-    return InterpolateUtil.interpolate(
-        shooterArmConstants.SHOOTER_ANGLE_INTERPOLATION_MAP,
-        swerve.getPose().getTranslation().getDistance(
-            AllianceFlipUtil.apply(FieldConstants.Speaker.centerSpeakerOpening).getTranslation()))
-            - (yOffset>0.5?yOffset*1:0);
+  /**
+   * Get the state of the reverse limit switch
+   * 
+   * @return The state of the reverse limit switch
+   */
+  public boolean getReverseLimit() {//TODO: change irl to make this correct
+    return !m_limitSwitch.get();//m_Motor.getReverseLimit().getValue() == lIMIT_SWITCH_TRUE_VALUE;
   }
 
   @Override
   public void periodic() {
-    SmartDashboard.putBoolean("shooter arm switch", getSwitch());
+    // This method will be called once per scheduler run
   }
 
-  private static ShooterArmSubsystem instance;
+  /**
+   * Apply the motors config
+   */
+  private void applyMotorsConfig() {
+    TalonFXConfiguration shooterAngleCfg = new TalonFXConfiguration();
 
-  public static ShooterArmSubsystem getInstance() {
-    if (instance == null) {
-      instance = new ShooterArmSubsystem();
+    Slot0Configs slot0Configs = shooterAngleCfg.Slot0;
+    slot0Configs.kP = KP;
+    slot0Configs.kD = KD;
+    slot0Configs.kS = KS;
+    slot0Configs.kA = KA;
+
+    MotionMagicConfigs motionMagicConfigs = shooterAngleCfg.MotionMagic;
+    motionMagicConfigs.MotionMagicCruiseVelocity = MM_CRUISE;
+    motionMagicConfigs.MotionMagicAcceleration = MM_ACCELERATION;
+    motionMagicConfigs.MotionMagicJerk = MM_JERK;
+
+    FeedbackConfigs feedbackConfigs = shooterAngleCfg.Feedback;
+    feedbackConfigs.SensorToMechanismRatio = SENSOR_TO_MEC_RATIO;
+
+    MotorOutputConfigs motorOutputConfigs = shooterAngleCfg.MotorOutput;
+    motorOutputConfigs.Inverted = InvertedValue.Clockwise_Positive;// TODO: constants
+    motorOutputConfigs.NeutralMode = NeutralModeValue.Brake;
+
+    HardwareLimitSwitchConfigs hardwareLimitSwitchConfigs = shooterAngleCfg.HardwareLimitSwitch;
+    hardwareLimitSwitchConfigs.ReverseLimitAutosetPositionEnable = true;
+    hardwareLimitSwitchConfigs.ReverseLimitAutosetPositionValue = RESET_POSE;
+    hardwareLimitSwitchConfigs.ReverseLimitEnable = true;
+
+    SoftwareLimitSwitchConfigs softwareLimitSwitchConfigs = shooterAngleCfg.SoftwareLimitSwitch;
+    softwareLimitSwitchConfigs.ForwardSoftLimitEnable = true;
+    softwareLimitSwitchConfigs.ForwardSoftLimitThreshold = FORWARD_LIMIT;
+
+    StatusCode status = StatusCode.StatusCodeNotInitialized;
+    for (int i = 0; i < 5; ++i) {
+      status = m_Motor.getConfigurator().apply(shooterAngleCfg);
+      if (status.isOK())
+        break;
     }
-    return instance;
+    if (!status.isOK()) {
+      System.out.println("Could not configure shooter Angle motor. Error: " + status.toString());
+    }
   }
 }

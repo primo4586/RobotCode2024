@@ -4,51 +4,34 @@
 
 package frc.robot.subsystems.shooter;
 
-import frc.util.interpolation.InterpolationMap;
-
 /** Add your docs here. */
-public class ShooterConstants {
+public interface ShooterConstants {
 
-    public static class shooterConstants {
-        // Shooter Motor IDs
-        public static final int UP_MOTOR_SHOOTER_ID = 6;
-        public static final int DOWN_MOTOR_SHOOTER_ID = 7;
+    // Shooter Motor IDs
+    public static final int UP_MOTOR_SHOOTER_ID = 60;
+    public static final int DOWN_MOTOR_SHOOTER_ID = 59;
 
-        // Motion Magic Values
-        public static final int MOTION_MAGIC_CRUISE_VELOCITY = 80;
-        public static final int MOTION_MAGIC_ACCELERATION = 160;
-        public static final int MOTION_MAGIC_JERK = 1600;
 
-        public static final double PEAK_FORWARD_VOLTAGE = 11.5;
-        public static final double PEAK_REVERSE_VOLTAGE = -11.5;
+    // Motion Magic Values
+    int MOTION_MAGIC_ACCELERATION = 300;
+    int MOTION_MAGIC_JERK = 3000;
+    double SENSOR_TO_MEC_RATIO = 0.5;
+    int MAX_VEL_ERROR = 2;
 
-        public static final double GEAR_RATIO = 0.5;
+    // PID values for up motor
+    double UP_KP = 0.056;
+    double UP_KD = 0.0;
+    double UP_KS = 0.16;
+    double UP_KA = 0.0;
 
-        public static final int MAX_ERROR = 2;
+    // PID values for down motor
+    double DOWN_KP = 0.022;
+    double DOWN_KD = 0.0;
+    double DOWN_KS = 0.2998046875;
+    double DOWN_KA = 0.079175;
 
-        // PID values for up motor
-        public static final double UP_KP = 0.056;
-        public static final double UP_KD = 0.0;
-        public static final double UP_KS = 0.16;
-        public static final double UP_KV = 0.056;
-        public static final double UP_KA = 0.0;
-
-        // PID values for down motor
-        public static final double DOWN_KP = 0.022;
-        public static final double DOWN_KD = 0.0;
-        public static final double DOWN_KS = 0.2998046875;
-        public static final double DOWN_KV = 0.0583;
-        public static final double DOWN_KA = 0.079175;
-
-        // Interpolation Map
-        public static final InterpolationMap SHOOTER_INTERPOLATION = new InterpolationMap()
-                .put(2.577, 100)
-                .put(2.124, 100)
-                .put(3.2, 100);
-
-        public static final double SHOOT_BASE_SPEED = 50;
-        public static final double SHOOT_STAGE_SPEED = 70;
-        public static final double SHOOT_SPEED = 70;
-        public static final double AMP_SPEED = 23;
-    }
+    // shooter velocity
+    double SPEAKR_VELOCITY = 60;
+    double AMP_VELOCITY = 23;
+    double IDLE_VELOCITY = 23;
 }

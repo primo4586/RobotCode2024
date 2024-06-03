@@ -4,15 +4,14 @@
 
 package frc.robot.subsystems.shooter;
 
-import frc.util.interpolation.InterpolationMap;
 
 /** Add your docs here. */
 public class ShooterConstants {
 
     public static class shooterConstants {
         // Shooter Motor IDs
-        public static final int UP_MOTOR_SHOOTER_ID = 6;
-        public static final int DOWN_MOTOR_SHOOTER_ID = 7;
+        public static final int UP_MOTOR_SHOOTER_ID = 48;
+        public static final int DOWN_MOTOR_SHOOTER_ID = 47;
 
         // Motion Magic Values
         public static final int MOTION_MAGIC_CRUISE_VELOCITY = 80;
@@ -39,12 +38,6 @@ public class ShooterConstants {
         public static final double DOWN_KS = 0.2998046875;
         public static final double DOWN_KV = 0.0583;
         public static final double DOWN_KA = 0.079175;
-
-        // Interpolation Map
-        public static final InterpolationMap SHOOTER_INTERPOLATION = new InterpolationMap()
-                .put(2.577, 100)
-                .put(2.124, 100)
-                .put(3.2, 100);
 
         public static final double SHOOT_BASE_SPEED = 50;
         public static final double SHOOT_STAGE_SPEED = 70;

@@ -7,7 +7,6 @@ package frc.robot.basicCommands.ShooterArmCommands;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.shooterArm.ShooterArmSubsystem;
-import frc.robot.subsystems.swerve.SwerveSubsystem;
 
 public class ShooterArmSpeakerAngle extends Command {
 
@@ -21,8 +20,8 @@ public class ShooterArmSpeakerAngle extends Command {
   @Override
   public void initialize() {
     SmartDashboard.putNumber("angle", shooterArm.speakerInterpolate());
-    shooterArm.moveArmTo(shooterArm.speakerInterpolate());}
-
+    shooterArm.moveArmTo(shooterArm.speakerInterpolate());
+  }
 
   @Override
   public void execute() {
@@ -30,9 +29,9 @@ public class ShooterArmSpeakerAngle extends Command {
     shooterArm.moveArmTo(shooterArm.speakerInterpolate());
   }
 
-  
   @Override
-  public void end(boolean interrupted) {}
+  public void end(boolean interrupted) {
+  }
 
   // Returns true when the command should end.
   @Override

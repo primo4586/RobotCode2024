@@ -8,14 +8,12 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.shooter.ShooterSubsystem;
 import frc.robot.subsystems.shooterArm.ShooterArmSubsystem;
-import frc.robot.subsystems.swerve.SwerveSubsystem;
 import frc.robot.subsystems.takeFeed.TakeFeedSubsystem;
 import frc.robot.subsystems.takeFeed.TakeFeedConstants.takeFeedConstants;
 
 public class FeedToShooter extends Command {
 
   private final TakeFeedSubsystem feeder = TakeFeedSubsystem.getInstance();
-  private final SwerveSubsystem swerve = SwerveSubsystem.getInstance();
   private final ShooterArmSubsystem shooterArm = ShooterArmSubsystem.getInstance();
   private final ShooterSubsystem shooter = ShooterSubsystem.getInstance();
   private Timer timer;
@@ -37,9 +35,9 @@ public class FeedToShooter extends Command {
   public void execute() {
     if (!startedShooting &&
         shooterArm.isArmReady() &&
-        shooter.checkIfShooterAtSpeed() 
-        // && swerve.headingPid.atSetpoint()
-        ) {
+        shooter.checkIfShooterAtSpeed()
+    // && swerve.headingPid.atSetpoint()
+    ) {
       startedShooting = true;
       feeder.setSpeed(takeFeedConstants.SHOOT_SPEED);
       timer.restart();

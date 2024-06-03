@@ -16,16 +16,11 @@ import edu.wpi.first.wpilibj.RobotState;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
-import frc.robot.FieldConstants;
-import frc.robot.subsystems.swerve.SwerveSubsystem;
-import frc.util.AllianceFlipUtil;
-import frc.util.interpolation.InterpolateUtil;
 
 public class ShooterSubsystem extends SubsystemBase {
     private TalonFX m_upShooterMotor;
     private TalonFX m_downShooterMotor;
     private double targetSpeed;
-    private final SwerveSubsystem swerve = SwerveSubsystem.getInstance();
 
     private final MotionMagicVelocityVoltage motionMagic = new MotionMagicVelocityVoltage(0,
             shooterConstants.MOTION_MAGIC_ACCELERATION,
@@ -99,13 +94,6 @@ public class ShooterSubsystem extends SubsystemBase {
         upConfigs.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
         downConfigs.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
 
-        /* Speed up signals for better characterization data */
-        BaseStatusSignal.setUpdateFrequencyForAll(1000, m_upShooterMotor.getVelocity());
-        BaseStatusSignal.setUpdateFrequencyForAll(1000, m_downShooterMotor.getVelocity());
-
-        m_upShooterMotor.optimizeBusUtilization();
-        m_downShooterMotor.optimizeBusUtilization();
-
         // Checking if m_upShooterMotor apply configs
         StatusCode status = StatusCode.StatusCodeNotInitialized;
         for (int i = 0; i < 5; ++i) {
@@ -156,19 +144,12 @@ public class ShooterSubsystem extends SubsystemBase {
 
     public boolean checkIfShooterAtSpeed() {
 
-        if(RobotState.isAutonomous()){
-            return((Math.abs(getUpShooterSpeed() - targetSpeed) < 5)
-                && ((Math.abs(getDownShooterSpeed() - targetSpeed) < 5)));
+        if (RobotState.isAutonomous()) {
+            return ((Math.abs(getUpShooterSpeed() - targetSpeed) < 5)
+                    && ((Math.abs(getDownShooterSpeed() - targetSpeed) < 5)));
         }
         return ((Math.abs(getUpShooterSpeed() - targetSpeed) < shooterConstants.MAX_ERROR)
                 && ((Math.abs(getDownShooterSpeed() - targetSpeed) < shooterConstants.MAX_ERROR)));
-    }
-
-    public double speakerInterpolate() {
-        return InterpolateUtil.interpolate(
-                shooterConstants.SHOOTER_INTERPOLATION,
-                swerve.getPose().getTranslation().getDistance(
-                        AllianceFlipUtil.apply(FieldConstants.Speaker.centerSpeakerOpening).getTranslation()));
     }
 
     public void coast() {
@@ -179,16 +160,20 @@ public class ShooterSubsystem extends SubsystemBase {
     @Override
     public void periodic() {
         // This method will be called once per scheduler run
-        // SmartDashboard.putNumber("uper shooter heat", m_upShooterMotor.getDeviceTemp().getValueAsDouble());
-        // SmartDashboard.putNumber("lower shooter heat", m_downShooterMotor.getDeviceTemp().getValueAsDouble());
-        // SmartDashboard.putNumber("uper shooter current", m_upShooterMotor.getSupplyCurrent().getValueAsDouble());
-        // SmartDashboard.putNumber("lower shooter current", m_downShooterMotor.getSupplyCurrent().getValueAsDouble());
+        // SmartDashboard.putNumber("uper shooter heat",
+        // m_upShooterMotor.getDeviceTemp().getValueAsDouble());
+        // SmartDashboard.putNumber("lower shooter heat",
+        // m_downShooterMotor.getDeviceTemp().getValueAsDouble());
+        // SmartDashboard.putNumber("uper shooter current",
+        // m_upShooterMotor.getSupplyCurrent().getValueAsDouble());
+        // SmartDashboard.putNumber("lower shooter current",
+        // m_downShooterMotor.getSupplyCurrent().getValueAsDouble());
         SmartDashboard.putNumber("lower shooter Speed", getDownShooterSpeed());
         SmartDashboard.putNumber("upper shooter Speed", getUpShooterSpeed());
 
-        SmartDashboard.putNumber("up error", getUpShooterSpeed()-70);
-        SmartDashboard.putNumber("down error", getDownShooterSpeed()-70);
+        SmartDashboard.putNumber("up error", getUpShooterSpeed() - 70);
+        SmartDashboard.putNumber("down error", getDownShooterSpeed() - 70);
 
-        SmartDashboard.putBoolean("shooter ready", Math.abs(getDownShooterSpeed()-getUpShooterSpeed())<0.3);
+        SmartDashboard.putBoolean("shooter ready", Math.abs(getDownShooterSpeed() - getUpShooterSpeed()) < 0.3);
     }
 }

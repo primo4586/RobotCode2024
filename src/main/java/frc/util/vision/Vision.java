@@ -33,7 +33,7 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.math.util.Units;
-import frc.robot.subsystems.swerve.SwerveSubsystem;
+import frc.robot.subsystems.swerve.CommandSwerveDrivetrain;
 
 import java.util.Optional;
 import org.photonvision.EstimatedRobotPose;
@@ -139,7 +139,7 @@ public class Vision {
         if (numTags > 1)
             estStdDevs = kRightMultiTagStdDevs;
         // Increase std devs based on (average) distance
-        if (numTags == 1 && avgDist > 7)//TODO: test on field
+        if (numTags == 1 && avgDist > 7)
             estStdDevs = VecBuilder.fill(Double.MAX_VALUE, Double.MAX_VALUE, Double.MAX_VALUE);
         else
             estStdDevs = estStdDevs.times(1 + (avgDist * avgDist / 30));
@@ -187,6 +187,6 @@ public class Vision {
     }
 
     public Rotation2d GetAngleFromTarget(Pose2d targetPose) {
-        return PhotonUtils.getYawToPose(SwerveSubsystem.getInstance().getPose(), targetPose);
+        return PhotonUtils.getYawToPose(CommandSwerveDrivetrain.getInstance().getPose(), targetPose);
     }
 }

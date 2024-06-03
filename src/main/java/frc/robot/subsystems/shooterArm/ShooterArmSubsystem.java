@@ -19,13 +19,13 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.FieldConstants;
 import frc.robot.subsystems.shooterArm.ShooterArmConstants.shooterArmConstants;
-import frc.robot.subsystems.swerve.SwerveSubsystem;
+import frc.robot.subsystems.swerve.CommandSwerveDrivetrain;
 import frc.util.AllianceFlipUtil;
 import frc.util.interpolation.InterpolateUtil;
 
 public class ShooterArmSubsystem extends SubsystemBase {
 
-  private final SwerveSubsystem swerve = SwerveSubsystem.getInstance();
+  private final CommandSwerveDrivetrain swerve = CommandSwerveDrivetrain.getInstance();
   private TalonFX m_shooterArmMotor;
   DigitalInput limitSwitch = new DigitalInput(shooterArmConstants.SWITCH_ID);
   private final MotionMagicVoltage motionMagic = new MotionMagicVoltage(0,

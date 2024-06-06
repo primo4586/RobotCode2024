@@ -103,7 +103,7 @@ public class CommandSwerveDrivetrain extends SwerveDrivetrain implements Subsyst
                     this));
 
     /* Change this to the sysid routine you want to test */
-    private final SysIdRoutine RoutineToApply = SysIdRoutineTranslation;
+    private final SysIdRoutine RoutineToApply = SysIdRoutineRotation;
 
     public CommandSwerveDrivetrain(SwerveDrivetrainConstants driveTrainConstants, double OdometryUpdateFrequency,
             SwerveModuleConstants... modules) {

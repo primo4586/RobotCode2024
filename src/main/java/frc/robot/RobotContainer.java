@@ -4,18 +4,16 @@
 
 package frc.robot;
 
-import com.ctre.phoenix6.mechanisms.swerve.SwerveRequest;
-
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
 import frc.robot.Commands.CommandGroupsFactory;
 import frc.robot.a_robotCommandGroups.ReadyShootSpeaker;
 import frc.robot.a_robotCommandGroups.ShootBase;
 import frc.robot.a_robotCommandGroups.ShootSpeaker;
-import frc.robot.a_robotCommandGroups.ShootStage;
 import frc.robot.basicCommands.ShooterArmCommands.ZeroShooterArm;
 import frc.robot.basicCommands.TakeFeedCommands.CollectUntilNote;
 import frc.robot.basicCommands.TakeFeedCommands.TakeFeedJoystickSetSpeed;
@@ -50,10 +48,32 @@ public class RobotContainer {
 		driverJoystick.povRight().onTrue(new ZeroShooterArm());
 	}
 
+	private void configureBindingsSysid() {
+
+		// uncomment the corresponding subsystem to sysid
+
+		driverJoystick.back().and(driverJoystick.y()).whileTrue(swerve.sysIdDynamic(Direction.kForward));
+		driverJoystick.back().and(driverJoystick.x()).whileTrue(swerve.sysIdDynamic(Direction.kReverse));
+		driverJoystick.start().and(driverJoystick.y()).whileTrue(swerve.sysIdQuasistatic(Direction.kForward));
+		driverJoystick.start().and(driverJoystick.x()).whileTrue(swerve.sysIdQuasistatic(Direction.kReverse));
+
+		// driverJoystick.back().and(driverJoystick.y()).whileTrue(shooter.sysIdDynamic(Direction.kForward));
+		// driverJoystick.back().and(driverJoystick.x()).whileTrue(shooter.sysIdDynamic(Direction.kReverse));
+		// driverJoystick.start().and(driverJoystick.y()).whileTrue(shooter.sysIdQuasistatic(Direction.kForward));
+		// driverJoystick.start().and(driverJoystick.x()).whileTrue(shooter.sysIdQuasistatic(Direction.kReverse));
+
+		// driverJoystick.back().and(driverJoystick.y()).whileTrue(shooterArm.sysIdDynamic(Direction.kForward));
+		// driverJoystick.back().and(driverJoystick.x()).whileTrue(shooterArm.sysIdDynamic(Direction.kReverse));
+		// driverJoystick.start().and(driverJoystick.y()).whileTrue(shooterArm.sysIdQuasistatic(Direction.kForward));
+		// driverJoystick.start().and(driverJoystick.x()).whileTrue(shooterArm.sysIdQuasistatic(Direction.kReverse));
+
+	}
+
 	public RobotContainer() {
 		swerve.setDefaultCommand(CommandGroupsFactory.getTeleopDriveCommand());
 		swerve.registerTelemetry(logger::telemeterize);
 		configureBindings();
+		configureBindingsSysid();
 		SmartDashboard.putString("swerve default command", swerve.getDefaultCommand().getName());
 	}
 

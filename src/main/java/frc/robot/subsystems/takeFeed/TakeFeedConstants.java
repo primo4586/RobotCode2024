@@ -9,7 +9,7 @@ public class TakeFeedConstants {
     
     public static class takeFeedConstants {
 
-        public static final int MOTOR_ID = 8;
+        public static final int MOTOR_ID = 39;
         public static final int OPTIC_SENSOR_ID = 8;
 
         public static final int SHOOT_SPEED = 11;

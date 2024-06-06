@@ -11,7 +11,7 @@ public class ShooterArmConstants {
     public static class shooterArmConstants {
 
         // Technical Constants
-        public static final int SHOOTER_ARM_ID = 5;
+        public static final int SHOOTER_ARM_ID = 43;
         public static final int SWITCH_ID = 9;
         public static final int ENCODER_COUNTS_PER_REVOLUTION = 1;
         public static final double GEAR_RATIO = 100.0 / 22.0 * 100.0;

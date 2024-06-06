@@ -10,8 +10,8 @@ public class ShooterConstants {
 
     public static class shooterConstants {
         // Shooter Motor IDs
-        public static final int UP_MOTOR_SHOOTER_ID = 48;
-        public static final int DOWN_MOTOR_SHOOTER_ID = 47;
+        public static final int UP_MOTOR_SHOOTER_ID = 42;
+        public static final int DOWN_MOTOR_SHOOTER_ID = 37;
 
         // Motion Magic Values
         public static final int MOTION_MAGIC_CRUISE_VELOCITY = 80;

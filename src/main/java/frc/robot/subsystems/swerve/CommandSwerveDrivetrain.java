@@ -67,6 +67,7 @@ public class CommandSwerveDrivetrain extends SwerveDrivetrain implements Subsyst
     private final SwerveRequest.SysIdSwerveSteerGains SteerCharacterization = new SwerveRequest.SysIdSwerveSteerGains();
 
     /* Use one of these sysidroutines for your particular test */
+    @SuppressWarnings("unused")
     private SysIdRoutine SysIdRoutineTranslation = new SysIdRoutine(
             new SysIdRoutine.Config(
                     null,
@@ -78,7 +79,7 @@ public class CommandSwerveDrivetrain extends SwerveDrivetrain implements Subsyst
                     null,
                     this));
 
-    @SuppressWarnings("unused")
+    // @SuppressWarnings("unused")
     private final SysIdRoutine SysIdRoutineRotation = new SysIdRoutine(
             new SysIdRoutine.Config(
                     null,

@@ -46,11 +46,16 @@ public class CommandGroupsFactory {
     }
 
     public static Command getTeleopDriveCommand() {
-        return swerve
+
+        Command teleopDriveCommand = swerve
                 .applyRequest(() -> teleopDrive.withVelocityX(-driverJoystick.getLeftY() * MaxSpeed)
                         .withVelocityY(-driverJoystick.getLeftX() * MaxSpeed)
                         .withRotationalRate(-driverJoystick.getRightX() * MaxAngularRate))
                 .ignoringDisable(true);
+        
+        teleopDriveCommand.setName("TeleopDriveCommand");
+
+        return teleopDriveCommand;
     }
 
     public static Command getDriveAlignedToSpeakerCommand() {
@@ -58,12 +63,15 @@ public class CommandGroupsFactory {
                 ? Misc.speakerPoseBlue
                 : Misc.speakerPoseRed;
 
-        return swerve
-                .applyRequest(() -> driveAlignedToSpeaker
-                        .withVelocityX(-driverJoystick.getLeftY() * MaxSpeed)
-                        .withVelocityY(-driverJoystick.getLeftX() * MaxSpeed)
-                        .withTargetDirection(swerve.getPose().getTranslation().minus(speakerPose).getAngle()))
+        Command driveAlignedCommand = swerve.applyRequest(() -> driveAlignedToSpeaker
+                .withVelocityX(-driverJoystick.getLeftY() * MaxSpeed)
+                .withVelocityY(-driverJoystick.getLeftX() * MaxSpeed)
+                .withTargetDirection(swerve.getPose().getTranslation().minus(speakerPose).getAngle()))
                 .ignoringDisable(true);
+        
+        driveAlignedCommand.setName("DriveAlignedToSpeakerCommand");
+
+        return driveAlignedCommand;
     }
 
 }

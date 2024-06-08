@@ -2,7 +2,6 @@ package frc.robot.subsystems.swerve;
 
 import com.ctre.phoenix6.configs.CANcoderConfiguration;
 import com.ctre.phoenix6.configs.CurrentLimitsConfigs;
-import com.ctre.phoenix6.configs.MotorOutputConfigs;
 import com.ctre.phoenix6.configs.Pigeon2Configuration;
 import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
@@ -12,8 +11,6 @@ import com.ctre.phoenix6.mechanisms.swerve.SwerveModuleConstantsFactory;
 import com.pathplanner.lib.util.PIDConstants;
 import com.ctre.phoenix6.mechanisms.swerve.SwerveModule.ClosedLoopOutputType;
 import com.ctre.phoenix6.mechanisms.swerve.SwerveModuleConstants.SteerFeedbackType;
-import com.ctre.phoenix6.signals.NeutralModeValue;
-
 import edu.wpi.first.math.controller.PIDController;
 
 import edu.wpi.first.math.util.Units;

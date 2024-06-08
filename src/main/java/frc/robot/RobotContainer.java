@@ -27,7 +27,7 @@ public class RobotContainer {
 
 	/* Setting up bindings for necessary control of the swerve drive platform */
 	public static final CommandXboxController driverJoystick = new CommandXboxController(0);
-	public static final CommandXboxController operatorJoystick = new CommandXboxController(0);
+	public static final CommandXboxController operatorJoystick = new CommandXboxController(1);
 
 	public final CommandSwerveDrivetrain swerve = TunerConstants.Swerve; // My drivetrain
 	Telemetry logger = new Telemetry(TunerConstants.kSpeedAt12VoltsMps);
@@ -52,10 +52,10 @@ public class RobotContainer {
 
 		// uncomment the corresponding subsystem to sysid
 
-		driverJoystick.back().and(driverJoystick.y()).whileTrue(swerve.sysIdDynamic(Direction.kForward));
-		driverJoystick.back().and(driverJoystick.x()).whileTrue(swerve.sysIdDynamic(Direction.kReverse));
-		driverJoystick.start().and(driverJoystick.y()).whileTrue(swerve.sysIdQuasistatic(Direction.kForward));
-		driverJoystick.start().and(driverJoystick.x()).whileTrue(swerve.sysIdQuasistatic(Direction.kReverse));
+		//driverJoystick.back().and(driverJoystick.y()).whileTrue(swerve.sysIdDynamic(Direction.kForward));
+		//driverJoystick.back().and(driverJoystick.x()).whileTrue(swerve.sysIdDynamic(Direction.kReverse));
+		//driverJoystick.start().and(driverJoystick.y()).whileTrue(swerve.sysIdQuasistatic(Direction.kForward));
+		//driverJoystick.start().and(driverJoystick.x()).whileTrue(swerve.sysIdQuasistatic(Direction.kReverse));
 
 		// driverJoystick.back().and(driverJoystick.y()).whileTrue(shooter.sysIdDynamic(Direction.kForward));
 		// driverJoystick.back().and(driverJoystick.x()).whileTrue(shooter.sysIdDynamic(Direction.kReverse));
